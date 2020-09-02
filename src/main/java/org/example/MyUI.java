@@ -23,7 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 public class MyUI extends UI {
 
 
-    //Test zur Wiederherstellung
+    //Test gelöscht
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
