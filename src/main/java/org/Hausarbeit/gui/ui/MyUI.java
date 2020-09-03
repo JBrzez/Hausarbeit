@@ -8,6 +8,8 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
+import org.Hausarbeit.model.objects.dto.UserDTO;
+import org.Hausarbeit.services.util.Views;
 
 import javax.servlet.annotation.WebServlet;
 

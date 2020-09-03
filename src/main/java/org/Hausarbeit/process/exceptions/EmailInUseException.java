@@ -1,4 +1,14 @@
 package org.Hausarbeit.process.exceptions;
 
-public class EmailInUseException {
+public class EmailInUseException extends Throwable {
+    private String reason;
+
+
+    public EmailInUseException( String reason ) {
+        this.reason = reason;
+    }
+
+    public String getReason() {
+        return reason;
+    }
 }

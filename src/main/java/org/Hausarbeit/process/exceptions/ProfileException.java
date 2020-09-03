@@ -1,4 +1,5 @@
 package org.Hausarbeit.process.exceptions;
 
-public class ProfileException {
+public class ProfileException extends Throwable {
+
 }

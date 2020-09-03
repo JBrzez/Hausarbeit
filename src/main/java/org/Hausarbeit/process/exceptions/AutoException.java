@@ -1,4 +1,5 @@
 package org.Hausarbeit.process.exceptions;
 
-public class AutoException {
+public class AutoException extends Throwable {
+
 }
