@@ -2,14 +2,15 @@ package org.Hausarbeit.process.control;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
-import org.Hausarbeit.model.dao.BewerbungDAO;
-import org.Hausarbeit.model.objects.dto.BewerbungDTO;
-import org.Hausarbeit.model.objects.dto.StellenanzeigeDTO;
-import org.Hausarbeit.model.objects.dto.StudentDTO;
+
+import org.Hausarbeit.model.dao.ReservierungDAO;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.objects.dto.ReservierungDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
-import org.Hausarbeit.process.Interfaces.BewerbungControlInterface;
-import org.Hausarbeit.process.exceptions.BewerbungException;
+import org.Hausarbeit.process.Interfaces.ReservierungControlInterface;
 import org.Hausarbeit.process.exceptions.DatabaseException;
+import org.Hausarbeit.process.exceptions.ReservierungException;
 import org.Hausarbeit.services.db.JDBCConnection;
 import org.Hausarbeit.services.util.Roles;
 
@@ -20,16 +21,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ReservierungControl implements BewerbungControlInterface {
-    private static BewerbungControl bewerbungControl = null;
+public class ReservierungControl implements ReservierungControlInterface {
+    private static ReservierungControl bewerbungControl = null;
 
     private ReservierungControl() {
 
     }
 
-    public static BewerbungControl getInstance() {
+    public static ReservierungControl getInstance() {
         if (bewerbungControl == null) {
-            bewerbungControl = new BewerbungControl();
+            bewerbungControl = new ReservierungControl();
         }
         return bewerbungControl;
     }
@@ -48,7 +49,7 @@ public class ReservierungControl implements BewerbungControlInterface {
                 id_bewerbung = rs.getInt(1);
             }
         } catch (SQLException ex) {
-            Logger.getLogger((BewerbungDAO.class.getName())).log(Level.SEVERE, null, ex);
+            Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
         } finally {
             assert rs != null;
             rs.close();
@@ -65,11 +66,11 @@ public class ReservierungControl implements BewerbungControlInterface {
             statement.setInt(2, stellenanzeige.getId_anzeige());
             statement.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger((BewerbungDAO.class.getName())).log(Level.SEVERE, null, ex);
+            Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void applyingIsAllowed() throws DatabaseException, SQLException, BewerbungException {
+    public void applyingIsAllowed() throws DatabaseException, SQLException, ReservierungException {
         String sql = "SELECT sichtbar " +
                 "FROM collhbrs.stellenanzeige_on_off";
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
@@ -80,33 +81,33 @@ public class ReservierungControl implements BewerbungControlInterface {
                 if (rs.getBoolean(1)) {
                     return;
                 }
-                throw new BewerbungException();
+                throw new ReservierungException();
             }
         } catch (SQLException ex) {
-            Logger.getLogger((BewerbungDAO.class.getName())).log(Level.SEVERE, null, ex);
+            Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
         } finally {
             assert rs != null;
             rs.close();
         }
     }
 
-    public void checkAlreadyApplied(StellenanzeigeDTO stellenanzeigeDTO, UserDTO userDTO) throws DatabaseException, SQLException, BewerbungException {
-        StudentDTO studentDTO = new StudentDTO(userDTO);
-        List<BewerbungDTO> list = BewerbungDAO.getInstance().getBewerbungenForStudent(studentDTO);
+    public void checkAlreadyApplied(AutoDTO autoDTO, UserDTO userDTO) throws DatabaseException, SQLException, ReservierungException {
+        EndkundeDTO endkundeDTO = new EndkundeDTO(userDTO);
+        List<ReservierungDTO> list = ReservierungDAO.getInstance().getBewerbungenForStudent(studentDTO);
         String sql = "SELECT id_anzeige " +
                 "FROM collhbrs.bewerbung_to_stellenanzeige " +
                 "WHERE id_bewerbung = ? " +
                 "AND id_anzeige = ?";
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         ResultSet rs = null;
-        for (BewerbungDTO bewerbungDTO : list) {
-            int id_bewerbung = bewerbungDTO.getId();
+        for (ReservierungDTO reservierungDTO : list) {
+            int id_bewerbung = reservierungDTO.getId();
             try {
                 statement.setInt(1, id_bewerbung);
-                statement.setInt(2, stellenanzeigeDTO.getId_anzeige());
+                statement.setInt(2, autoDTO.getId_anzeige());
                 rs = statement.executeQuery();
                 if (rs.next()) {
-                    throw new BewerbungException();
+                    throw new ReservierungException();
                 }
             } catch (SQLException e) {
                 Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte kontaktieren Sie den Administrator!", Notification.Type.ERROR_MESSAGE);
@@ -117,47 +118,47 @@ public class ReservierungControl implements BewerbungControlInterface {
         }
 
     }
-    public void checkAllowed(StellenanzeigeDTO stellenanzeige, UserDTO userDTO, Button bewerbenButton) {
+    public void checkAllowed(AutoDTO auto, UserDTO userDTO, Button bewerbenButton) {
         if (userDTO == null || !userDTO.hasRole(Roles.STUDENT)) {
             bewerbenButton.setVisible(false);
             return;
         }
         try {
             applyingIsAllowed();
-            checkAlreadyApplied(stellenanzeige, userDTO);
+            checkAlreadyApplied(auto, userDTO);
         } catch (DatabaseException e) {
             Notification.show("Es ist ein Datenbankfehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
-        } catch (BewerbungException e) {
+        } catch (ReservierungException e) {
             bewerbenButton.setVisible(false);
         } catch (SQLException e) {
             Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte kontaktieren Sie den Administrator!", Notification.Type.ERROR_MESSAGE);
         }
     }
 
-    public void createBewerbung(String bewerbungstext, UserDTO userDTO) throws BewerbungException {
-        StudentDTO studentDTO = new StudentDTO(userDTO);
-        boolean result = BewerbungDAO.getInstance().createBewerbung(bewerbungstext, studentDTO);
+    public void createReservierung(String bewerbungstext, UserDTO userDTO) throws ReservierungException {
+        EndkundeDTO endkundeDTO = new EndkundeDTO(userDTO);
+        boolean result = ReservierungDAO.getInstance().createReservierung(bewerbungstext, endkundeDTO);
         if (!result) {
-            throw new BewerbungException();
+            throw new ReservierungException();
         }
     }
 
-    public BewerbungDTO getBewerbungForStellenanzeige(StellenanzeigeDTO selektiert, StudentDTO studentDTO) throws SQLException, DatabaseException {
-        List<BewerbungDTO> list = getBewerbungenForStudent(studentDTO);
-        BewerbungDTO bewerbungDTO = new BewerbungDTO();
+    public ReservierungDTO getBewerbungForStellenanzeige(AutoDTO selektiert, EndkundeDTO endkundeDTO) throws SQLException, DatabaseException {
+        List<ReservierungDTO> list = getBewerbungenForStudent(endkundeDTO);
+        ReservierungDTO reservierungDTO = new ReservierungDTO();
         String sql = "SELECT id_bewerbung " +
                 "FROM collhbrs.bewerbung_to_stellenanzeige " +
                 "WHERE id_anzeige = ? " +
                 "AND id_bewerbung = ? ";
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         ResultSet rs = null;
-        for (BewerbungDTO bewerbung :list ) {
+        for (ReservierungDTO reservierung :list ) {
             try {
                 statement.setInt(1, selektiert.getId_anzeige());
-                statement.setInt(2, bewerbung.getId());
+                statement.setInt(2, reservierung.getId());
                 rs = statement.executeQuery();
                 if ( rs.next() ) {
-                    bewerbungDTO = bewerbung;
+                    reservierungDTO = reservierung;
                     break;
                 }
             } catch (SQLException e) {
@@ -170,15 +171,15 @@ public class ReservierungControl implements BewerbungControlInterface {
         return bewerbungDTO;
     }
 
-    public List<BewerbungDTO> getBewerbungenForStudent(StudentDTO studentDTO) throws SQLException {
-        return BewerbungDAO.getInstance().getBewerbungenForStudent(studentDTO);
+    public List<ReservierungDTO> getBewerbungenForStudent(EndkundeDTO endkundeDTO) throws SQLException {
+        return ReservierungDAO.getInstance().getBewerbungenForStudent(endklundeDTO);
     }
 
-    public void deleteBewerbung(BewerbungDTO bewerbungDTO) throws BewerbungException {
-        boolean result = BewerbungDAO.getInstance().deleteBewerbung(bewerbungDTO);
+    public void deleteReservierung(ReservierungDTO reservierungDTO) throws ReservierungException {
+        boolean result = ReservierungDAO.getInstance().deleteReservierung(reservierungDTO);
         if (result) {
             return;
         }
-        throw new BewerbungException();
+        throw new ReservierungException();
     }
 }

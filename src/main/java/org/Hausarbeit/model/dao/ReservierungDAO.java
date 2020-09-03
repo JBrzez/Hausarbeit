@@ -1,9 +1,12 @@
 package org.Hausarbeit.model.dao;
 
 import com.vaadin.ui.Notification;
-import org.Hausarbeit.model.factory.BewerbungDTOFactory;
-import org.Hausarbeit.model.objects.dto.BewerbungDTO;
-import org.Hausarbeit.model.objects.dto.StudentDTO;
+
+import org.Hausarbeit.model.factory.ReservierungDTOFactory;
+
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.objects.dto.ReservierungDTO;
+
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.services.db.JDBCConnection;
 
@@ -16,33 +19,33 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ReservierungDAO extends AbstractDAO {
-    private static BewerbungDAO bewerbungDAO = null;
+    private static ReservierungDAO reservierungDAO = null;
 
-    private BewerbungDAO() {
+    private ReservierungDAO() {
 
     }
 
-    public static BewerbungDAO getInstance() {
-        if (bewerbungDAO == null) {
-            bewerbungDAO = new BewerbungDAO();
+    public static ReservierungDAO getInstance() {
+        if (reservierungDAO == null) {
+            reservierungDAO = new ReservierungDAO();
         }
-        return bewerbungDAO;
+        return reservierungDAO;
     }
 
-    public BewerbungDTO getBewerbung(int id_bewerbung) throws DatabaseException, SQLException {
+    public ReservierungDTO getReservierung(int id_reservierung) throws DatabaseException, SQLException {
         String sql = "SELECT id_bewerbung, freitext " +
                 "FROM collhbrs.bewerbung " +
                 "WHERE id_bewerbung = ?";
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         ResultSet rs = null;
-        BewerbungDTO bewerbungDTO = null;
+        ReservierungDTO reservierungDTO = null;
         try {
-            statement.setInt(1, id_bewerbung);
+            statement.setInt(1, id_reservierung);
             rs = statement.executeQuery();
             if (rs.next()) {
                 int id = rs.getInt(1);
                 String text = rs.getString(2);
-                bewerbungDTO = BewerbungDTOFactory.createBewerbungDTO(id, text);
+                reservierungDTO = ReservierungDTOFactory.createReservierungDTO(id, text);
             }
         } catch (SQLException e) {
             Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
@@ -50,31 +53,31 @@ public class ReservierungDAO extends AbstractDAO {
             assert rs != null;
             rs.close();
         }
-        return bewerbungDTO;
+        return reservierungDTO;
     }
 
-    public List<BewerbungDTO> getBewerbungenForStudent(StudentDTO studentDTO) throws SQLException {
+    public List<ReservierungDTO> getBewerbungenForStudent(EndkundeDTO endkundeDTO) throws SQLException {
         String sql = "SELECT id_bewerbung, freitext " +
                 "FROM collhbrs.bewerbung " +
                 "WHERE id = ? ;";
-        List<BewerbungDTO> list = new ArrayList<>();
+        List<ReservierungDTO> list = new ArrayList<>();
         PreparedStatement statement = this.getPreparedStatement(sql);
         ResultSet rs = null;
         try {
-            statement.setInt(1, studentDTO.getId());
+            statement.setInt(1, endkundeDTO.getId());
             rs = statement.executeQuery();
         } catch (SQLException ex) {
             Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
         }
-        BewerbungDTO bewerbungDTO;
+        ReservierungDTO reservierungDTO;
         try {
             while (true) {
                 assert rs != null;
                 if (!rs.next()) break;
                 int id = rs.getInt(1);
                 String text = rs.getString(2);
-                bewerbungDTO = BewerbungDTOFactory.createBewerbungDTO(id, text);
-                list.add(bewerbungDTO);
+                reservierungDTO = ReservierungDTOFactory.createReservierungDTO(id, text);
+                list.add(reservierungDTO);
 
             }
         } catch (SQLException ex) {
@@ -87,12 +90,12 @@ public class ReservierungDAO extends AbstractDAO {
         return list;
     }
 
-    public boolean createBewerbung(String text, StudentDTO studentDTO) {
+    public boolean createBewerbung(String text, EndkundeDTO endkundeDTO) {
         String sql = "INSERT INTO collhbrs.bewerbung (id, freitext) " +
                 "VALUES (?, ?); ";
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
-            statement.setInt(1, studentDTO.getId());
+            statement.setInt(1, endkundeDTO.getId());
             statement.setString(2, text);
             statement.executeUpdate();
             return true;
@@ -102,18 +105,18 @@ public class ReservierungDAO extends AbstractDAO {
 
     }
 
-    public boolean deleteBewerbung(BewerbungDTO bewerbungDTO) {
+    public boolean deleteReservierung(ReservierungDTO reservierungDTO) {
         String sql = "DELETE " +
                 "FROM collhbrs.bewerbung " +
                 "WHERE id_bewerbung = ?";
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
-            statement.setInt(1, bewerbungDTO.getId());
+            statement.setInt(1, reservierungDTO.getId());
             statement.executeUpdate();
             return true;
 
         } catch (SQLException ex) {
-            Logger.getLogger((BewerbungDAO.class.getName())).log(Level.SEVERE, null, ex);
+            Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
             return false;
         }
     }

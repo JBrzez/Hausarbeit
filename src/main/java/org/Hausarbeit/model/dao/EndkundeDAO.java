@@ -1,8 +1,7 @@
 package org.Hausarbeit.model.dao;
 
-import org.Hausarbeit.model.objects.dto.StudentDTO;
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,35 +10,31 @@ import java.util.logging.Logger;
 
 public class EndkundeDAO extends AbstractDAO {
 
-    private static StudentDAO dao = null;
+    private static EndkundeDAO dao = null;
 
-    private StudentDAO() {
+    private EndkundeDAO() {
 
     }
 
-    public static StudentDAO getInstance() {
+    public static EndkundeDAO getInstance() {
         if (dao == null) {
-            dao = new StudentDAO();
+            dao = new EndkundeDAO();
         }
         return dao;
     }
 
-    public boolean updateStudent(StudentDTO studentDTO) {
+    public boolean updateEndkunde(EndkundeDTO endkundeDTO) {
         String sql = "UPDATE collhbrs.student " +
                 "SET anrede = ?, vorname = ?, name = ?, hochschule = ?, " +
                 "semester = ?, gebdatum = ?, kenntnisse = ?, studiengang = ?" +
                 "WHERE collhbrs.student.id = ?;";
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
-            statement.setString(1, studentDTO.getAnrede());
-            statement.setString(2, studentDTO.getVorname());
-            statement.setString(3, studentDTO.getName());
-            statement.setString(4, studentDTO.getHochschule());
-            statement.setInt(5, studentDTO.getSemester());
-            statement.setObject(6, studentDTO.getGebDatum());
-            statement.setString(7, studentDTO.getKenntnisse());
-            statement.setString(8, studentDTO.getStudiengang());
-            statement.setInt(9, studentDTO.getId());
+            statement.setString(1, endkundeDTO.getAnrede());
+            statement.setString(2, endkundeDTO.getVorname());
+            statement.setString(3, endkundeDTO.getName());
+
+            statement.setInt(9, endkundeDTO.getId());
             statement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -47,7 +42,7 @@ public class EndkundeDAO extends AbstractDAO {
         }
     }
 
-    public StudentDTO getAllDataStudent(UserDTO userDTO) throws SQLException {
+    public EndkundeDTO getAllDataEndkunde(UserDTO userDTO) throws SQLException {
         String sql = "SELECT * " +
                 "FROM collhbrs.student " +
                 "WHERE collhbrs.student.id = ? ;";
@@ -59,25 +54,21 @@ public class EndkundeDAO extends AbstractDAO {
             rs = statement.executeQuery();
 
         } catch (SQLException ex) {
-            Logger.getLogger((StudentDAO.class.getName())).log(Level.SEVERE, null, ex);
+            Logger.getLogger((EndkundeDAO.class.getName())).log(Level.SEVERE, null, ex);
             return null;
         }
 
         try {
-            StudentDTO studentDTO = new StudentDTO(userDTO);
+            EndkundeDTO endkundeDTO = new EndkundeDTO(userDTO);
             while (rs.next()) {
-                studentDTO.setAnrede(rs.getString(2));
-                studentDTO.setVorname(rs.getString(3));
-                studentDTO.setName(rs.getString(4));
-                studentDTO.setHochschule(rs.getString(5));
-                studentDTO.setSemester(rs.getInt(6));
-                studentDTO.setGebDatum(rs.getDate(7).toLocalDate());
-                studentDTO.setKenntnisse(rs.getString(8));
-                studentDTO.setStudiengang(rs.getString(9));
+                endkundeDTO.setAnrede(rs.getString(2));
+                endkundeDTO.setVorname(rs.getString(3));
+                endkundeDTO.setName(rs.getString(4));
+
             }
-            return studentDTO;
+            return endkundeDTO;
         } catch (SQLException ex) {
-            Logger.getLogger((StudentDAO.class.getName())).log(Level.SEVERE, null, ex);
+            Logger.getLogger((EndkundeDAO.class.getName())).log(Level.SEVERE, null, ex);
             return null;
         } finally {
             rs.close();

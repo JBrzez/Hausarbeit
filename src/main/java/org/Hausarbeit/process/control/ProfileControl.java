@@ -1,12 +1,16 @@
 package org.Hausarbeit.process.control;
 
-import org.Hausarbeit.model.dao.BewerbungDAO;
-import org.Hausarbeit.model.dao.StudentDAO;
-import org.Hausarbeit.model.dao.UnternehmenDAO;
-import org.Hausarbeit.model.objects.dto.BewerbungDTO;
-import org.Hausarbeit.model.objects.dto.StudentDTO;
-import org.Hausarbeit.model.objects.dto.UnternehmenDTO;
+
+import org.Hausarbeit.model.dao.EndkundeDAO;
+import org.Hausarbeit.model.dao.ReservierungDAO;
+
+import org.Hausarbeit.model.dao.VertrieblerDAO;
+
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.objects.dto.ReservierungDTO;
+
 import org.Hausarbeit.model.objects.dto.UserDTO;
+import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.process.Interfaces.ProfileControlInterface;
 import org.Hausarbeit.process.exceptions.ProfileException;
 
@@ -27,39 +31,39 @@ public class ProfileControl implements ProfileControlInterface {
     }
 
 
-    public void updateStudentData(StudentDTO studentDTO) throws ProfileException {
-        boolean result =  StudentDAO.getInstance().updateStudent(studentDTO);
+    public void updateEndkundeData(EndkundeDTO endkundeDTO) throws ProfileException {
+        boolean result =  EndkundeDAO.getInstance().updateEndkunde(endkundeDTO);
         if (result) {
             return;
         }
         throw new ProfileException();
     }
 
-    public void updateUnternehmenData(UnternehmenDTO unternehmenDTO) throws ProfileException {
-        boolean result = UnternehmenDAO.getInstance().updateUnternehmen(unternehmenDTO);
+    public void updateVertrieblerData(VertrieblerDTO vertrieblerDTO) throws ProfileException {
+        boolean result = VertrieblerDAO.getInstance().updateVertriebler(vertrieblerDTO);
         if (result) {
             return;
         }
         throw new ProfileException();
     }
 
-    public StudentDTO getStudent(UserDTO userDTO) throws SQLException {
-        return StudentDAO.getInstance().getAllDataStudent(userDTO);
+    public EndkundeDTO getEndkunde(UserDTO userDTO) throws SQLException {
+        return EndkundeDAO.getInstance().getAllDataEndkunde(userDTO);
     }
 
-    public UnternehmenDTO getUnternehmen(UserDTO userDTO) throws SQLException {
-        return UnternehmenDAO.getInstance().getAllDataUnternehmen(userDTO);
+    public VertrieblerDTO getVertriebler(UserDTO userDTO) throws SQLException {
+        return VertrieblerDAO.getInstance().getAllDataVertriebler(userDTO);
     }
 
-    public void setBewerbung(String text, StudentDTO studentDTO) throws ProfileException {
-        boolean result =  BewerbungDAO.getInstance().createBewerbung(text, studentDTO);
+    public void setBewerbung(String text, EndkundeDTO endkundeDTO) throws ProfileException {
+        boolean result =  EndkundeDAO.getInstance().createReservierung(text, endkundeDTO);
         if (result) {
             return;
         }
         throw new ProfileException();
     }
 
-    public List<BewerbungDTO> getBewerbung(StudentDTO studentDTO) throws SQLException {
-        return BewerbungDAO.getInstance().getBewerbungenForStudent(studentDTO);
+    public List<ReservierungDTO> getReservierung(EndkundeDTO endkundetDTO) throws SQLException {
+        return ReservierungDAO.getInstance().getBewerbungenForStudent(studentDTO);
     }
 }

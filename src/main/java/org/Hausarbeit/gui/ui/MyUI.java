@@ -8,6 +8,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
+import org.Hausarbeit.gui.views.*;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.services.util.Views;
 
@@ -47,8 +48,8 @@ public class MyUI extends UI {
         navi.addView(Views.PROFILE, ProfileView.class);
         navi.addView(Views.REGISTRATION, RegistrationView.class);
         navi.addView(Views.LOGIN, LoginView.class);
-        navi.addView(Views.STELLENANZEIGE, StellenanzeigeView.class);
-        navi.addView(Views.BEWERBUNG, BewerbungView.class);
+        navi.addView(Views.AUTO, AutoView.class);
+        navi.addView(Views.RESERVIERUNG, ReservierungView.class);
 
         UI.getCurrent().getNavigator().navigateTo(Views.MAIN);
     }

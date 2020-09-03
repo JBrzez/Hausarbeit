@@ -1,14 +1,14 @@
 package org.Hausarbeit.model.factory;
 
-import org.Hausarbeit.model.objects.dto.BewerbungDTO;
+import org.Hausarbeit.model.objects.dto.ReservierungDTO;
 
 public class ReservierungDTOFactory {
 
-    public static BewerbungDTO createBewerbungDTO(int id, String text) {
-        BewerbungDTO bewerbungDTO = new BewerbungDTO();
-        bewerbungDTO.setId(id);
-        bewerbungDTO.setFreitext(text);
-        return bewerbungDTO;
+    public static ReservierungDTO createReservierungDTO(int id, String text) {
+        ReservierungDTO reservierungDTO = new ReservierungDTO();
+        reservierungDTO.setId(id);
+        reservierungDTO.setFreitext(text);
+        return reservierungDTO;
     }
 
     public Object clone() throws CloneNotSupportedException {

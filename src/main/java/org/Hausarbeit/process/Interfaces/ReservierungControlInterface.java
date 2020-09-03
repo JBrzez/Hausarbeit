@@ -1,7 +1,9 @@
 package org.Hausarbeit.process.Interfaces;
 
 import com.vaadin.ui.Button;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
 import org.Hausarbeit.model.objects.dto.BewerbungDTO;
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
 import org.Hausarbeit.model.objects.dto.StellenanzeigeDTO;
 import org.Hausarbeit.model.objects.dto.StudentDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
@@ -15,19 +17,19 @@ public interface ReservierungControlInterface {
 
     int getLatestApply(UserDTO userDTO) throws DatabaseException, SQLException;
 
-    void applyForStellenanzeige(StellenanzeigeDTO stellenanzeige, int id_bewerbung) throws DatabaseException;
+    void applyForStellenanzeige(AutoDTO auto, int id_bewerbung) throws DatabaseException;
 
     void applyingIsAllowed() throws DatabaseException, BewerbungException, SQLException;
 
-    void checkAlreadyApplied(StellenanzeigeDTO stellenanzeigeDTO, UserDTO userDTO) throws BewerbungException, DatabaseException, SQLException;
+    void checkAlreadyApplied(AutoDTO auto, UserDTO userDTO) throws BewerbungException, DatabaseException, SQLException;
 
-    void checkAllowed(StellenanzeigeDTO stellenanzeige, UserDTO userDTO, Button bewerbenButton);
+    void checkAllowed(AutoDTO auto, UserDTO userDTO, Button bewerbenButton);
 
     void createBewerbung(String bewerbungstext, UserDTO userDTO) throws BewerbungException;
 
-    BewerbungDTO getBewerbungForStellenanzeige(StellenanzeigeDTO selektiert, StudentDTO studentDTO) throws SQLException, DatabaseException;
+    BewerbungDTO getBewerbungForStellenanzeige(AutoDTO selektiert, StudentDTO studentDTO) throws SQLException, DatabaseException;
 
-    List<BewerbungDTO> getBewerbungenForStudent(StudentDTO studentDTO) throws SQLException;
+    List<BewerbungDTO> getBewerbungenForStudent(EndkundeDTO studentDTO) throws SQLException;
 
     void deleteBewerbung(BewerbungDTO bewerbungDTO) throws BewerbungException;
 }

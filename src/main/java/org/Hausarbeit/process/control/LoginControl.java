@@ -3,9 +3,10 @@ package org.Hausarbeit.process.control;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.Hausarbeit.gui.ui.MyUI;
-import org.Hausarbeit.model.objects.dto.StudentDTO;
-import org.Hausarbeit.model.objects.dto.UnternehmenDTO;
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+
 import org.Hausarbeit.model.objects.dto.UserDTO;
+import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.process.Interfaces.LoginControlInterface;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.process.exceptions.NoSuchUserOrPassword;
@@ -52,10 +53,10 @@ public class LoginControl implements LoginControlInterface {
                 userDTO.setId(rs.getInt(1));
                 userDTO.setEmail(email);
                 if ( userDTO.hasRole(Roles.STUDENT) ) {
-                    userDTO = ProfileControl.getInstance().getStudent(new StudentDTO(userDTO));
+                    userDTO = ProfileControl.getInstance().getStudent(new EndkundeDTO(userDTO));
                 }
                 else {
-                    userDTO = ProfileControl.getInstance().getUnternehmen(new UnternehmenDTO(userDTO));
+                    userDTO = ProfileControl.getInstance().getVertriebler(new VertrieblerDTO(userDTO));
                 }
             }
             else {
