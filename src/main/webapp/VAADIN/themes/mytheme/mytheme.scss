@@ -27,12 +27,35 @@
 //$v-error-indicator-color: #ed473b;
 
 // For more information, see: https://vaadin.com/book/-/page/themes.valo.html
-// Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
-
+// Example variants can be copy/pasted from https://vaadin.com/docs/v8/framework/articles/ValoExamples.html
 @import "../valo/valo.scss";
 
 @mixin mytheme {
   @include valo;
-
   // Insert your own theme rules here
+}
+
+.hintergrundbild {
+  background-image: url("iconNonCopyRight.png");
+  background-position: left top;
+  background-size: cover;
+}
+
+.schrift-willkommen{
+  font-family: Lato, Helvetica, Roboto, sans-serif;
+  font-size: larger;
+  color: #ffffff;
+}
+
+.schrift-profil{
+  font-family: Lato, Helvetica, Roboto, sans-serif;
+  color: #ffffff;
+}
+.schrift-tabelle{
+  font-family: Lato, Helvetica, Roboto, sans-serif;
+  color: #000000;
+}
+
+.HomeButtonStyle{
+  cursor: pointer;
 }
