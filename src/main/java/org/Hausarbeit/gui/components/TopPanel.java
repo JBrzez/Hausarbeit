@@ -35,12 +35,12 @@ public class TopPanel extends HorizontalLayout {
         HorizontalLayout hlayout = new HorizontalLayout();
         setStyleName("schrift-willkommen");
         UserDTO userDTO = ( (MyUI) MyUI.getCurrent() ).getUserDTO();
-        Label welcome = new Label("Willkommen bei Hausarbeit!");
+        Label welcome = new Label("Willkommen bei CarLook!");
         if (userDTO != null) {
-            if (userDTO.hasRole(Roles.STUDENT) && userDTO.getVorname() != null) {
+            if (userDTO.hasRole(Roles.ENDKUNDE) && userDTO.getVorname() != null) {
                 welcome = new Label("Willkommen " + userDTO.getVorname() + "!");
             }
-            if (userDTO.hasRole(Roles.UNTERNEHMEN) && userDTO.getName() != null) {
+            if (userDTO.hasRole(Roles.VERTRIEBLER) && userDTO.getName() != null) {
                 welcome = new Label("Willkommen " + userDTO.getName() + "!");
             }
         }
@@ -79,21 +79,21 @@ public class TopPanel extends HorizontalLayout {
             });
 
             //Unternehmer Menü
-            if ( userDTO.hasRole(Roles.UNTERNEHMEN) ) {
+            if ( userDTO.hasRole(Roles.VERTRIEBLER) ) {
                 item1.addItem("Meine Stellenanzeigen", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
-                        UI.getCurrent().getNavigator().navigateTo(Views.STELLENANZEIGE);
+                        UI.getCurrent().getNavigator().navigateTo(Views.AUTO);
                     }
                 });
             }
 
             //Student Menü
-            if ( userDTO.hasRole(Roles.STUDENT) ) {
+            if ( userDTO.hasRole(Roles.ENDKUNDE) ) {
                 item1.addItem("Meine Bewerbungen", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
-                        UI.getCurrent().getNavigator().navigateTo(Views.BEWERBUNG);
+                        UI.getCurrent().getNavigator().navigateTo(Views.RESERVIERUNG);
                     }
                 });
             }
