@@ -1,13 +1,13 @@
 package org.Hausarbeit.process.Interfaces;
 
-import org.Hausarbeit.model.objects.dto.StellenanzeigeDTO;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface SearchControlInterface {
 
-    List<StellenanzeigeDTO> getAnzeigenForUser() throws SQLException;
+    List<AutoDTO> getAnzeigenForUser() throws SQLException;
 
-    List<StellenanzeigeDTO> getAnzeigenForSearch(String suchtext, String filter) throws SQLException;
+    List<AutoDTO> getAnzeigenForSearch(String suchtext, String filter) throws SQLException;
 }

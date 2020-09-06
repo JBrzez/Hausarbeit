@@ -56,7 +56,7 @@ public class ReservierungDAO extends AbstractDAO {
         return reservierungDTO;
     }
 
-    public List<ReservierungDTO> getBewerbungenForStudent(EndkundeDTO endkundeDTO) throws SQLException {
+    public List<ReservierungDTO> getReservierungForEndkunde(EndkundeDTO endkundeDTO) throws SQLException {
         String sql = "SELECT id_bewerbung, freitext " +
                 "FROM collhbrs.bewerbung " +
                 "WHERE id = ? ;";
@@ -90,7 +90,7 @@ public class ReservierungDAO extends AbstractDAO {
         return list;
     }
 
-    public boolean createBewerbung(String text, EndkundeDTO endkundeDTO) {
+    public boolean createReservierung(String text, EndkundeDTO endkundeDTO) {
         String sql = "INSERT INTO collhbrs.bewerbung (id, freitext) " +
                 "VALUES (?, ?); ";
         PreparedStatement statement = this.getPreparedStatement(sql);

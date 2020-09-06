@@ -55,15 +55,15 @@ public class ProfileControl implements ProfileControlInterface {
         return VertrieblerDAO.getInstance().getAllDataVertriebler(userDTO);
     }
 
-    public void setBewerbung(String text, EndkundeDTO endkundeDTO) throws ProfileException {
-        boolean result =  EndkundeDAO.getInstance().createReservierung(text, endkundeDTO);
-        if (result) {
-            return;
-        }
-        throw new ProfileException();
+    public void setReservierung(String text, EndkundeDTO endkundeDTO) throws ProfileException {
+        //boolean result =  EndkundeDAO.getInstance().createReservierung(text, endkundeDTO);
+        //if (result) {
+      //      return;
+      //  }
+      //  throw new ProfileException();
     }
 
-    public List<ReservierungDTO> getReservierung(EndkundeDTO endkundetDTO) throws SQLException {
-        return ReservierungDAO.getInstance().getBewerbungenForStudent(studentDTO);
+    public List<ReservierungDTO> getReservierung(EndkundeDTO endkundeDTO) throws SQLException {
+        return ReservierungDAO.getInstance().getReservierungForEndkunde(endkundeDTO);
     }
 }

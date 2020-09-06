@@ -12,7 +12,7 @@ public class AutoDTO extends AbstractDTO {
     private String branche = "";
     private String studiengang = "";
     private String ort = "";
-    private int anzahl_bewerber = 0;
+    private int anzahl_reservierung = 0;
 
     public int getId() {
         return id;
@@ -98,11 +98,11 @@ public class AutoDTO extends AbstractDTO {
                 "Ort: " + this.getOrt() + "\n";
     }
 
-    public int getAnzahl_bewerber() {
-        return anzahl_bewerber;
+    public int setAnzahl_Reservierung() {
+        return anzahl_reservierung;
     }
 
-    public void setAnzahl_bewerber(int anzahl_bewerber) {
-        this.anzahl_bewerber = anzahl_bewerber;
+    public void setAnzahl_Reservierung(int anzahl_reservierung) {
+        this.anzahl_reservierung = anzahl_reservierung;
     }
 }

@@ -1,65 +1,65 @@
 package org.Hausarbeit.process.proxy;
 
 import com.vaadin.ui.Button;
-import org.Hausarbeit.model.objects.dto.BewerbungDTO;
-import org.Hausarbeit.model.objects.dto.StellenanzeigeDTO;
-import org.Hausarbeit.model.objects.dto.StudentDTO;
+import org.Hausarbeit.model.objects.dto.ReservierungDTO;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
-import org.Hausarbeit.process.Interfaces.BewerbungControlInterface;
-import org.Hausarbeit.process.control.BewerbungControl;
-import org.Hausarbeit.process.exceptions.BewerbungException;
+import org.Hausarbeit.process.Interfaces.ReservierungControlInterface;
+import org.Hausarbeit.process.control.ReservierungControl;
+import org.Hausarbeit.process.exceptions.ReservierungException;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class ReservierungControlProxy implements BewerbungControlInterface {
-    private static BewerbungControlProxy bewerbungControl = null;
+public class ReservierungControlProxy implements ReservierungControlInterface {
+    private static ReservierungControlProxy ReservierungControl = null;
 
-    private BewerbungControlProxy() {
+    private ReservierungControlProxy() {
 
     }
 
-    public static BewerbungControlProxy getInstance() {
-        if (bewerbungControl == null) {
-            bewerbungControl = new BewerbungControlProxy();
+    public static ReservierungControlProxy getInstance() {
+        if (ReservierungControl == null) {
+            ReservierungControl = new ReservierungControlProxy();
         }
-        return bewerbungControl;
+        return ReservierungControl;
     }
 
     public int getLatestApply(UserDTO userDTO) throws DatabaseException, SQLException {
-        return BewerbungControl.getInstance().getLatestApply(userDTO);
+        return ReservierungControl.getInstance().getLatestApply(userDTO);
     }
 
-    public void applyForStellenanzeige(StellenanzeigeDTO stellenanzeige, int id_bewerbung) throws DatabaseException {
-        BewerbungControl.getInstance().applyForStellenanzeige(stellenanzeige, id_bewerbung);
+    public void applyForAuto(AutoDTO Auto, int id_Reservierung) throws DatabaseException {
+        ReservierungControl.getInstance().applyForAuto(Auto, id_Reservierung);
     }
 
-    public void applyingIsAllowed() throws DatabaseException, BewerbungException, SQLException {
-        BewerbungControl.getInstance().applyingIsAllowed();
+    public void applyingIsAllowed() throws DatabaseException, ReservierungException, SQLException {
+        ReservierungControl.getInstance().applyingIsAllowed();
     }
 
-    public void checkAlreadyApplied(StellenanzeigeDTO stellenanzeigeDTO, UserDTO userDTO) throws BewerbungException, DatabaseException, SQLException {
-        BewerbungControl.getInstance().checkAlreadyApplied(stellenanzeigeDTO, userDTO);
+    public void checkAlreadyApplied(AutoDTO AutoDTO, UserDTO userDTO) throws ReservierungException, DatabaseException, SQLException {
+        ReservierungControl.getInstance().checkAlreadyApplied(AutoDTO, userDTO);
 
     }
-    public void checkAllowed(StellenanzeigeDTO stellenanzeige, UserDTO userDTO, Button bewerbenButton) {
-        BewerbungControl.getInstance().checkAllowed(stellenanzeige, userDTO, bewerbenButton);
+    public void checkAllowed(AutoDTO Auto, UserDTO userDTO, Button bewerbenButton) {
+        ReservierungControl.getInstance().checkAllowed(Auto, userDTO, bewerbenButton);
     }
 
-    public void createBewerbung(String bewerbungstext, UserDTO userDTO) throws BewerbungException {
-        BewerbungControl.getInstance().createBewerbung(bewerbungstext, userDTO);
+    public void createReservierung(String Reservierungstext, UserDTO userDTO) throws ReservierungException {
+        ReservierungControl.getInstance().createReservierung(Reservierungstext, userDTO);
     }
 
-    public BewerbungDTO getBewerbungForStellenanzeige(StellenanzeigeDTO selektiert, StudentDTO studentDTO) throws SQLException, DatabaseException {
-        return BewerbungControl.getInstance().getBewerbungForStellenanzeige(selektiert, studentDTO);
+    public ReservierungDTO getReservierungForAuto(AutoDTO selektiert, EndkundeDTO EndkundeDTO) throws SQLException, DatabaseException {
+        return ReservierungControl.getInstance().getReservierungForAuto(selektiert, EndkundeDTO);
     }
 
-    public List<BewerbungDTO> getBewerbungenForStudent(StudentDTO studentDTO) throws SQLException {
-        return BewerbungControl.getInstance().getBewerbungenForStudent(studentDTO);
+    public List<ReservierungDTO> getReservierungForEndkunde(EndkundeDTO EndkundeDTO) throws SQLException {
+        return ReservierungControl.getInstance().getReservierungForEndkunde(EndkundeDTO);
     }
 
-    public void deleteBewerbung(BewerbungDTO bewerbungDTO) throws BewerbungException {
-        BewerbungControl.getInstance().deleteBewerbung(bewerbungDTO);
+    public void deleteReservierung(ReservierungDTO ReservierungDTO) throws ReservierungException {
+        ReservierungControl.getInstance().deleteReservierung(ReservierungDTO);
     }
 }

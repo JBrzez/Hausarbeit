@@ -1,53 +1,55 @@
 package org.Hausarbeit.process.proxy;
 
-import org.Hausarbeit.model.objects.dto.StellenanzeigeDTO;
-import org.Hausarbeit.model.objects.dto.StudentDTO;
-import org.Hausarbeit.model.objects.dto.UnternehmenDTO;
-import org.Hausarbeit.process.Interfaces.StellenanzeigeControlInterface;
-import org.Hausarbeit.process.control.StellenanzeigeControl;
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
+import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
+import org.Hausarbeit.process.Interfaces.AutoControlInterface;
+import org.Hausarbeit.process.control.AutoControl;
 import org.Hausarbeit.process.exceptions.DatabaseException;
-import org.Hausarbeit.process.exceptions.StellenanzeigeException;
+import org.Hausarbeit.process.exceptions.AutoException;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class AutoControlProxy implements StellenanzeigeControlInterface {
-    private static StellenanzeigeControlProxy search = null;
+public class AutoControlProxy implements AutoControlInterface {
+    private static AutoControlProxy search = null;
 
-    public static StellenanzeigeControlProxy getInstance() {
+    public static AutoControlProxy getInstance() {
         if (search == null) {
-            search = new StellenanzeigeControlProxy();
+            search = new AutoControlProxy();
         }
         return search;
     }
 
-    private StellenanzeigeControlProxy() {
+    private AutoControlProxy() {
 
     }
 
-    public List<StellenanzeigeDTO> getAnzeigenForUnternehmen(UnternehmenDTO unternehmenDTO) throws SQLException {
-        return StellenanzeigeControl.getInstance().getAnzeigenForUnternehmen(unternehmenDTO);
+    public List<AutoDTO> getAnzeigenForVertriebler(VertrieblerDTO vertrieblerDTO) throws SQLException {
+        return AutoControl.getInstance().getAnzeigenForVertriebler(vertrieblerDTO);
     }
 
-    public List<StellenanzeigeDTO> getAnzeigenForStudent(StudentDTO studentDTO) throws SQLException {
-        return StellenanzeigeControl.getInstance().getAnzeigenForStudent(studentDTO);
+    public List<AutoDTO> getAnzeigenForEndkunde(EndkundeDTO studentDTO) throws SQLException {
+        return AutoControl.getInstance().getAnzeigenForEndkunde(studentDTO);
     }
-    public void createStellenanzeige(StellenanzeigeDTO stellenanzeigeDTO) throws StellenanzeigeException {
-        StellenanzeigeControl.getInstance().createStellenanzeige(stellenanzeigeDTO);
+    public void createAuto(AutoDTO AutoDTO) throws AutoException {
+        AutoControl.getInstance().createAuto(AutoDTO);
     }
-    public void updateStellenanzeige(StellenanzeigeDTO stellenanzeigeDTO) throws StellenanzeigeException {
-        StellenanzeigeControl.getInstance().updateStellenanzeige(stellenanzeigeDTO);
-    }
-
-    public void deleteStellenanzeige(StellenanzeigeDTO stellenanzeigeDTO) throws StellenanzeigeException {
-        StellenanzeigeControl.getInstance().deleteStellenanzeige(stellenanzeigeDTO);
+    public void updateAuto(AutoDTO AutoDTO) throws AutoException {
+        AutoControl.getInstance().updateAuto(AutoDTO);
     }
 
-    public List<StellenanzeigeDTO> getAnzeigenForSearch(String suchtext, String filter) throws SQLException {
-        return StellenanzeigeControl.getInstance().getAnzeigenForSearch(suchtext, filter);
+    public void deleteAuto(AutoDTO AutoDTO) throws AutoException {
+        AutoControl.getInstance().deleteAuto(AutoDTO);
     }
 
-    public int getAnzahlBewerber(StellenanzeigeDTO stellenanzeigeDTO) throws DatabaseException, SQLException {
-        return StellenanzeigeControl.getInstance().getAnzahlBewerber(stellenanzeigeDTO);
+    public List<AutoDTO> getAnzeigenForSearch(String suchtext, String filter) throws SQLException {
+        return AutoControl.getInstance().getAnzeigenForSearch(suchtext, filter);
+    }
+
+    public int getAnzahlReservierung(AutoDTO autoDTO) throws DatabaseException, SQLException {
+        return AutoControl.getInstance().getAnzahlReservierung(autoDTO);
     }
 }

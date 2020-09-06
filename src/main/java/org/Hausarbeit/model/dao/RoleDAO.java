@@ -66,7 +66,7 @@ public class RoleDAO extends AbstractDAO {
 
         try {
             statement.setInt(1, userDTO.getId());
-            statement.setString(2, Roles.STUDENT);
+            statement.setString(2, Roles.ENDKUNDE);
             statement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -79,7 +79,7 @@ public class RoleDAO extends AbstractDAO {
 
         try {
             statement.setInt(1, userDTO.getId());
-            statement.setString(2, Roles.UNTERNEHMEN);
+            statement.setString(2, Roles.VERTRIEBLER);
             statement.executeUpdate();
             return true;
         } catch (SQLException ex) {

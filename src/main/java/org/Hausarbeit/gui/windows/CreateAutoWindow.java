@@ -1,47 +1,48 @@
 package org.Hausarbeit.gui.windows;
 
 import com.vaadin.ui.*;
-import org.Hausarbeit.model.objects.dto.StellenanzeigeDTO;
-import org.Hausarbeit.model.objects.dto.UnternehmenDTO;
-import org.Hausarbeit.process.exceptions.StellenanzeigeException;
-import org.Hausarbeit.process.proxy.StellenanzeigeControlProxy;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
+import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
+import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
+import org.Hausarbeit.process.exceptions.AutoException;
+import org.Hausarbeit.process.proxy.AutoControlProxy;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class CreateAutoWindow extends Window {
 
-    public CreateAutoWindow(StellenanzeigeDTO stellenanzeige, Grid<StellenanzeigeDTO> grid, UnternehmenDTO unternehmenDTO) {
-        super("Ihre Stellenanzeige");
+    public CreateAutoWindow(AutoDTO Auto, Grid<AutoDTO> grid, VertrieblerDTO vertrieblerDTO) {
+        super("Ihre Auto");
         center();
 
         //Name
         TextField name = new TextField("Titel");
-        name.setValue(stellenanzeige.getName());
+        name.setValue(Auto.getName());
 
         //Art
         TextField art = new TextField("Art der Anstellung");
-        art.setValue(stellenanzeige.getArt());
+        art.setValue(Auto.getArt());
 
         //Branche
         TextField branche = new TextField("Branche");
-        branche.setValue(stellenanzeige.getBranche());
+        branche.setValue(Auto.getBranche());
 
         //Studiengang
         TextField studiengang = new TextField("Studiengang");
-        studiengang.setValue(stellenanzeige.getStudiengang());
+        studiengang.setValue(Auto.getStudiengang());
 
         //Ort
         TextField ort = new TextField("Ort");
-        ort.setValue(stellenanzeige.getOrt());
+        ort.setValue(Auto.getOrt());
 
         //Zeitraum
         DateField zeitraum = new DateField("Ende der Ausschreibung");
-        zeitraum.setValue(stellenanzeige.getZeitraum());
+        zeitraum.setValue(Auto.getZeitraum());
 
         //Beschreibung
         TextArea beschreibung = new TextArea("Beschreibung");
-        beschreibung.setValue(stellenanzeige.getBeschreibung());
+        beschreibung.setValue(Auto.getBeschreibung());
 
 
         //saveButton Config
@@ -49,23 +50,23 @@ public class CreateAutoWindow extends Window {
         saveButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                stellenanzeige.setName(name.getValue());
-                stellenanzeige.setArt(art.getValue());
-                stellenanzeige.setBranche(branche.getValue());
-                stellenanzeige.setStudiengang(studiengang.getValue());
-                stellenanzeige.setOrt(ort.getValue());
-                stellenanzeige.setZeitraum(zeitraum.getValue());
-                stellenanzeige.setBeschreibung(beschreibung.getValue());
+                Auto.setName(name.getValue());
+                Auto.setArt(art.getValue());
+                Auto.setBranche(branche.getValue());
+                Auto.setStudiengang(studiengang.getValue());
+                Auto.setOrt(ort.getValue());
+                Auto.setZeitraum(zeitraum.getValue());
+                Auto.setBeschreibung(beschreibung.getValue());
 
                 try {
-                    StellenanzeigeControlProxy.getInstance().createStellenanzeige(stellenanzeige);
-                } catch (StellenanzeigeException e) {
+                    AutoControlProxy.getInstance().createAuto(Auto);
+                } catch (AutoException e) {
                     Notification.show("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
                 }
-                UI.getCurrent().addWindow(new ConfirmationWindow("Stellenanzeige erfolgreich gespeichert"));
-                List<StellenanzeigeDTO> list = null;
+                UI.getCurrent().addWindow(new ConfirmationWindow("Auto erfolgreich gespeichert"));
+                List<AutoDTO> list = null;
                 try {
-                    list = StellenanzeigeControlProxy.getInstance().getAnzeigenForUnternehmen(unternehmenDTO);
+                    list = AutoControlProxy.getInstance().getAnzeigenForVertriebler(vertrieblerDTO);
                 } catch (SQLException e) {
                     Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!", Notification.Type.ERROR_MESSAGE);
                 }

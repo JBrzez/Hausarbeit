@@ -9,8 +9,8 @@ import org.Hausarbeit.gui.ui.MyUI;
 import org.Hausarbeit.gui.windows.ConfirmationWindow;
 import org.Hausarbeit.gui.windows.DeleteProfileWindow;
 import org.Hausarbeit.gui.windows.DeleteWindow;
-import org.Hausarbeit.model.objects.dto.StudentDTO;
-import org.Hausarbeit.model.objects.dto.UnternehmenDTO;
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.exceptions.ProfileException;
 import org.Hausarbeit.process.proxy.ProfileControlProxy;
@@ -36,7 +36,7 @@ public class ProfileView extends VerticalLayout implements View {
         this.addStyleName("schrift-profil");
         UserDTO userDTO = ((MyUI) UI.getCurrent()).getUserDTO();
         setStyleName("schrift-profil");
-        //Felder Student erzeugen
+        //Felder Endkunde erzeugen
 
         final NativeSelect<String> anrede = new NativeSelect<>("Anrede");
         anrede.setItems("Herr", "Frau");
@@ -91,69 +91,45 @@ public class ProfileView extends VerticalLayout implements View {
 
         Label meinUnternehmen = new Label("Mein Unternehmensprofil");
 
-        if (userDTO.hasRole(Roles.STUDENT)) {
+        if (userDTO.hasRole(Roles.ENDKUNDE)) {
             //Werte einsetzen
-            StudentDTO studentDTO = new StudentDTO(userDTO);
+            EndkundeDTO EndkundeDTO = new EndkundeDTO(userDTO);
             try {
-                studentDTO = ProfileControlProxy.getInstance().getStudent(userDTO);
+                EndkundeDTO = ProfileControlProxy.getInstance().getEndkunde(userDTO);
             } catch (SQLException e) {
                 Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!", Notification.Type.ERROR_MESSAGE);
             }
-            if (studentDTO.getAnrede() != null) {
-                anrede.setValue(studentDTO.getAnrede());
+            if (EndkundeDTO.getAnrede() != null) {
+                anrede.setValue(EndkundeDTO.getAnrede());
             }
-            if (studentDTO.getVorname() != null) {
-                vorname.setValue(studentDTO.getVorname());
+            if (EndkundeDTO.getVorname() != null) {
+                vorname.setValue(EndkundeDTO.getVorname());
             }
-            if (studentDTO.getName() != null) {
-                name.setValue(studentDTO.getName());
-            }
-            if (studentDTO.getHochschule() != null) {
-                hochschule.setValue(studentDTO.getHochschule());
-            }
-            if (studentDTO.getSemester() != 0) {
-                semester.setValue(String.valueOf(studentDTO.getSemester()));
-            }
-            if (studentDTO.getGebDatum() != null) {
-                gebDatum.setValue(studentDTO.getGebDatum());
-            }
-            if (studentDTO.getKenntnisse() != null) {
-                kenntnisse.setValue(studentDTO.getKenntnisse());
-            }
-            if (studentDTO.getStudiengang() != null) {
-                studiengang.setValue(studentDTO.getStudiengang());
+            if (EndkundeDTO.getName() != null) {
+                name.setValue(EndkundeDTO.getName());
             }
         } else {
             //Werte Setzen
-            UnternehmenDTO unternehmenDTO = new UnternehmenDTO(userDTO);
+            VertrieblerDTO VertrieblerDTO = new VertrieblerDTO(userDTO);
             try {
-                unternehmenDTO = ProfileControlProxy.getInstance().getUnternehmen(userDTO);
+                VertrieblerDTO = ProfileControlProxy.getInstance().getVertriebler(userDTO);
             } catch (SQLException e) {
                 Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!", Notification.Type.ERROR_MESSAGE);
             }
-            if (unternehmenDTO.getName() != null) {
-                firmenname.setValue(unternehmenDTO.getName());
+            if (VertrieblerDTO.getName() != null) {
+                firmenname.setValue(VertrieblerDTO.getName());
             }
-            if (unternehmenDTO.getAnsprechpartner() != null) {
-                ansprechpartner.setValue(unternehmenDTO.getAnsprechpartner());
+            if (VertrieblerDTO.getStrasse() != null) {
+                strasse.setValue(VertrieblerDTO.getStrasse());
             }
-            if (unternehmenDTO.getStrasse() != null) {
-                strasse.setValue(unternehmenDTO.getStrasse());
+            if (VertrieblerDTO.getPlz() != null) {
+                plz.setValue(String.valueOf(VertrieblerDTO.getPlz()));
             }
-            if (unternehmenDTO.getPlz() != null) {
-                plz.setValue(String.valueOf(unternehmenDTO.getPlz()));
+            if (VertrieblerDTO.getHaus_nr() != null) {
+                haus_nr.setValue(String.valueOf(VertrieblerDTO.getHaus_nr()));
             }
-            if (unternehmenDTO.getHaus_nr() != null) {
-                haus_nr.setValue(String.valueOf(unternehmenDTO.getHaus_nr()));
-            }
-            if (unternehmenDTO.getZusatz() != null) {
-                zusatz.setValue(unternehmenDTO.getZusatz());
-            }
-            if (unternehmenDTO.getOrt() != null) {
-                ort.setValue(unternehmenDTO.getOrt());
-            }
-            if (unternehmenDTO.getBranche() != null) {
-                branche.setValue(unternehmenDTO.getBranche());
+            if (VertrieblerDTO.getZusatz() != null) {
+                zusatz.setValue(VertrieblerDTO.getZusatz());
             }
         }
 
@@ -173,41 +149,29 @@ public class ProfileView extends VerticalLayout implements View {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 //UI.getCurrent().addWindow(new ConfirmationWindow("Sollen alle Daten aktualisiert werden?"));
-                if (userDTO.hasRole(Roles.STUDENT)) {
-                    StudentDTO studentDTO = new StudentDTO(userDTO);
-                    studentDTO.setAnrede(anrede.getValue());
-                    studentDTO.setVorname(vorname.getValue());
-                    studentDTO.setName(name.getValue());
-                    studentDTO.setHochschule(hochschule.getValue());
-                    try {
-                        studentDTO.setSemester(Integer.valueOf(semester.getValue()));
-                    } catch (NumberFormatException e) {
-                        studentDTO.setSemester(0);
-                    }
-                    studentDTO.setGebDatum(gebDatum.getValue());
-                    studentDTO.setKenntnisse(kenntnisse.getValue());
-                    studentDTO.setStudiengang(studiengang.getValue());
+                if (userDTO.hasRole(Roles.ENDKUNDE)) {
+                    EndkundeDTO EndkundeDTO = new EndkundeDTO(userDTO);
+                    EndkundeDTO.setAnrede(anrede.getValue());
+                    EndkundeDTO.setVorname(vorname.getValue());
+                    EndkundeDTO.setName(name.getValue());
 
                     try {
-                        ProfileControlProxy.getInstance().updateStudentData(studentDTO);
+                        ProfileControlProxy.getInstance().updateEndkundeData(EndkundeDTO);
                         UI.getCurrent().addWindow(new ConfirmationWindow("Ihr Profil wurde erfolgreich aktualisiert!"));
                     } catch (ProfileException e) {
                         Notification.show("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
                     }
 
                 } else {
-                    UnternehmenDTO unternehmenDTO = new UnternehmenDTO(userDTO);
-                    unternehmenDTO.setName(firmenname.getValue());
-                    unternehmenDTO.setAnsprechpartner(ansprechpartner.getValue());
-                    unternehmenDTO.setStrasse(strasse.getValue());
-                    unternehmenDTO.setPlz(Integer.valueOf(plz.getValue()));
-                    unternehmenDTO.setHaus_nr(Integer.valueOf(haus_nr.getValue()));
-                    unternehmenDTO.setZusatz(zusatz.getValue());
-                    unternehmenDTO.setBranche(branche.getValue());
-                    unternehmenDTO.setOrt(ort.getValue());
+                    VertrieblerDTO VertrieblerDTO = new VertrieblerDTO(userDTO);
+                    VertrieblerDTO.setName(firmenname.getValue());
+                    VertrieblerDTO.setStrasse(strasse.getValue());
+                    VertrieblerDTO.setPlz(Integer.valueOf(plz.getValue()));
+                    VertrieblerDTO.setHaus_nr(Integer.valueOf(haus_nr.getValue()));
+                    VertrieblerDTO.setZusatz(zusatz.getValue());
 
                     try {
-                        ProfileControlProxy.getInstance().updateUnternehmenData(unternehmenDTO);
+                        ProfileControlProxy.getInstance().updateVertrieblerData(VertrieblerDTO);
                         UI.getCurrent().addWindow(new ConfirmationWindow("Ihr Profil wurde erfolgreich aktualisiert!"));
                     } catch (ProfileException e) {
                         Notification.show("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
@@ -239,7 +203,7 @@ public class ProfileView extends VerticalLayout implements View {
         horizontalLayoutUni.addComponent(studiengang);
         horizontalLayoutUni.addComponent(semester);
 
-        if (userDTO.hasRole(Roles.STUDENT)) {
+        if (userDTO.hasRole(Roles.ENDKUNDE)) {
             this.addComponent(meinProfil);
             this.addComponent(anrede);
             this.addComponent(horizontalLayoutName);

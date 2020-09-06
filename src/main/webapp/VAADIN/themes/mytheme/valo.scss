@@ -1,0 +1,32 @@
+
+// Include custom font faces if they are used by the theme
+@if contains($v-font-family, "Open Sans") {
+  @include font-open-sans($light: true, $regular: true, $medium: true);
+}
+@if contains($v-font-family, "Source Sans Pro") {
+  @include font-source-sans-pro($light: true, $regular: true, $medium: true);
+}
+@if contains($v-font-family, "Roboto") {
+  @include font-roboto($light: true, $regular: true, $medium: true);
+}
+@if contains($v-font-family, "Lato") {
+  @include font-lato($light: true, $regular: true, $bold: true);
+}
+@if contains($v-font-family, "Lora") {
+  @include font-lora($regular: true, $bold: true);
+}
+
+
+// Include global styles directly, without a theme name prefix (this is done only once)
+@include valo-global;
+
+
+/**
+ * The main Valo theme mixin, which outputs all the selectors and properties to produce 
+ * the variation specified by global variables. Should not be included multiple times 
+ * per compilation.
+ */
+@mixin valo {
+  @include valo-common;
+  @include valo-components;
+}

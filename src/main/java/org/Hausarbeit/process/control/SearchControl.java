@@ -2,9 +2,9 @@ package org.Hausarbeit.process.control;
 
 import com.vaadin.ui.UI;
 import org.Hausarbeit.gui.ui.MyUI;
-import org.Hausarbeit.model.objects.dto.StellenanzeigeDTO;
-import org.Hausarbeit.model.objects.dto.StudentDTO;
-import org.Hausarbeit.model.objects.dto.UnternehmenDTO;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.Interfaces.SearchControlInterface;
 import org.Hausarbeit.services.util.Roles;
@@ -26,20 +26,20 @@ public class SearchControl implements SearchControlInterface {
 
     }
 
-    public List<StellenanzeigeDTO> getAnzeigenForUser() throws SQLException {
+    public List<AutoDTO> getAnzeigenForUser() throws SQLException {
         UserDTO userDTO = ( (MyUI) UI.getCurrent() ).getUserDTO();
-        if (userDTO.hasRole(Roles.STUDENT)) {
-            StudentDTO studentDTO = new StudentDTO(userDTO);
-            return StellenanzeigeControl.getInstance().getAnzeigenForStudent(studentDTO);
+        if (userDTO.hasRole(Roles.ENDKUNDE)) {
+            EndkundeDTO EndkundeDTO = new EndkundeDTO(userDTO);
+            return AutoControl.getInstance().getAnzeigenForEndkunde(EndkundeDTO);
         }
-        UnternehmenDTO unternehmenDTO = new UnternehmenDTO(userDTO);
-        return StellenanzeigeControl.getInstance().getAnzeigenForUnternehmen(unternehmenDTO);
+        VertrieblerDTO VertrieblerDTO = new VertrieblerDTO(userDTO);
+        return AutoControl.getInstance().getAnzeigenForVertriebler(VertrieblerDTO);
     }
 
-    public List<StellenanzeigeDTO> getAnzeigenForSearch(String suchtext, String filter) throws SQLException {
+    public List<AutoDTO> getAnzeigenForSearch(String suchtext, String filter) throws SQLException {
         if (filter == null) {
             filter = "name";
         }
-        return StellenanzeigeControl.getInstance().getAnzeigenForSearch(suchtext, filter);
+        return AutoControl.getInstance().getAnzeigenForSearch(suchtext, filter);
     }
 }

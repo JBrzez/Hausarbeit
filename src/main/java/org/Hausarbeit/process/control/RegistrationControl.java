@@ -82,7 +82,7 @@ public class RegistrationControl implements RegistrationControlInterface {
         RegisterDAO.getInstance().addUser(userDTO);
         userDTO.setId(UserDAO.getInstance().getMaxID());
 
-        if (regAs.equals(Roles.STUDENT)) {
+        if (regAs.equals(Roles.ENDKUNDE)) {
             RegisterDAO.getInstance().addStudent(userDTO);
             registerUser = RoleDAO.getInstance().setRolesForStudent(userDTO);
         } else {

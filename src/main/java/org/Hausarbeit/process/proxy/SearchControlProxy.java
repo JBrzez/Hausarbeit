@@ -1,6 +1,6 @@
 package org.Hausarbeit.process.proxy;
 
-import org.Hausarbeit.model.objects.dto.StellenanzeigeDTO;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
 import org.Hausarbeit.process.Interfaces.SearchControlInterface;
 import org.Hausarbeit.process.control.SearchControl;
 
@@ -21,11 +21,11 @@ public class SearchControlProxy implements SearchControlInterface {
 
     }
 
-    public List<StellenanzeigeDTO> getAnzeigenForUser() throws SQLException {
+    public List<AutoDTO> getAnzeigenForUser() throws SQLException {
         return SearchControl.getInstance().getAnzeigenForUser();
     }
 
-    public List<StellenanzeigeDTO> getAnzeigenForSearch(String suchtext, String filter) throws SQLException {
+    public List<AutoDTO> getAnzeigenForSearch(String suchtext, String filter) throws SQLException {
         return SearchControl.getInstance().getAnzeigenForSearch(suchtext, filter);
     }
 }

@@ -16,7 +16,7 @@ public class TopPanel extends HorizontalLayout {
         this.setSizeFull();
 
         //Logo links oben in der Ecke
-        ThemeResource icon = new ThemeResource("wasloooos - Kopie.jpg");
+        ThemeResource icon = new ThemeResource("fastCarNonCOPYRIGHT-removebg-preview_-_Kopie-removebg-preview.png");
         Image logo = new Image(null, icon);
         logo.setWidth("150");
         logo.setStyleName("HomeButtonStyle");

@@ -22,23 +22,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ReservierungControl implements ReservierungControlInterface {
-    private static ReservierungControl bewerbungControl = null;
+    private static ReservierungControl ReservierungControl = null;
 
     private ReservierungControl() {
 
     }
 
     public static ReservierungControl getInstance() {
-        if (bewerbungControl == null) {
-            bewerbungControl = new ReservierungControl();
+        if (ReservierungControl == null) {
+            ReservierungControl = new ReservierungControl();
         }
-        return bewerbungControl;
+        return ReservierungControl;
     }
 
     public int getLatestApply(UserDTO userDTO) throws DatabaseException, SQLException {
-        int id_bewerbung = 0;
-        String sql = "SELECT max(id_bewerbung) " +
-                "FROM collhbrs.bewerbung " +
+        int id_Reservierung = 0;
+        String sql = "SELECT max(id_Reservierung) " +
+                "FROM collhbrs.Reservierung " +
                 "WHERE id = ?";
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         ResultSet rs = null;
@@ -46,7 +46,7 @@ public class ReservierungControl implements ReservierungControlInterface {
             statement.setInt(1, userDTO.getId());
             rs = statement.executeQuery();
             if (rs.next()) {
-                id_bewerbung = rs.getInt(1);
+                id_Reservierung = rs.getInt(1);
             }
         } catch (SQLException ex) {
             Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
@@ -54,16 +54,16 @@ public class ReservierungControl implements ReservierungControlInterface {
             assert rs != null;
             rs.close();
         }
-        return id_bewerbung;
+        return id_Reservierung;
     }
 
-    public void applyForStellenanzeige(StellenanzeigeDTO stellenanzeige, int id_bewerbung) throws DatabaseException {
-        String sql = "INSERT INTO collhbrs.bewerbung_to_stellenanzeige (id_bewerbung, id_anzeige) " +
+    public void applyForAuto(AutoDTO Auto, int id_Reservierung) throws DatabaseException {
+        String sql = "INSERT INTO collhbrs.Reservierung_to_Auto (id_Reservierung, id_anzeige) " +
                 "VALUES (?, ?);";
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         try {
-            statement.setInt(1, id_bewerbung);
-            statement.setInt(2, stellenanzeige.getId_anzeige());
+            statement.setInt(1, id_Reservierung);
+            statement.setInt(2, Auto.getId_anzeige());
             statement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
@@ -72,7 +72,7 @@ public class ReservierungControl implements ReservierungControlInterface {
 
     public void applyingIsAllowed() throws DatabaseException, SQLException, ReservierungException {
         String sql = "SELECT sichtbar " +
-                "FROM collhbrs.stellenanzeige_on_off";
+                "FROM collhbrs.Auto_on_off";
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         ResultSet rs = null;
         try {
@@ -93,17 +93,17 @@ public class ReservierungControl implements ReservierungControlInterface {
 
     public void checkAlreadyApplied(AutoDTO autoDTO, UserDTO userDTO) throws DatabaseException, SQLException, ReservierungException {
         EndkundeDTO endkundeDTO = new EndkundeDTO(userDTO);
-        List<ReservierungDTO> list = ReservierungDAO.getInstance().getBewerbungenForStudent(studentDTO);
+        List<ReservierungDTO> list = ReservierungDAO.getInstance().getReservierungForEndkunde(endkundeDTO);
         String sql = "SELECT id_anzeige " +
-                "FROM collhbrs.bewerbung_to_stellenanzeige " +
-                "WHERE id_bewerbung = ? " +
+                "FROM collhbrs.Reservierung_to_Auto " +
+                "WHERE id_Reservierung = ? " +
                 "AND id_anzeige = ?";
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         ResultSet rs = null;
         for (ReservierungDTO reservierungDTO : list) {
-            int id_bewerbung = reservierungDTO.getId();
+            int id_Reservierung = reservierungDTO.getId();
             try {
-                statement.setInt(1, id_bewerbung);
+                statement.setInt(1, id_Reservierung);
                 statement.setInt(2, autoDTO.getId_anzeige());
                 rs = statement.executeQuery();
                 if (rs.next()) {
@@ -119,7 +119,7 @@ public class ReservierungControl implements ReservierungControlInterface {
 
     }
     public void checkAllowed(AutoDTO auto, UserDTO userDTO, Button bewerbenButton) {
-        if (userDTO == null || !userDTO.hasRole(Roles.STUDENT)) {
+        if (userDTO == null || !userDTO.hasRole(Roles.ENDKUNDE)) {
             bewerbenButton.setVisible(false);
             return;
         }
@@ -135,21 +135,21 @@ public class ReservierungControl implements ReservierungControlInterface {
         }
     }
 
-    public void createReservierung(String bewerbungstext, UserDTO userDTO) throws ReservierungException {
+    public void createReservierung(String Reservierungstext, UserDTO userDTO) throws ReservierungException {
         EndkundeDTO endkundeDTO = new EndkundeDTO(userDTO);
-        boolean result = ReservierungDAO.getInstance().createReservierung(bewerbungstext, endkundeDTO);
+        boolean result = ReservierungDAO.getInstance().createReservierung(Reservierungstext, endkundeDTO);
         if (!result) {
             throw new ReservierungException();
         }
     }
 
-    public ReservierungDTO getBewerbungForStellenanzeige(AutoDTO selektiert, EndkundeDTO endkundeDTO) throws SQLException, DatabaseException {
-        List<ReservierungDTO> list = getBewerbungenForStudent(endkundeDTO);
+    public ReservierungDTO getReservierungForAuto(AutoDTO selektiert, EndkundeDTO endkundeDTO) throws SQLException, DatabaseException {
+        List<ReservierungDTO> list = getReservierungForEndkunde(endkundeDTO);
         ReservierungDTO reservierungDTO = new ReservierungDTO();
-        String sql = "SELECT id_bewerbung " +
-                "FROM collhbrs.bewerbung_to_stellenanzeige " +
+        String sql = "SELECT id_Reservierung " +
+                "FROM collhbrs.Reservierung_to_Auto " +
                 "WHERE id_anzeige = ? " +
-                "AND id_bewerbung = ? ";
+                "AND id_Reservierung = ? ";
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         ResultSet rs = null;
         for (ReservierungDTO reservierung :list ) {
@@ -168,11 +168,11 @@ public class ReservierungControl implements ReservierungControlInterface {
                 rs.close();
             }
         }
-        return bewerbungDTO;
+        return reservierungDTO;
     }
 
-    public List<ReservierungDTO> getBewerbungenForStudent(EndkundeDTO endkundeDTO) throws SQLException {
-        return ReservierungDAO.getInstance().getBewerbungenForStudent(endklundeDTO);
+    public List<ReservierungDTO> getReservierungForEndkunde(EndkundeDTO endkundeDTO) throws SQLException {
+        return ReservierungDAO.getInstance().getReservierungForEndkunde(endkundeDTO);
     }
 
     public void deleteReservierung(ReservierungDTO reservierungDTO) throws ReservierungException {

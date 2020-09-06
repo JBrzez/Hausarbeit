@@ -9,14 +9,14 @@ import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.*;
 import org.Hausarbeit.gui.components.TopPanel;
 import org.Hausarbeit.gui.ui.MyUI;
-import org.Hausarbeit.gui.windows.DeleteBewerbungWindow;
+import org.Hausarbeit.gui.windows.DeleteReservierungWindow;
 import org.Hausarbeit.gui.windows.DeleteWindow;
-import org.Hausarbeit.model.objects.dto.BewerbungDTO;
-import org.Hausarbeit.model.objects.dto.StellenanzeigeDTO;
-import org.Hausarbeit.model.objects.dto.StudentDTO;
+import org.Hausarbeit.model.objects.dto.ReservierungDTO;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
+import org.Hausarbeit.model.objects.dto.EndkundeDTO;
 import org.Hausarbeit.process.exceptions.DatabaseException;
-import org.Hausarbeit.process.proxy.BewerbungControlProxy;
-import org.Hausarbeit.process.proxy.StellenanzeigeControlProxy;
+import org.Hausarbeit.process.proxy.ReservierungControlProxy;
+import org.Hausarbeit.process.proxy.AutoControlProxy;
 import org.Hausarbeit.services.util.BuildGrid;
 
 import java.sql.SQLException;
@@ -24,18 +24,18 @@ import java.util.List;
 
 public class ReservierungView extends VerticalLayout implements View {
 
-    private StellenanzeigeDTO selektiert;
-    private List<StellenanzeigeDTO> list;
+    private AutoDTO selektiert;
+    private List<AutoDTO> list;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
-        StudentDTO studentDTO = new StudentDTO( ( (MyUI) UI.getCurrent() ).getUserDTO() );
+        EndkundeDTO EndkundeDTO = new EndkundeDTO( ( (MyUI) UI.getCurrent() ).getUserDTO() );
 
-        this.setUp(studentDTO);
+        this.setUp(EndkundeDTO);
     }
 
-    private void setUp(StudentDTO studentDTO) {
+    private void setUp(EndkundeDTO endkundeDTO) {
 
         //Top Layer
         this.addComponent( new TopPanel() );
@@ -44,14 +44,14 @@ public class ReservierungView extends VerticalLayout implements View {
         line.setSizeFull();
         setStyleName("schrift-profil");
         //Tabelle
-        final Grid<StellenanzeigeDTO> grid = new Grid<>("Ihre Bewerbungen");
+        final Grid<AutoDTO> grid = new Grid<>("Ihre Reservierungen");
         grid.setSizeFull();
         grid.setHeightMode(HeightMode.UNDEFINED);
-        SingleSelect<StellenanzeigeDTO> selection = grid.asSingleSelect();
+        SingleSelect<AutoDTO> selection = grid.asSingleSelect();
         grid.setStyleName("schrift-tabelle");
         //Tabelle füllen
         try {
-            list = StellenanzeigeControlProxy.getInstance().getAnzeigenForStudent(studentDTO);
+            list = AutoControlProxy.getInstance().getAnzeigenForEndkunde(endkundeDTO);
         } catch (SQLException e) {
             Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
         }
@@ -63,9 +63,9 @@ public class ReservierungView extends VerticalLayout implements View {
         deleteButton.setEnabled(false);
 
         //Tabellen Select Config
-        grid.addSelectionListener(new SelectionListener<StellenanzeigeDTO>() {
+        grid.addSelectionListener(new SelectionListener<AutoDTO>() {
             @Override
-            public void selectionChange(SelectionEvent<StellenanzeigeDTO> event) {
+            public void selectionChange(SelectionEvent<AutoDTO> event) {
                 if (selection.getValue() == null) {
                     deleteButton.setEnabled(false);
                 }
@@ -80,16 +80,16 @@ public class ReservierungView extends VerticalLayout implements View {
         deleteButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                BewerbungDTO bewerbungDTO = null;
+                ReservierungDTO ReservierungDTO = null;
                 try {
-                    bewerbungDTO = BewerbungControlProxy.getInstance().getBewerbungForStellenanzeige(selektiert, studentDTO);
+                    ReservierungDTO = ReservierungControlProxy.getInstance().getReservierungForAuto(selektiert, endkundeDTO);
                 } catch (SQLException e) {
                     Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte kontaktieren Sie den Administrator!", Notification.Type.ERROR_MESSAGE);
                 } catch (DatabaseException e) {
                     Notification.show("Es ist ein Datenbankfehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
                 }
-                DeleteBewerbungWindow deleteBewerbungWindow = new DeleteBewerbungWindow(bewerbungDTO);
-                UI.getCurrent().addWindow( new DeleteWindow(deleteBewerbungWindow) );
+                DeleteReservierungWindow deleteReservierungWindow = new DeleteReservierungWindow(ReservierungDTO);
+                UI.getCurrent().addWindow( new DeleteWindow(deleteReservierungWindow) );
             }
         });
 

@@ -12,8 +12,8 @@ import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.*;
 import org.Hausarbeit.gui.components.TopPanel;
 import org.Hausarbeit.gui.ui.MyUI;
-import org.Hausarbeit.gui.windows.StellenanzeigeWindow;
-import org.Hausarbeit.model.objects.dto.StellenanzeigeDTO;
+import org.Hausarbeit.gui.windows.AutoWindow;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.proxy.SearchControlProxy;
 import org.Hausarbeit.services.util.BuildGrid;
@@ -23,8 +23,8 @@ import java.util.List;
 
 public class MainView extends VerticalLayout implements View {
 
-    private StellenanzeigeDTO selektiert = null;
-    private List<StellenanzeigeDTO> list;
+    private AutoDTO selektiert = null;
+    private List<AutoDTO> list;
     private String suchtext;
 
 
@@ -46,11 +46,11 @@ public class MainView extends VerticalLayout implements View {
         line.setSizeFull();
         setStyleName("schrift-profil");
         //Tabelle
-        final Grid<StellenanzeigeDTO> grid = new Grid<>("Ihre Treffer");
+        final Grid<AutoDTO> grid = new Grid<>("Ihre Treffer");
         grid.setSizeFull();
         grid.setHeightMode(HeightMode.UNDEFINED);
         BuildGrid.buildGrid(grid);
-        SingleSelect<StellenanzeigeDTO> selection = grid.asSingleSelect();
+        SingleSelect<AutoDTO> selection = grid.asSingleSelect();
         grid.setStyleName("schrift-tabelle");
         //DetailButton
         Button detailButton = new Button("Details", VaadinIcons.ENTER);
@@ -62,7 +62,7 @@ public class MainView extends VerticalLayout implements View {
                     detailButton.setEnabled(false);
                 }
                 selektiert = selection.getValue();
-                UI.getCurrent().addWindow( new StellenanzeigeWindow(selektiert, userDTO) );
+                UI.getCurrent().addWindow( new AutoWindow(selektiert, userDTO) );
             }
         });
 
@@ -76,9 +76,9 @@ public class MainView extends VerticalLayout implements View {
         comboBox.setItems("Name", "Art", "Branche", "Studiengang", "Ort");
 
         //SelectionListener Tabelle
-        grid.addSelectionListener(new SelectionListener<StellenanzeigeDTO>() {
+        grid.addSelectionListener(new SelectionListener<AutoDTO>() {
             @Override
-            public void selectionChange(SelectionEvent<StellenanzeigeDTO> event) {
+            public void selectionChange(SelectionEvent<AutoDTO> event) {
                 if (selection.getValue() == null) {
                     detailButton.setEnabled(false);
                 } else {
@@ -133,7 +133,7 @@ public class MainView extends VerticalLayout implements View {
         this.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);
     }
 
-    private void search(TextField search, ComboBox<String> comboBox, Grid<StellenanzeigeDTO> grid, Button detailButton) {
+    private void search(TextField search, ComboBox<String> comboBox, Grid<AutoDTO> grid, Button detailButton) {
         if (search.getValue().length() > 1) {
             suchtext = search.getValue();
             String filter = comboBox.getValue();

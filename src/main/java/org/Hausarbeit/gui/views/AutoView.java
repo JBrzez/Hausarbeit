@@ -56,7 +56,7 @@ public class AutoView extends VerticalLayout implements View {
             Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
         }
         BuildGrid.buildGrid(grid);
-        grid.addColumn(AutoDTO::getAnzahl_bewerber).setCaption("Anzahl der Bewerber");
+        //grid.addColumn(AutoDTO::getAnzahl_Reservierung).setCaption("Anzahl der Reservierungen");
         grid.setItems(list);
 
         //ShowButton
@@ -90,7 +90,7 @@ public class AutoView extends VerticalLayout implements View {
         showButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                AutoWindow window = new AutoWindow(selektiert, grid, unternehmenDTO);
+                AutoWindow window = new AutoWindow(selektiert, grid, vertrieblerDTO);
                 UI.getCurrent().addWindow(window);
             }
         });
@@ -99,7 +99,7 @@ public class AutoView extends VerticalLayout implements View {
         createButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                CreateAutoWindow window = new CreateAutoWindow(new AutoDTO(), grid, unternehmenDTO);
+                CreateAutoWindow window = new CreateAutoWindow(new AutoDTO(), grid, vertrieblerDTO);
                 UI.getCurrent().addWindow(window);
             }
         });
