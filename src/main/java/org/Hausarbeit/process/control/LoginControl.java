@@ -32,7 +32,7 @@ public class LoginControl implements LoginControlInterface {
 
     public void checkAuthentification(String email, String password) throws NoSuchUserOrPassword, DatabaseException, SQLException {
         String sql = "SELECT id " +
-                "FROM collhbrs.user " +
+                "FROM carlook.user " +
                 "WHERE email = ? "+
                 "AND password = ? ;";
         ResultSet rs;

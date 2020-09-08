@@ -48,7 +48,7 @@ public class RegistrationControl implements RegistrationControlInterface {
 
         //DB Zugriff Emailcheck
         String sql = "SELECT email " +
-                "FROM collhbrs.user " +
+                "FROM carlook.user " +
                 "WHERE email = ? ;";
         ResultSet rs = null;
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
@@ -83,11 +83,11 @@ public class RegistrationControl implements RegistrationControlInterface {
         userDTO.setId(UserDAO.getInstance().getMaxID());
 
         if (regAs.equals(Roles.ENDKUNDE)) {
-            RegisterDAO.getInstance().addStudent(userDTO);
-            registerUser = RoleDAO.getInstance().setRolesForStudent(userDTO);
+            RegisterDAO.getInstance().addEndkunde(userDTO);
+            registerUser = RoleDAO.getInstance().setRolesForEndkunde(userDTO);
         } else {
-            RegisterDAO.getInstance().addUnternehmen(userDTO);
-            registerUser = RoleDAO.getInstance().setRolesForUnternehmen(userDTO);
+            RegisterDAO.getInstance().addVertriebler(userDTO);
+            registerUser = RoleDAO.getInstance().setRolesForVertriebler(userDTO);
         }
 
         if (registerUser) {

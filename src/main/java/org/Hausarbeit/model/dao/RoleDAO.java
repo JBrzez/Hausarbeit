@@ -27,7 +27,7 @@ public class RoleDAO extends AbstractDAO {
 
     public List<RoleDTO> getRolesForUser(UserDTO userDTO) throws SQLException {
         String sql = "SELECT rolle " +
-                "FROM collhbrs.user_to_rolle " +
+                "FROM carlook.user_to_rolle " +
                 "WHERE id = ? ";
         PreparedStatement statement = getPreparedStatement(sql);
 
@@ -60,8 +60,8 @@ public class RoleDAO extends AbstractDAO {
         return liste;
     }
 
-    public boolean setRolesForStudent(UserDTO userDTO) {
-        String sql = "INSERT INTO collhbrs.user_to_rolle VALUES (?,?)";
+    public boolean setRolesForEndkunde(UserDTO userDTO) {
+        String sql = "INSERT INTO carlook.user_to_rolle VALUES (?,?)";
         PreparedStatement statement = this.getPreparedStatement(sql);
 
         try {
@@ -73,8 +73,8 @@ public class RoleDAO extends AbstractDAO {
             return false;
         }
     }
-    public boolean setRolesForUnternehmen(UserDTO userDTO) {
-        String sql = "INSERT INTO collhbrs.user_to_rolle VALUES (?,?)";
+    public boolean setRolesForVertriebler(UserDTO userDTO) {
+        String sql = "INSERT INTO carlook.user_to_rolle VALUES (?,?)";
         PreparedStatement statement = this.getPreparedStatement(sql);
 
         try {

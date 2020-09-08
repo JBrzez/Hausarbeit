@@ -24,17 +24,17 @@ public class EndkundeDAO extends AbstractDAO {
     }
 
     public boolean updateEndkunde(EndkundeDTO endkundeDTO) {
-        String sql = "UPDATE collhbrs.student " +
-                "SET anrede = ?, vorname = ?, name = ?, hochschule = ?, " +
-                "semester = ?, gebdatum = ?, kenntnisse = ?, studiengang = ?" +
-                "WHERE collhbrs.student.id = ?;";
+        String sql = "UPDATE carlook.endkunde " +
+                "SET anrede = ?, vorname = ?, name = ?,  " +
+
+                "WHERE carlook.endkunde.id = ?;";
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
             statement.setString(1, endkundeDTO.getAnrede());
             statement.setString(2, endkundeDTO.getVorname());
             statement.setString(3, endkundeDTO.getName());
 
-            statement.setInt(9, endkundeDTO.getId());
+            statement.setInt(4, endkundeDTO.getId());
             statement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -44,8 +44,8 @@ public class EndkundeDAO extends AbstractDAO {
 
     public EndkundeDTO getAllDataEndkunde(UserDTO userDTO) throws SQLException {
         String sql = "SELECT * " +
-                "FROM collhbrs.student " +
-                "WHERE collhbrs.student.id = ? ;";
+                "FROM carlook.endkunde " +
+                "WHERE carlook.endkunde.id = ? ;";
 
         PreparedStatement statement = this.getPreparedStatement(sql);
         ResultSet rs;
@@ -61,9 +61,11 @@ public class EndkundeDAO extends AbstractDAO {
         try {
             EndkundeDTO endkundeDTO = new EndkundeDTO(userDTO);
             while (rs.next()) {
-                endkundeDTO.setAnrede(rs.getString(2));
-                endkundeDTO.setVorname(rs.getString(3));
-                endkundeDTO.setName(rs.getString(4));
+                endkundeDTO.setVorname(rs.getString(2));
+                endkundeDTO.setName(rs.getString(3));
+                endkundeDTO.setAnrede(rs.getString(4));
+
+
 
             }
             return endkundeDTO;

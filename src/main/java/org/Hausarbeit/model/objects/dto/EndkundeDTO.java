@@ -26,4 +26,7 @@ public class EndkundeDTO extends UserDTO {
 
 
 
+
+
+
 }
