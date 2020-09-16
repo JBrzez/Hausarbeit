@@ -37,11 +37,11 @@ public class TopPanel extends HorizontalLayout {
         UserDTO userDTO = ( (MyUI) MyUI.getCurrent() ).getUserDTO();
         Label welcome = new Label("Willkommen bei CarLook!");
         if (userDTO != null) {
-            if (userDTO.hasRole(Roles.ENDKUNDE) && userDTO.getVorname() != null) {
+            if (userDTO.isEndkunde() && userDTO.getVorname() != null) {
                 welcome = new Label("Willkommen " + userDTO.getVorname() + "!");
             }
-            if (userDTO.hasRole(Roles.VERTRIEBLER) && userDTO.getName() != null) {
-                welcome = new Label("Willkommen " + userDTO.getName() + "!");
+            if (userDTO.isEndkunde() && userDTO.getNachname() != null) {
+                welcome = new Label("Willkommen " + userDTO.getNachname() + "!");
             }
         }
         hlayout.addComponent(welcome);
@@ -79,7 +79,7 @@ public class TopPanel extends HorizontalLayout {
             });
 
             //Unternehmer Menü
-            if ( userDTO.hasRole(Roles.VERTRIEBLER) ) {
+            if ( userDTO.isVertriebler() ) {
                 item1.addItem("Meine Stellenanzeigen", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
@@ -89,7 +89,7 @@ public class TopPanel extends HorizontalLayout {
             }
 
             //Student Menü
-            if ( userDTO.hasRole(Roles.ENDKUNDE) ) {
+            if ( userDTO.isEndkunde() ) {
                 item1.addItem("Meine Bewerbungen", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {

@@ -2,27 +2,60 @@ package org.Hausarbeit.model.objects.dto;
 
 import com.vaadin.ui.Notification;
 import org.Hausarbeit.model.dao.RoleDAO;
+import org.Hausarbeit.services.util.BCrypt;
+import org.Hausarbeit.services.util.Roles;
 
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class UserDTO extends AbstractDTO implements Serializable {
     private int id;
     private String vorname;
-    private String name;
+    private String nachname;
     private String email;
     private String password;
-    private List<RoleDTO> roles = null;
+
+    public String getAnrede() {
+        return anrede;
+    }
+
+    public void setAnrede(String anrede) {
+        this.anrede = anrede;
+    }
+
+    public String getRolle() {
+        return rolle;
+    }
+
+    public void setRolle(String rolle) {
+        if(Pattern.matches("[0-9]+", rolle)){
+            rolle = RoleDAO.getInstance().getRoleFromID(Integer.parseInt(rolle));
+        }
+        this.rolle = rolle;
+    }
+
+    public boolean isVertriebler() {
+        return this.rolle.toLowerCase().equals(Roles.VERTRIEBLER.toLowerCase());
+    }
+
+    public boolean isEndkunde() {
+        return this.rolle.toLowerCase().equals(Roles.ENDKUNDE.toLowerCase());
+    }
+
+    private String anrede;
+    private String rolle;
 
     public UserDTO() {}
     public UserDTO(UserDTO userDTO) {
         this.id = userDTO.id;
         this.vorname = userDTO.vorname;
-        this.name = userDTO.name;
+        this.nachname = userDTO.nachname;
         this.email = userDTO.email;
         this.password = userDTO.password;
-        this.roles = userDTO.roles;
+        this.anrede = userDTO.anrede;
+        this.rolle = userDTO.rolle;
     }
 
     public String getVorname() {
@@ -33,12 +66,12 @@ public class UserDTO extends AbstractDTO implements Serializable {
         this.vorname = vorname;
     }
 
-    public String getName() {
-        return name;
+    public String getNachname() {
+        return nachname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNachname(String nachname) {
+        this.nachname = nachname;
     }
 
     public int getId() { return id; }
@@ -55,31 +88,23 @@ public class UserDTO extends AbstractDTO implements Serializable {
         this.email = id;
     }
 
-    public boolean hasRole(String role){
-        if (this.roles == null) {
-            getRoles();
-
-        }
-        for(RoleDTO r : roles) {
-            if (r.getBezeichnung().equals(role)) return true;
-        }
-        return false;
-
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (password == null || password.length() == 0) {
+            return;
+        }
+
+        this.password = (isHashed(password) ? password : BCrypt.hashpw(password, BCrypt.gensalt()));
     }
 
-    private void getRoles() {
-        try {
-            this.roles = RoleDAO.getInstance().getRolesForUser(this);
-        } catch (SQLException e) {
-            Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!", Notification.Type.ERROR_MESSAGE);
-        }
+    private boolean isHashed(String password) {
+        return password.length() == 60 && password.charAt(0) == '$' && password.charAt(3) == '$' && password.charAt(6) == '$';
     }
+    public boolean checkpassword(String password) {
+        return BCrypt.checkpw(password, getPassword());
+    }
+
 }

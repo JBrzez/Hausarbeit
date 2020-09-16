@@ -91,7 +91,7 @@ public class ProfileView extends VerticalLayout implements View {
 
         Label meinUnternehmen = new Label("Mein Unternehmensprofil");
 
-        if (userDTO.hasRole(Roles.ENDKUNDE)) {
+        if (userDTO.isEndkunde()) {
             //Werte einsetzen
             EndkundeDTO EndkundeDTO = new EndkundeDTO(userDTO);
             try {
@@ -105,8 +105,8 @@ public class ProfileView extends VerticalLayout implements View {
             if (EndkundeDTO.getVorname() != null) {
                 vorname.setValue(EndkundeDTO.getVorname());
             }
-            if (EndkundeDTO.getName() != null) {
-                name.setValue(EndkundeDTO.getName());
+            if (EndkundeDTO.getNachname() != null) {
+                name.setValue(EndkundeDTO.getNachname());
             }
         } else {
             //Werte Setzen
@@ -116,8 +116,8 @@ public class ProfileView extends VerticalLayout implements View {
             } catch (SQLException e) {
                 Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!", Notification.Type.ERROR_MESSAGE);
             }
-            if (VertrieblerDTO.getName() != null) {
-                firmenname.setValue(VertrieblerDTO.getName());
+            if (VertrieblerDTO.getNachname() != null) {
+                firmenname.setValue(VertrieblerDTO.getNachname());
             }
             if (VertrieblerDTO.getStrasse() != null) {
                 strasse.setValue(VertrieblerDTO.getStrasse());
@@ -149,11 +149,11 @@ public class ProfileView extends VerticalLayout implements View {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 //UI.getCurrent().addWindow(new ConfirmationWindow("Sollen alle Daten aktualisiert werden?"));
-                if (userDTO.hasRole(Roles.ENDKUNDE)) {
+                if (userDTO.isEndkunde()) {
                     EndkundeDTO EndkundeDTO = new EndkundeDTO(userDTO);
                     EndkundeDTO.setAnrede(anrede.getValue());
                     EndkundeDTO.setVorname(vorname.getValue());
-                    EndkundeDTO.setName(name.getValue());
+                    EndkundeDTO.setNachname(name.getValue());
 
                     try {
                         ProfileControlProxy.getInstance().updateEndkundeData(EndkundeDTO);
@@ -164,7 +164,7 @@ public class ProfileView extends VerticalLayout implements View {
 
                 } else {
                     VertrieblerDTO VertrieblerDTO = new VertrieblerDTO(userDTO);
-                    VertrieblerDTO.setName(firmenname.getValue());
+                    VertrieblerDTO.setNachname(firmenname.getValue());
                     VertrieblerDTO.setStrasse(strasse.getValue());
                     VertrieblerDTO.setPlz(Integer.valueOf(plz.getValue()));
                     VertrieblerDTO.setHaus_nr(Integer.valueOf(haus_nr.getValue()));
@@ -203,7 +203,7 @@ public class ProfileView extends VerticalLayout implements View {
         horizontalLayoutUni.addComponent(studiengang);
         horizontalLayoutUni.addComponent(semester);
 
-        if (userDTO.hasRole(Roles.ENDKUNDE)) {
+        if (userDTO.isEndkunde()) {
             this.addComponent(meinProfil);
             this.addComponent(anrede);
             this.addComponent(horizontalLayoutName);

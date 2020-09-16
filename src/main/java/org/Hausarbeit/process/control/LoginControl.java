@@ -52,7 +52,7 @@ public class LoginControl implements LoginControlInterface {
                 userDTO = new UserDTO();
                 userDTO.setId(rs.getInt(1));
                 userDTO.setEmail(email);
-                if ( userDTO.hasRole(Roles.ENDKUNDE) ) {
+                if ( userDTO.isEndkunde()) {
                     userDTO = ProfileControl.getInstance().getEndkunde(new EndkundeDTO(userDTO));
                 }
                 else {

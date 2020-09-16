@@ -119,7 +119,7 @@ public class ReservierungControl implements ReservierungControlInterface {
 
     }
     public void checkAllowed(AutoDTO auto, UserDTO userDTO, Button bewerbenButton) {
-        if (userDTO == null || !userDTO.hasRole(Roles.ENDKUNDE)) {
+        if (userDTO == null || !userDTO.isEndkunde()) {
             bewerbenButton.setVisible(false);
             return;
         }

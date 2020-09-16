@@ -32,7 +32,7 @@ public class EndkundeDAO extends AbstractDAO {
         try {
             statement.setString(1, endkundeDTO.getAnrede());
             statement.setString(2, endkundeDTO.getVorname());
-            statement.setString(3, endkundeDTO.getName());
+            statement.setString(3, endkundeDTO.getNachname());
 
             statement.setInt(4, endkundeDTO.getId());
             statement.executeUpdate();
@@ -62,7 +62,7 @@ public class EndkundeDAO extends AbstractDAO {
             EndkundeDTO endkundeDTO = new EndkundeDTO(userDTO);
             while (rs.next()) {
                 endkundeDTO.setVorname(rs.getString(2));
-                endkundeDTO.setName(rs.getString(3));
+                endkundeDTO.setNachname(rs.getString(3));
                 endkundeDTO.setAnrede(rs.getString(4));
 
 

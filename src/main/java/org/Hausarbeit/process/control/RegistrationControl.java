@@ -82,13 +82,8 @@ public class RegistrationControl implements RegistrationControlInterface {
         RegisterDAO.getInstance().addUser(userDTO);
         userDTO.setId(UserDAO.getInstance().getMaxID());
 
-        if (regAs.equals(Roles.ENDKUNDE)) {
-            RegisterDAO.getInstance().addEndkunde(userDTO);
-            registerUser = RoleDAO.getInstance().setRolesForEndkunde(userDTO);
-        } else {
-            RegisterDAO.getInstance().addVertriebler(userDTO);
-            registerUser = RoleDAO.getInstance().setRolesForVertriebler(userDTO);
-        }
+        userDTO.setRolle(regAs.equals(Roles.ENDKUNDE) ? Roles.ENDKUNDE : Roles.VERTRIEBLER);
+        registerUser = RegisterDAO.getInstance().addUser(userDTO);
 
         if (registerUser) {
             UI.getCurrent().addWindow( new ConfirmationWindow("Registration erfolgreich!") );

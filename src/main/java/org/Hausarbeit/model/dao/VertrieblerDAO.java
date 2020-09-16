@@ -31,7 +31,7 @@ public class VertrieblerDAO extends AbstractDAO {
 
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
-            statement.setString(1, vertrieblerDTO.getName());
+            statement.setString(1, vertrieblerDTO.getNachname());
 
             statement.setString(3, vertrieblerDTO.getStrasse());
             statement.setInt(4, vertrieblerDTO.getPlz());
@@ -65,7 +65,7 @@ public class VertrieblerDAO extends AbstractDAO {
         try {
             while (rs.next()) {
 
-                un.setName(rs.getString(2));
+                un.setNachname(rs.getString(2));
 
                 un.setStrasse(rs.getString(4));
                 un.setPlz(rs.getInt(5));
