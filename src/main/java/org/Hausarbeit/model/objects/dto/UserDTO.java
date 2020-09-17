@@ -16,6 +16,8 @@ public class UserDTO extends AbstractDTO implements Serializable {
     private String nachname;
     private String email;
     private String password;
+    private String anrede;
+    private String rolle;
 
     public String getAnrede() {
         return anrede;
@@ -44,8 +46,7 @@ public class UserDTO extends AbstractDTO implements Serializable {
         return this.rolle.toLowerCase().equals(Roles.ENDKUNDE.toLowerCase());
     }
 
-    private String anrede;
-    private String rolle;
+
 
     public UserDTO() {}
     public UserDTO(UserDTO userDTO) {

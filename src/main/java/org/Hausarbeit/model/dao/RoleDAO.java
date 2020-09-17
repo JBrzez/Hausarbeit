@@ -92,7 +92,7 @@ public class RoleDAO extends AbstractDAO {
     public String getRoleFromID(int id) {
         String sql = "SELECT rolle FROM carlook.rolle WHERE id = ?;";
         PreparedStatement statement = this.getPreparedStatement(sql);
-        System.out.println(statement);
+
         try {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
@@ -107,7 +107,6 @@ public class RoleDAO extends AbstractDAO {
         public int getIDFromRole(String rolle) {
         String sql = "SELECT id FROM carlook.rolle WHERE rolle = ?;";
         PreparedStatement statement = this.getPreparedStatement(sql);
-        System.out.println(statement);
         try {
             statement.setString(1, rolle);
             ResultSet rs = statement.executeQuery();

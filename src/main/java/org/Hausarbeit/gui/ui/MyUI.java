@@ -10,6 +10,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 import org.Hausarbeit.gui.views.*;
 import org.Hausarbeit.model.objects.dto.UserDTO;
+import org.Hausarbeit.services.util.Roles;
 import org.Hausarbeit.services.util.Views;
 
 import javax.servlet.annotation.WebServlet;
@@ -31,6 +32,9 @@ public class MyUI extends UI {
 
     public UserDTO getUserDTO() {
         return userDTO;
+    }
+    public String getUserRolle() {
+        return userDTO.getRolle();
     }
 
     public void setUserDTO(UserDTO userDTO) {

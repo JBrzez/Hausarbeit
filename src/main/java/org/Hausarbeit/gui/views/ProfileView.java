@@ -44,24 +44,12 @@ public class ProfileView extends VerticalLayout implements View {
         final TextField vorname = new TextField("Vorname");
         vorname.setPlaceholder("Max");
 
-        TextField name = new TextField("Name");
-        name.setPlaceholder("Mustermann");
+        TextField nachname = new TextField("nachname");
+        nachname.setPlaceholder("Mustermann");
 
-        TextField hochschule = new TextField("Hochschule");
-        hochschule.setPlaceholder("HBRS");
 
-        TextField semester = new TextField("Semester");
-        semester.setPlaceholder("1");
 
-        DateField gebDatum = new DateField("Geburtsdatum");
-        gebDatum.setValue(LocalDate.now());
 
-        TextField kenntnisse = new TextField("Kenntnisse");
-        kenntnisse.setPlaceholder("Java, SQL");
-
-        TextField studiengang = new TextField("Studiengang");
-        studiengang.setPlaceholder("Informatik");
-        //Upload profilbild = new Upload("Profilbild", reciever);
 
         Label meinProfil = new Label("Mein Profil");
         //Felder Unternehmen erzeugen
@@ -106,7 +94,7 @@ public class ProfileView extends VerticalLayout implements View {
                 vorname.setValue(EndkundeDTO.getVorname());
             }
             if (EndkundeDTO.getNachname() != null) {
-                name.setValue(EndkundeDTO.getNachname());
+                nachname.setValue(EndkundeDTO.getNachname());
             }
         } else {
             //Werte Setzen
@@ -153,7 +141,7 @@ public class ProfileView extends VerticalLayout implements View {
                     EndkundeDTO EndkundeDTO = new EndkundeDTO(userDTO);
                     EndkundeDTO.setAnrede(anrede.getValue());
                     EndkundeDTO.setVorname(vorname.getValue());
-                    EndkundeDTO.setNachname(name.getValue());
+                    EndkundeDTO.setNachname(nachname.getValue());
 
                     try {
                         ProfileControlProxy.getInstance().updateEndkundeData(EndkundeDTO);
@@ -164,7 +152,7 @@ public class ProfileView extends VerticalLayout implements View {
 
                 } else {
                     VertrieblerDTO VertrieblerDTO = new VertrieblerDTO(userDTO);
-                    VertrieblerDTO.setNachname(firmenname.getValue());
+                    VertrieblerDTO.setNachname(nachname.getValue());
                     VertrieblerDTO.setStrasse(strasse.getValue());
                     VertrieblerDTO.setPlz(Integer.valueOf(plz.getValue()));
                     VertrieblerDTO.setHaus_nr(Integer.valueOf(haus_nr.getValue()));
@@ -195,30 +183,26 @@ public class ProfileView extends VerticalLayout implements View {
         //Horizontal Name
         HorizontalLayout horizontalLayoutName = new HorizontalLayout();
         horizontalLayoutName.addComponent(vorname);
-        horizontalLayoutName.addComponent(name);
+        horizontalLayoutName.addComponent(nachname);
 
-        //horizontal Uni
-        HorizontalLayout horizontalLayoutUni = new HorizontalLayout();
-        horizontalLayoutUni.addComponent(hochschule);
-        horizontalLayoutUni.addComponent(studiengang);
-        horizontalLayoutUni.addComponent(semester);
+
+
 
         if (userDTO.isEndkunde()) {
             this.addComponent(meinProfil);
             this.addComponent(anrede);
             this.addComponent(horizontalLayoutName);
-            this.addComponent(horizontalLayoutUni);
-            this.addComponent(kenntnisse);
-            this.addComponent(gebDatum);
+
+
             this.addComponent(overwriteBtn);
             this.addComponent(deleteButton);
         } else {
             this.addComponent(meinUnternehmen);
-            this.addComponent(firmenname);
+
             this.addComponent(ansprechpartner);
             this.addComponent(horizontalLayoutStrasse);
             this.addComponent(horizontalLayoutOrt);
-            this.addComponent(branche);
+
             this.addComponent(overwriteBtn);
             this.addComponent(deleteButton);
         }

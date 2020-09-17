@@ -20,6 +20,7 @@ import org.Hausarbeit.services.util.Views;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 public class RegistrationControl implements RegistrationControlInterface {
 
@@ -86,6 +87,22 @@ public class RegistrationControl implements RegistrationControlInterface {
         userDTO.setId(UserDAO.getInstance().getMaxID());
 
         userDTO.setRolle(regAs.equals(Roles.ENDKUNDE) ? Roles.ENDKUNDE : Roles.VERTRIEBLER);
+        if(regAs.equals(Roles.VERTRIEBLER)) {
+            if(!Pattern.matches("^[\\w\\d._%+-]+@carlook\\.de$", email))
+            {
+                Notification.show("Fehler",
+                        "Mit dieser E-Mail-Adresse können Sie sich nicht als Vertriebler registrieren.",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+        }
+        if(!Pattern.matches("^[\\w\\d._%+-]+@[\\w\\d.-]+\\.[\\w]{2,}$", email))
+        {
+            Notification.show("Fehler",
+                    "Die von Ihnen angegebene E-Mail-Adresse ist nicht Valide.",
+                    Notification.Type.ERROR_MESSAGE);
+            return;
+        }
         registerUser = RegisterDAO.getInstance().addUser(userDTO);
 
         if (registerUser) {

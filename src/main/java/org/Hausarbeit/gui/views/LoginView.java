@@ -36,7 +36,7 @@ public class LoginView extends VerticalLayout implements View {
         userLogin.setPlaceholder("beispiel@gmx.de");
         Binder<UserDTO> binder = new Binder<>();
         binder.forField(userLogin)
-                .withValidator(new EmailValidator("Bitte geben Sie eine korrekte Emailadresse ein!"))
+                .withValidator(new EmailValidator("Bitte geben Sie eine valide Emailadresse ein!"))
                 .bind(UserDTO::getEmail, UserDTO::setEmail);
         final PasswordField passwordField = new PasswordField("Passwort:");
         passwordField.setPlaceholder("Passwort");

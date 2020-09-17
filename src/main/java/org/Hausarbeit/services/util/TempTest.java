@@ -3,7 +3,12 @@ package org.Hausarbeit.services.util;
 import org.Hausarbeit.model.dao.RegisterDAO;
 import org.Hausarbeit.model.dao.RoleDAO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
+import org.Hausarbeit.process.control.LoginControl;
+import org.Hausarbeit.process.exceptions.DatabaseException;
+import org.Hausarbeit.process.exceptions.NoSuchUserOrPassword;
 import org.Hausarbeit.services.db.JDBCConnection;
+
+import java.sql.SQLException;
 
 public class TempTest {
     public static void main(String[] args) {
@@ -18,10 +23,19 @@ public class TempTest {
 
 //        System.out.println(user.getPassword());
 //        System.out.println(user.checkpassword("Bananensaft"));
-        System.out.println(user.getId());
+//        System.out.println(user.getId());
         //RegisterDAO.getInstance().addUser(user);
-        RegisterDAO.getInstance().deleteUser(user);
+//        RegisterDAO.getInstance().deleteUser(user);
 //        System.out.println(RoleDAO.getInstance().getRoleFromID(1));
+        try {
+            LoginControl.getInstance().checkAuthentification("test@test.test", "test");
+        } catch (NoSuchUserOrPassword noSuchUserOrPassword) {
+            noSuchUserOrPassword.printStackTrace();
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
     }
 }
