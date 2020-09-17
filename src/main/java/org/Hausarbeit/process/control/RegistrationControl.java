@@ -74,10 +74,13 @@ public class RegistrationControl implements RegistrationControlInterface {
     }
 
     //User registrieren
-    public void registerUser(String email, String password, String regAs ) throws DatabaseException, SQLException {
+    public void registerUser(String email, String password, String regAs, String vorname, String nachname, String anrede ) throws DatabaseException, SQLException {
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(email);
         userDTO.setPassword(password);
+        userDTO.setVorname(vorname);
+        userDTO.setNachname(nachname);
+        userDTO.setAnrede(anrede);
         boolean registerUser;
         RegisterDAO.getInstance().addUser(userDTO);
         userDTO.setId(UserDAO.getInstance().getMaxID());

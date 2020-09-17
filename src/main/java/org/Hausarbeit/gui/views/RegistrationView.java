@@ -44,6 +44,41 @@ public class RegistrationView extends VerticalLayout implements View {
                 .bind(UserDTO::getEmail, UserDTO::setEmail);
         fieldEmail.setId("email");
 
+        //Anrede
+        final Binder<UserDTO> anredeBinder = new Binder<>();
+        final TextField fieldAnrede = new TextField("Anrede:");
+        fieldAnrede.focus();
+        fieldAnrede.setPlaceholder("Anrede");
+        fieldAnrede.setRequiredIndicatorVisible(true);
+        anredeBinder.forField(fieldAnrede)
+                //.withValidator(new VornameValidator("Biite geben Sie eine korrekte Emailadresse ein!"))
+                .bind(UserDTO::getAnrede, UserDTO::setAnrede);
+        fieldAnrede.setId("anrede");
+
+
+        //VornameValidator erstellen bzw. einen fuer Name und Vorname
+        //Vorname
+        final Binder<UserDTO> vornameBinder = new Binder<>();
+        final TextField fieldVorname = new TextField("Vorname:");
+        fieldVorname.focus();
+        fieldVorname.setPlaceholder("Vorname");
+        fieldVorname.setRequiredIndicatorVisible(true);
+        vornameBinder.forField(fieldVorname)
+                //.withValidator(new VornameValidator("Biite geben Sie eine korrekte Emailadresse ein!"))
+                .bind(UserDTO::getVorname, UserDTO::setVorname);
+        fieldVorname.setId("vorname");
+
+        //Name
+        final Binder<UserDTO> nachnameBinder = new Binder<>();
+        final TextField fieldNachname = new TextField("Nachname:");
+        fieldNachname.focus();
+        fieldNachname.setPlaceholder("Nachname");
+        fieldNachname.setRequiredIndicatorVisible(true);
+        vornameBinder.forField(fieldNachname)
+                //.withValidator(new VornameValidator("Biite geben Sie eine korrekte Emailadresse ein!"))
+                .bind(UserDTO::getNachname, UserDTO::setNachname);
+        fieldVorname.setId("nachname");
+
         //Passwort setzen und Counter Label darunter
         final Binder<UserDTO> password1Binder = new Binder<>();
         final PasswordField fieldPassword1 = new PasswordField("Passwort:");
@@ -91,7 +126,7 @@ public class RegistrationView extends VerticalLayout implements View {
         //Checkbox
         final Binder<UserDTO> checkboxBinder = new Binder<>();
         RadioButtonGroup<String> radioButtonGroup = new RadioButtonGroup<>("Registrieren als:");
-        radioButtonGroup.setItems("Endkunde", "Unternehmen");
+        radioButtonGroup.setItems("Endkunde", "Vertriebler");
         radioButtonGroup.setRequiredIndicatorVisible(true);
         radioButtonGroup.isSelected("Endkunde");
         checkboxBinder.forField(radioButtonGroup)
@@ -108,12 +143,15 @@ public class RegistrationView extends VerticalLayout implements View {
                     password1Binder.validate();
                     password2Binder.validate();
                     checkboxBinder.validate();
+                    String vorname = fieldVorname.getValue();
+                    String nachname = fieldNachname.getValue();
+                    String anrede = fieldAnrede.getValue();
                     String email = fieldEmail.getValue();
                     String password1 = fieldPassword1.getValue();
                     String password2 = fieldPassword2.getValue();
                     String regAs = radioButtonGroup.getValue();
                     RegistrationControlProxy.getInstance().checkValid( email, emailBinder.isValid(), password1, password2 , password1Binder.isValid(), password2Binder.isValid(), checkboxBinder.isValid() );
-                    RegistrationControlProxy.getInstance().registerUser( email, password1, regAs );
+                    RegistrationControlProxy.getInstance().registerUser( email, password1, regAs ,vorname, nachname, anrede);
                 } catch (NoEqualPasswordException e) {
                     Notification.show("Passwort-Fehler!", e.getReason(), Notification.Type.WARNING_MESSAGE);
                 } catch (DatabaseException e) {
@@ -144,6 +182,9 @@ public class RegistrationView extends VerticalLayout implements View {
 
         //Vertical Layout
         VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.addComponent(fieldAnrede);
+        verticalLayout.addComponent(fieldVorname);
+        verticalLayout.addComponent(fieldNachname);
         verticalLayout.addComponent(fieldEmail);
         verticalLayout.addComponent(fieldPassword1);
         verticalLayout.addComponent(counter1);

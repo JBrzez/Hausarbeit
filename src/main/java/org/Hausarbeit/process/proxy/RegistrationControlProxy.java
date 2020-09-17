@@ -28,8 +28,8 @@ public class RegistrationControlProxy implements RegistrationControlInterface {
     }
 
     //User registrieren
-    public void registerUser(String email, String password, String regAs ) throws DatabaseException, SQLException {
-        RegistrationControl.getInstance().registerUser(email, password, regAs);
+    public void registerUser(String email, String password, String regAs, String vorname, String nachname, String anrede ) throws DatabaseException, SQLException {
+        RegistrationControl.getInstance().registerUser(email, password, regAs, vorname, nachname, anrede);
     }
 
     //User Löschen
