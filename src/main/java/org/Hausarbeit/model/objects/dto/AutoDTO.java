@@ -1,17 +1,11 @@
 package org.Hausarbeit.model.objects.dto;
 
-import java.time.LocalDate;
-
 public class AutoDTO extends AbstractDTO {
     private int id ;
-    private int id_anzeige;
     private String beschreibung = "";
-    private String art = "";
-    private String name = "";
-    private LocalDate zeitraum = LocalDate.now();
-    private String branche = "";
-    private String studiengang = "";
-    private String ort = "";
+    private String marke = "";
+    private String baujahr = "";
+    private int vertriebler_id = 0;
     private int anzahl_reservierung = 0;
 
     public int getId() {
@@ -22,14 +16,6 @@ public class AutoDTO extends AbstractDTO {
         this.id = id;
     }
 
-    public int getId_anzeige() {
-        return id_anzeige;
-    }
-
-    public void setId_anzeige(int id_anzeige) {
-        this.id_anzeige = id_anzeige;
-    }
-
     public String getBeschreibung() {
         return beschreibung;
     }
@@ -38,64 +24,36 @@ public class AutoDTO extends AbstractDTO {
         this.beschreibung = beschreibung;
     }
 
-    public String getArt() {
-        return art;
+    public String getmarke() {
+        return marke;
     }
 
-    public void setArt(String art) {
-        this.art = art;
+    public void setmarke(String marke) {
+        this.marke = marke;
     }
 
-    public String getName() {
-        return name;
+    public String getbaujahr() {
+        return baujahr;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setbaujahr(String baujahr) {
+        this.baujahr = baujahr;
     }
 
-    public LocalDate getZeitraum() {
-        return zeitraum;
+    public int getVertriebler_id() {
+        return vertriebler_id;
     }
 
-    public void setZeitraum(LocalDate zeitraum) {
-        this.zeitraum = zeitraum;
-    }
-
-    public String getBranche() {
-        return branche;
-    }
-
-    public void setBranche(String branche) {
-        this.branche = branche;
-    }
-
-    public String getStudiengang() {
-        return studiengang;
-    }
-
-    public void setStudiengang(String studiengang) {
-        this.studiengang = studiengang;
-    }
-
-    public String getOrt() {
-        return ort;
-    }
-
-    public void setOrt(String ort) {
-        this.ort = ort;
+    public void setVertriebler_id(int vertriebler_id) {
+        this.vertriebler_id = vertriebler_id;
     }
 
     public String toString(){
         return "ID: " + this.getId() + "\n" +
-                "ID Anzeige: " + this.getId_anzeige() + "\n" +
                 "Beschreibung: " + this.getBeschreibung() + "\n" +
-                "Art: " + this.getArt() + "\n" +
-                "Name: " + this.getName() + "\n" +
-                "Zeitraum: " + this.getZeitraum().toString() + "\n" +
-                "Branche: "+ this.getBranche() + "\n" +
-                "Studiengang: "+ this.getStudiengang() + "\n" +
-                "Ort: " + this.getOrt() + "\n";
+                "Marke: " + this.getmarke() + "\n" +
+                "Baujahr: " + this.getbaujahr() + "\n" +
+                "Vertriebler_ID: " + this.getVertriebler_id() + "\n";
     }
 
     public int setAnzahl_Reservierung() {

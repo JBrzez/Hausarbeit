@@ -13,7 +13,6 @@ import org.Hausarbeit.gui.windows.DeleteReservierungWindow;
 import org.Hausarbeit.gui.windows.DeleteWindow;
 import org.Hausarbeit.model.objects.dto.ReservierungDTO;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.process.proxy.ReservierungControlProxy;
 import org.Hausarbeit.process.proxy.AutoControlProxy;

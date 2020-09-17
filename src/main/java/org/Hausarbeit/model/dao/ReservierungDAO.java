@@ -4,9 +4,10 @@ import com.vaadin.ui.Notification;
 
 import org.Hausarbeit.model.factory.ReservierungDTOFactory;
 
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
 import org.Hausarbeit.model.objects.dto.ReservierungDTO;
 
+import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.services.db.JDBCConnection;
 
@@ -56,47 +57,14 @@ public class ReservierungDAO extends AbstractDAO {
         return reservierungDTO;
     }
 
-    public List<ReservierungDTO> getReservierungForEndkunde(EndkundeDTO endkundeDTO) throws SQLException {
-        String sql = "SELECT id_bewerbung, freitext " +
-                "FROM collhbrs.bewerbung " +
-                "WHERE id = ? ;";
-        List<ReservierungDTO> list = new ArrayList<>();
-        PreparedStatement statement = this.getPreparedStatement(sql);
-        ResultSet rs = null;
-        try {
-            statement.setInt(1, endkundeDTO.getId());
-            rs = statement.executeQuery();
-        } catch (SQLException ex) {
-            Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
-        }
-        ReservierungDTO reservierungDTO;
-        try {
-            while (true) {
-                assert rs != null;
-                if (!rs.next()) break;
-                int id = rs.getInt(1);
-                String text = rs.getString(2);
-                reservierungDTO = ReservierungDTOFactory.createReservierungDTO(id, text);
-                list.add(reservierungDTO);
 
-            }
-        } catch (SQLException ex) {
-            Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
-        }
-        finally{
-            assert rs != null;
-            rs.close();
-        }
-        return list;
-    }
-
-    public boolean createReservierung(String text, EndkundeDTO endkundeDTO) {
-        String sql = "INSERT INTO collhbrs.bewerbung (id, freitext) " +
+    public boolean createReservierung(UserDTO userDTO, AutoDTO autoDTO) {
+        String sql = "INSERT INTO carlook.auto (user_id, auto_id) " +
                 "VALUES (?, ?); ";
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
-            statement.setInt(1, endkundeDTO.getId());
-            statement.setString(2, text);
+            statement.setInt(1, userDTO.getId());
+            statement.setInt(2, autoDTO.getId());
             statement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -107,11 +75,12 @@ public class ReservierungDAO extends AbstractDAO {
 
     public boolean deleteReservierung(ReservierungDTO reservierungDTO) {
         String sql = "DELETE " +
-                "FROM collhbrs.bewerbung " +
-                "WHERE id_bewerbung = ?";
+                "FROM carlook.auto " +
+                "WHERE auto_id = ? AND user_id = ?";
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
-            statement.setInt(1, reservierungDTO.getId());
+            statement.setInt(1, reservierungDTO.getAuto_id());
+            statement.setInt(2, reservierungDTO.getUser_id());
             statement.executeUpdate();
             return true;
 

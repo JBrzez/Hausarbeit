@@ -1,10 +1,7 @@
 package org.Hausarbeit.process.proxy;
 
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
+import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.Interfaces.AutoControlInterface;
 import org.Hausarbeit.process.control.AutoControl;
 import org.Hausarbeit.process.exceptions.DatabaseException;
@@ -27,11 +24,11 @@ public class AutoControlProxy implements AutoControlInterface {
 
     }
 
-    public List<AutoDTO> getAnzeigenForVertriebler(VertrieblerDTO vertrieblerDTO) throws SQLException {
+    public List<AutoDTO> getAnzeigenForVertriebler(UserDTO vertrieblerDTO) throws SQLException {
         return AutoControl.getInstance().getAnzeigenForVertriebler(vertrieblerDTO);
     }
 
-    public List<AutoDTO> getAnzeigenForEndkunde(EndkundeDTO studentDTO) throws SQLException {
+    public List<AutoDTO> getAnzeigenForEndkunde(UserDTO studentDTO) throws SQLException {
         return AutoControl.getInstance().getAnzeigenForEndkunde(studentDTO);
     }
     public void createAuto(AutoDTO AutoDTO) throws AutoException {

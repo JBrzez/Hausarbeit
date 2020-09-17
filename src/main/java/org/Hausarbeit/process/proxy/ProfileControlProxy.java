@@ -1,11 +1,8 @@
 package org.Hausarbeit.process.proxy;
 
 import org.Hausarbeit.model.objects.dto.ReservierungDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.Interfaces.ProfileControlInterface;
-import org.Hausarbeit.process.control.ProfileControl;
 import org.Hausarbeit.process.exceptions.ProfileException;
 
 import java.sql.SQLException;

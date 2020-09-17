@@ -4,15 +4,8 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.Hausarbeit.gui.ui.MyUI;
 import org.Hausarbeit.model.dao.AutoDAO;
-import org.Hausarbeit.model.dao.AutoDAO;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
-import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
-import org.Hausarbeit.process.Interfaces.AutoControlInterface;
 import org.Hausarbeit.process.Interfaces.AutoControlInterface;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.process.exceptions.AutoException;
@@ -37,12 +30,12 @@ public class AutoControl implements AutoControlInterface {
 
     }
 
-    public List<AutoDTO> getAnzeigenForVertriebler(VertrieblerDTO vertrieblerDTO) throws SQLException {
-        return AutoDAO.getInstance().getAutoForVertriebler(vertrieblerDTO);
+    public List<AutoDTO> getAnzeigenForVertriebler(UserDTO userDTO) throws SQLException {
+        return AutoDAO.getInstance().getAutoForVertriebler(userDTO);
     }
 
-    public List<AutoDTO> getAnzeigenForEndkunde(EndkundeDTO endkundeDTO) throws SQLException {
-        return AutoDAO.getInstance().getAutoforEndKunde(endkundeDTO);
+    public List<AutoDTO> getAnzeigenForEndkunde(UserDTO userDTO) throws SQLException {
+        return AutoDAO.getInstance().getAutosForEndkunde(userDTO);
 
     }
 
@@ -72,25 +65,26 @@ public class AutoControl implements AutoControlInterface {
     }
 
     public List<AutoDTO> getAnzeigenForSearch(String suchtext, String filter) throws SQLException {
-        return AutoDAO.getInstance().getAutonForSearch(suchtext, filter);
+        return AutoDAO.getInstance().getAutoForSearch(suchtext, filter);
     }
 
-    public int getAnzahlReservierung(AutoDTO AutoDTO) throws DatabaseException, SQLException {
-        int anzahl_bewerber = 0;
-        String sql = "SELECT count(id_bewerbung) " +
-                "FROM collhbrs.bewerbung_to_Auto " +
-                "WHERE id_anzeige = ? ;";
+    public int getAnzahlReservierung(AutoDTO autoDTO) throws DatabaseException, SQLException {
+        int anzahlReservierungen = 0;
+        String sql = "SELECT count(user_id) " +
+                "FROM carlook.user_to_auto " +
+                "WHERE auto_id = ? ;";
+
         ResultSet rs;
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         try {
-            statement.setInt(1, AutoDTO.getId_anzeige());
+            statement.setInt(1, autoDTO.getId());
             rs = statement.executeQuery();
         } catch (SQLException throwables) {
             throw new DatabaseException("Fehler im SQL-Befehl: Bitte den Programmierer informieren!");
         }
         try {
             if (rs.next()) {
-                anzahl_bewerber = rs.getInt(1);
+                anzahlReservierungen = rs.getInt(1);
             }
         } catch (SQLException e) {
             Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!", Notification.Type.ERROR_MESSAGE);
@@ -99,6 +93,6 @@ public class AutoControl implements AutoControlInterface {
             rs.close();
         }
 
-        return anzahl_bewerber;
+        return anzahlReservierungen;
     }
 }

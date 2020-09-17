@@ -2,7 +2,6 @@ package org.Hausarbeit.gui.windows;
 
 import com.vaadin.ui.*;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.exceptions.AutoException;
 import org.Hausarbeit.process.proxy.ReservierungControlProxy;
@@ -14,44 +13,27 @@ import java.util.List;
 public class AutoWindow extends Window {
     private TextField name;
     private TextField art;
-    private TextField branche;
     private TextField studiengang;
-    private TextField ort;
     private TextArea beschreibung;
 
-    public AutoWindow(AutoDTO autoDTO, UserDTO userDTO) {
-        super(autoDTO.getName());
+    public AutoWindow(AutoDTO autoDTO, UserDTO userDTO, String endkunde) {
+        super(autoDTO.getmarke() + " - " + autoDTO.getbaujahr());
         center();
 
         //Name
-        name = new TextField("Titel");
-        name.setValue(autoDTO.getName());
+        name = new TextField("Marke");
+        name.setValue(autoDTO.getmarke());
         name.setReadOnly(true);
 
         //Art
-        art = new TextField("Art");
-        art.setValue(autoDTO.getArt());
+        art = new TextField("Baujahr");
+        art.setValue(autoDTO.getbaujahr());
         art.setReadOnly(true);
 
-        //Branche
-        branche = new TextField("Branche");
-        branche.setValue(autoDTO.getBranche());
-        branche.setReadOnly(true);
-
         //Studiengang
-        studiengang = new TextField("Studiengang");
-        studiengang.setValue(autoDTO.getStudiengang());
+        studiengang = new TextField("Ansprechpartner-ID");
+        studiengang.setValue("" + autoDTO.getVertriebler_id());
         studiengang.setReadOnly(true);
-
-        //Ort
-        ort = new TextField("Ort");
-        ort.setValue(autoDTO.getOrt());
-        ort.setReadOnly(true);
-
-        //Zeitraum
-        DateField zeitraum = new DateField("Ende der Ausschreibung");
-        zeitraum.setValue(autoDTO.getZeitraum());
-        zeitraum.setReadOnly(true);
 
         //Beschreibung
         beschreibung = new TextArea("Beschreibung");
@@ -68,7 +50,7 @@ public class AutoWindow extends Window {
         });
 
         //BewerbenButton
-        Button bewerbenButton = new Button("Bewerben");
+        Button bewerbenButton = new Button("Reservieren");
         ReservierungControlProxy.getInstance().checkAllowed(autoDTO, userDTO, bewerbenButton);
         bewerbenButton.addClickListener(new Button.ClickListener() {
             @Override
@@ -85,64 +67,53 @@ public class AutoWindow extends Window {
 
         //Vertikal
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout = this.buildVerticalLayout(verticalLayout, name, art, branche, studiengang, ort, zeitraum, beschreibung, horizontalLayout);
+        verticalLayout = this.buildVerticalLayout(verticalLayout, name, art, studiengang, beschreibung, horizontalLayout);
         setContent(verticalLayout);
     }
 
-    public AutoWindow(AutoDTO Auto, Grid<AutoDTO> grid, VertrieblerDTO vertrieblerDTO) {
-        super(Auto.getName());
+    public AutoWindow(AutoDTO autoDTO, Grid<AutoDTO> grid, UserDTO userDTO) {
+        super(autoDTO.getmarke() + " - " + autoDTO.getbaujahr());
         center();
 
         //Name
-        name = new TextField("Titel");
-        name.setValue(Auto.getName());
+        name = new TextField("Marke");
+        name.setValue(autoDTO.getmarke());
+        name.setReadOnly(true);
 
         //Art
-        art = new TextField("Art");
-        art.setValue(Auto.getArt());
-
-        //Branche
-        branche = new TextField("Branche");
-        branche.setValue(Auto.getBranche());
+        art = new TextField("Baujahr");
+        art.setValue(autoDTO.getbaujahr());
+        art.setReadOnly(true);
 
         //Studiengang
-        studiengang = new TextField("Studiengang");
-        studiengang.setValue(Auto.getStudiengang());
-
-        //Ort
-        ort = new TextField("Ort");
-        ort.setValue(Auto.getOrt());
-
-        //Zeitraum
-        DateField zeitraum = new DateField("Ende der Ausschreibung");
-        zeitraum.setValue(Auto.getZeitraum());
+        studiengang = new TextField("Ansprechpartner-ID");
+        studiengang.setValue("" + autoDTO.getVertriebler_id());
+        studiengang.setReadOnly(true);
 
         //Beschreibung
         beschreibung = new TextArea("Beschreibung");
-        beschreibung.setValue(Auto.getBeschreibung());
+        beschreibung.setValue(autoDTO.getBeschreibung());
+        beschreibung.setReadOnly(true);
 
         //SaveButton
         Button saveButton = new Button("Speichern");
         saveButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                Auto.setName(name.getValue());
-                Auto.setArt(art.getValue());
-                Auto.setBranche(branche.getValue());
-                Auto.setStudiengang(studiengang.getValue());
-                Auto.setOrt(ort.getValue());
-                Auto.setZeitraum(zeitraum.getValue());
-                Auto.setBeschreibung(beschreibung.getValue());
+                autoDTO.setmarke(name.getValue());
+                autoDTO.setbaujahr(art.getValue());
+                autoDTO.setVertriebler_id(Integer.parseInt(studiengang.getValue()));
+                autoDTO.setBeschreibung(beschreibung.getValue());
 
                 try {
-                    AutoControlProxy.getInstance().updateAuto(Auto);
+                    AutoControlProxy.getInstance().updateAuto(autoDTO);
                 } catch (AutoException e) {
                     Notification.show("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
                 }
                 UI.getCurrent().addWindow(new ConfirmationWindow("Auto erfolgreich gespeichert"));
                 List<AutoDTO> list = null;
                 try {
-                    list = AutoControlProxy.getInstance().getAnzeigenForVertriebler(vertrieblerDTO);
+                    list = AutoControlProxy.getInstance().getAnzeigenForVertriebler(userDTO);
                 } catch (SQLException e) {
                     Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!", Notification.Type.ERROR_MESSAGE);
                 }
@@ -168,17 +139,14 @@ public class AutoWindow extends Window {
 
         //Vertikal
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout = this.buildVerticalLayout(verticalLayout, name, art, branche, studiengang, ort, zeitraum, beschreibung, horizontalLayout);
+        verticalLayout = this.buildVerticalLayout(verticalLayout, name, art, studiengang,  beschreibung, horizontalLayout);
         setContent(verticalLayout);
     }
-    public VerticalLayout buildVerticalLayout(VerticalLayout verticalLayout, TextField name, TextField art, TextField branche, TextField studiengang,
-                                              TextField ort, DateField zeitraum, TextArea beschreibung, HorizontalLayout horizontalLayout ){
+
+    public VerticalLayout buildVerticalLayout(VerticalLayout verticalLayout, TextField name, TextField art, TextField studiengang, TextArea beschreibung, HorizontalLayout horizontalLayout ){
         verticalLayout.addComponent(name);
         verticalLayout.addComponent(art);
-        verticalLayout.addComponent(branche);
         verticalLayout.addComponent(studiengang);
-        verticalLayout.addComponent(ort);
-        verticalLayout.addComponent(zeitraum);
         verticalLayout.addComponent(beschreibung);
         verticalLayout.addComponent(horizontalLayout);
         verticalLayout.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);

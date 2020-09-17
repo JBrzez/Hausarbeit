@@ -4,16 +4,12 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.Hausarbeit.gui.ui.MyUI;
 import org.Hausarbeit.model.dao.UserDAO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
 
 import org.Hausarbeit.model.objects.dto.UserDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.process.Interfaces.LoginControlInterface;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.process.exceptions.NoSuchUserOrPassword;
 import org.Hausarbeit.services.db.JDBCConnection;
-import org.Hausarbeit.services.util.BCrypt;
-import org.Hausarbeit.services.util.Roles;
 import org.Hausarbeit.services.util.Views;
 
 import java.sql.PreparedStatement;
@@ -59,12 +55,6 @@ public class LoginControl implements LoginControlInterface {
                 }
                 userDTO.setEmail(email);
                 userDTO.setRolle(UserDAO.getInstance().getRoleFromUserID(userDTO.getId()));
-                if ( userDTO.isEndkunde()) {
-                    userDTO = ProfileControl.getInstance().getEndkunde(new EndkundeDTO(userDTO));
-                }
-                else {
-                    userDTO = ProfileControl.getInstance().getVertriebler(new VertrieblerDTO(userDTO));
-                }
             }
             else {
                 throw new NoSuchUserOrPassword();

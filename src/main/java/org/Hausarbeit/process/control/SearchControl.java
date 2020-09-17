@@ -3,11 +3,8 @@ package org.Hausarbeit.process.control;
 import com.vaadin.ui.UI;
 import org.Hausarbeit.gui.ui.MyUI;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.Interfaces.SearchControlInterface;
-import org.Hausarbeit.services.util.Roles;
 
 import java.sql.SQLException;
 import java.util.List;

@@ -1,10 +1,7 @@
 package org.Hausarbeit.process.Interfaces;
 
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
+import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.process.exceptions.AutoException;
 
@@ -13,9 +10,9 @@ import java.util.List;
 
 public interface AutoControlInterface {
 
-    List<AutoDTO> getAnzeigenForVertriebler(VertrieblerDTO vertrieblerDTO) throws SQLException;
+    List<AutoDTO> getAnzeigenForVertriebler(UserDTO vertrieblerDTO) throws SQLException;
 
-    List<AutoDTO> getAnzeigenForEndkunde(EndkundeDTO endkundeDTO) throws SQLException;
+    List<AutoDTO> getAnzeigenForEndkunde(UserDTO endkundeDTO) throws SQLException;
 
     void createAuto(AutoDTO AutoDTO) throws AutoException;
 

@@ -14,7 +14,7 @@ import org.Hausarbeit.gui.windows.DeleteAutoWindow;
 import org.Hausarbeit.gui.windows.DeleteWindow;
 import org.Hausarbeit.gui.windows.AutoWindow;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
+import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.proxy.SearchControlProxy;
 import org.Hausarbeit.services.util.BuildGrid;
 
@@ -30,11 +30,11 @@ public class AutoView extends VerticalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
         //User user = (User) VaadinSession.getCurrent().getAttribute(Roles.CURRENT_USER);
-        VertrieblerDTO vertrieblerDTO = new VertrieblerDTO(((MyUI) UI.getCurrent()).getUserDTO());
-        this.setUp(vertrieblerDTO);
+        UserDTO userDTO = new UserDTO(((MyUI) UI.getCurrent()).getUserDTO());
+        this.setUp(userDTO);
     }
 
-    private void setUp(VertrieblerDTO vertrieblerDTO) {
+    private void setUp(UserDTO userDTO) {
 
         //Top Layer
         this.addComponent(new TopPanel());
@@ -90,7 +90,7 @@ public class AutoView extends VerticalLayout implements View {
         showButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                AutoWindow window = new AutoWindow(selektiert, grid, vertrieblerDTO);
+                AutoWindow window = new AutoWindow(selektiert, grid, userDTO);
                 UI.getCurrent().addWindow(window);
             }
         });
@@ -99,7 +99,7 @@ public class AutoView extends VerticalLayout implements View {
         createButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                CreateAutoWindow window = new CreateAutoWindow(new AutoDTO(), grid, vertrieblerDTO);
+                CreateAutoWindow window = new CreateAutoWindow(new AutoDTO(), grid, userDTO);
                 UI.getCurrent().addWindow(window);
             }
         });

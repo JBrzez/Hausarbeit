@@ -3,9 +3,6 @@ package org.Hausarbeit.process.Interfaces;
 import com.vaadin.ui.Button;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
 import org.Hausarbeit.model.objects.dto.ReservierungDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
-import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.exceptions.ReservierungException;
 import org.Hausarbeit.process.exceptions.DatabaseException;
@@ -27,9 +24,9 @@ public interface ReservierungControlInterface {
 
     void createReservierung(String Reservierungstext, UserDTO userDTO) throws ReservierungException;
 
-    ReservierungDTO getReservierungForAuto(AutoDTO selektiert, EndkundeDTO endkundeDTO) throws SQLException, DatabaseException;
+    ReservierungDTO getReservierungForAuto(AutoDTO selektiert, UserDTO userDTO) throws SQLException, DatabaseException;
 
-    List<ReservierungDTO> getReservierungForEndkunde(EndkundeDTO endkundeDTO) throws SQLException;
+    List<ReservierungDTO> getReservierungForEndkunde(UserDTO userDTO) throws SQLException;
 
     void deleteReservierung(ReservierungDTO ReservierungDTO) throws ReservierungException;
 }

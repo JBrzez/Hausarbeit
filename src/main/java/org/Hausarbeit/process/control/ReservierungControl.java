@@ -5,14 +5,12 @@ import com.vaadin.ui.Notification;
 
 import org.Hausarbeit.model.dao.ReservierungDAO;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
 import org.Hausarbeit.model.objects.dto.ReservierungDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.Interfaces.ReservierungControlInterface;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.process.exceptions.ReservierungException;
 import org.Hausarbeit.services.db.JDBCConnection;
-import org.Hausarbeit.services.util.Roles;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
