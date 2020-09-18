@@ -24,19 +24,19 @@ public class AutoDTO extends AbstractDTO {
         this.beschreibung = beschreibung;
     }
 
-    public String getmarke() {
+    public String getMarke() {
         return marke;
     }
 
-    public void setmarke(String marke) {
+    public void setMarke(String marke) {
         this.marke = marke;
     }
 
-    public String getbaujahr() {
+    public String getBaujahr() {
         return baujahr;
     }
 
-    public void setbaujahr(String baujahr) {
+    public void setBaujahr(String baujahr) {
         this.baujahr = baujahr;
     }
 
@@ -51,8 +51,8 @@ public class AutoDTO extends AbstractDTO {
     public String toString(){
         return "ID: " + this.getId() + "\n" +
                 "Beschreibung: " + this.getBeschreibung() + "\n" +
-                "Marke: " + this.getmarke() + "\n" +
-                "Baujahr: " + this.getbaujahr() + "\n" +
+                "Marke: " + this.getMarke() + "\n" +
+                "Baujahr: " + this.getBaujahr() + "\n" +
                 "Vertriebler_ID: " + this.getVertriebler_id() + "\n";
     }
 

@@ -54,8 +54,8 @@ public class AutoDAO extends AbstractDAO {
 
         try {
             statement.setString(1, Auto.getBeschreibung());
-            statement.setString(2, Auto.getmarke());
-            statement.setString(3, Auto.getbaujahr());
+            statement.setString(2, Auto.getMarke());
+            statement.setString(3, Auto.getBaujahr());
             statement.setInt(4, Auto.getVertriebler_id());
             statement.executeUpdate();
             return true;
@@ -74,8 +74,8 @@ public class AutoDAO extends AbstractDAO {
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
             statement.setString(1, auto.getBeschreibung());
-            statement.setString(2, auto.getmarke());
-            statement.setString(3, auto.getbaujahr());
+            statement.setString(2, auto.getMarke());
+            statement.setString(3, auto.getBaujahr());
             statement.setInt(4, auto.getVertriebler_id());
             statement.setInt(5, auto.getId());
             statement.executeUpdate();
@@ -161,8 +161,8 @@ public class AutoDAO extends AbstractDAO {
                 autoDTO = new AutoDTO();
                 autoDTO.setId(rs.getInt(1));
                 autoDTO.setBeschreibung(rs.getString(2));
-                autoDTO.setmarke(rs.getString(3));
-                autoDTO.setbaujahr(rs.getString(4));
+                autoDTO.setMarke(rs.getString(3));
+                autoDTO.setBaujahr(rs.getString(4));
                 autoDTO.setVertriebler_id(rs.getInt(5));
 
                 try {

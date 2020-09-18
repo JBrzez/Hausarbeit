@@ -28,8 +28,8 @@ public class AutoControlProxy implements AutoControlInterface {
         return AutoControl.getInstance().getAnzeigenForVertriebler(vertrieblerDTO);
     }
 
-    public List<AutoDTO> getAnzeigenForEndkunde(UserDTO studentDTO) throws SQLException {
-        return AutoControl.getInstance().getAnzeigenForEndkunde(studentDTO);
+    public List<AutoDTO> getAnzeigenForEndkunde(UserDTO endkundeDTO) throws SQLException {
+        return AutoControl.getInstance().getAnzeigenForEndkunde(endkundeDTO);
     }
     public void createAuto(AutoDTO AutoDTO) throws AutoException {
         AutoControl.getInstance().createAuto(AutoDTO);

@@ -11,29 +11,29 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class AutoWindow extends Window {
-    private TextField name;
-    private TextField art;
-    private TextField studiengang;
+    private TextField marke;
+    private TextField baujahr;
+    private TextField ansprechpartner_id;
     private TextArea beschreibung;
 
-    public AutoWindow(AutoDTO autoDTO, UserDTO userDTO, String endkunde) {
-        super(autoDTO.getmarke() + " - " + autoDTO.getbaujahr());
+    public AutoWindow(AutoDTO autoDTO, UserDTO userDTO) {
+        super(autoDTO.getMarke() + " - " + autoDTO.getBaujahr());
         center();
 
-        //Name
-        name = new TextField("Marke");
-        name.setValue(autoDTO.getmarke());
-        name.setReadOnly(true);
+        //Marke
+        marke = new TextField("Marke");
+        marke.setValue(autoDTO.getMarke());
+        marke.setReadOnly(true);
 
-        //Art
-        art = new TextField("Baujahr");
-        art.setValue(autoDTO.getbaujahr());
-        art.setReadOnly(true);
+        //Baujahr
+        baujahr = new TextField("Baujahr");
+        baujahr.setValue(autoDTO.getBaujahr());
+        baujahr.setReadOnly(true);
 
-        //Studiengang
-        studiengang = new TextField("Ansprechpartner-ID");
-        studiengang.setValue("" + autoDTO.getVertriebler_id());
-        studiengang.setReadOnly(true);
+        //Ansprechpartner_ID
+        ansprechpartner_id = new TextField("Ansprechpartner-ID");
+        ansprechpartner_id.setValue("" + autoDTO.getVertriebler_id());
+        ansprechpartner_id.setReadOnly(true);
 
         //Beschreibung
         beschreibung = new TextArea("Beschreibung");
@@ -49,10 +49,10 @@ public class AutoWindow extends Window {
             }
         });
 
-        //BewerbenButton
-        Button bewerbenButton = new Button("Reservieren");
-        ReservierungControlProxy.getInstance().checkAllowed(autoDTO, userDTO, bewerbenButton);
-        bewerbenButton.addClickListener(new Button.ClickListener() {
+        //Reservierenutton
+        Button reservierenButton = new Button("Reservieren");
+        ReservierungControlProxy.getInstance().checkAllowed(autoDTO, userDTO, reservierenButton);
+        reservierenButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 UI.getCurrent().addWindow(new FreitextWindow(autoDTO, userDTO));
@@ -63,32 +63,32 @@ public class AutoWindow extends Window {
         //Horizontal
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponent(okButton);
-        horizontalLayout.addComponent(bewerbenButton);
+        horizontalLayout.addComponent(reservierenButton);
 
         //Vertikal
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout = this.buildVerticalLayout(verticalLayout, name, art, studiengang, beschreibung, horizontalLayout);
+        verticalLayout = this.buildVerticalLayout(verticalLayout, marke, baujahr, ansprechpartner_id, beschreibung, horizontalLayout);
         setContent(verticalLayout);
     }
 
     public AutoWindow(AutoDTO autoDTO, Grid<AutoDTO> grid, UserDTO userDTO) {
-        super(autoDTO.getmarke() + " - " + autoDTO.getbaujahr());
+        super(autoDTO.getMarke() + " - " + autoDTO.getBaujahr());
         center();
 
-        //Name
-        name = new TextField("Marke");
-        name.setValue(autoDTO.getmarke());
-        name.setReadOnly(true);
+        //Marke
+        marke = new TextField("Marke");
+        marke.setValue(autoDTO.getMarke());
+        marke.setReadOnly(true);
 
-        //Art
-        art = new TextField("Baujahr");
-        art.setValue(autoDTO.getbaujahr());
-        art.setReadOnly(true);
+        //Baujahr
+        baujahr = new TextField("Baujahr");
+        baujahr.setValue(autoDTO.getBaujahr());
+        baujahr.setReadOnly(true);
 
-        //Studiengang
-        studiengang = new TextField("Ansprechpartner-ID");
-        studiengang.setValue("" + autoDTO.getVertriebler_id());
-        studiengang.setReadOnly(true);
+        //Ansprechpartner_ID
+        ansprechpartner_id = new TextField("Ansprechpartner-ID");
+        ansprechpartner_id.setValue("" + autoDTO.getVertriebler_id());
+        ansprechpartner_id.setReadOnly(true);
 
         //Beschreibung
         beschreibung = new TextArea("Beschreibung");
@@ -100,9 +100,9 @@ public class AutoWindow extends Window {
         saveButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                autoDTO.setmarke(name.getValue());
-                autoDTO.setbaujahr(art.getValue());
-                autoDTO.setVertriebler_id(Integer.parseInt(studiengang.getValue()));
+                autoDTO.setMarke(marke.getValue());
+                autoDTO.setBaujahr(baujahr.getValue());
+                autoDTO.setVertriebler_id(Integer.parseInt(ansprechpartner_id.getValue()));
                 autoDTO.setBeschreibung(beschreibung.getValue());
 
                 try {
@@ -139,14 +139,14 @@ public class AutoWindow extends Window {
 
         //Vertikal
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout = this.buildVerticalLayout(verticalLayout, name, art, studiengang,  beschreibung, horizontalLayout);
+        verticalLayout = this.buildVerticalLayout(verticalLayout, marke, baujahr, ansprechpartner_id,  beschreibung, horizontalLayout);
         setContent(verticalLayout);
     }
 
-    public VerticalLayout buildVerticalLayout(VerticalLayout verticalLayout, TextField name, TextField art, TextField studiengang, TextArea beschreibung, HorizontalLayout horizontalLayout ){
-        verticalLayout.addComponent(name);
-        verticalLayout.addComponent(art);
-        verticalLayout.addComponent(studiengang);
+    public VerticalLayout buildVerticalLayout(VerticalLayout verticalLayout, TextField marke, TextField baujahr, TextField ansprechpartner_id, TextArea beschreibung, HorizontalLayout horizontalLayout ){
+        verticalLayout.addComponent(marke);
+        verticalLayout.addComponent(baujahr);
+        verticalLayout.addComponent(ansprechpartner_id);
         verticalLayout.addComponent(beschreibung);
         verticalLayout.addComponent(horizontalLayout);
         verticalLayout.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);

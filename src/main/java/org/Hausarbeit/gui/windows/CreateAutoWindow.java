@@ -15,29 +15,19 @@ public class CreateAutoWindow extends Window {
         super("Ihre Auto");
         center();
 
-        //Name
-        TextField name = new TextField("Titel");
-        name.setValue(auto.getName());
+        //Marke
+        TextField marke = new TextField("Marke");
+        marke.setValue(auto.getMarke());
 
-        //Art
-        TextField art = new TextField("Art der Anstellung");
-        art.setValue(auto.getArt());
+        //Baujahr
+        TextField baujahr = new TextField("Baujahr");
+        baujahr.setValue(auto.getBaujahr());
 
-        //Branche
-        TextField branche = new TextField("Branche");
-        branche.setValue(auto.getBranche());
+        //Vertriebler_ID
+        TextField vertriebler_id = new TextField("Vertriebler_ID");
+        vertriebler_id.setValue(" " + auto.getVertriebler_id());
 
-        //Studiengang
-        TextField studiengang = new TextField("Studiengang");
-        studiengang.setValue(auto.getStudiengang());
 
-        //Ort
-        TextField ort = new TextField("Ort");
-        ort.setValue(auto.getOrt());
-
-        //Zeitraum
-        DateField zeitraum = new DateField("Ende der Ausschreibung");
-        zeitraum.setValue(auto.getZeitraum());
 
         //Beschreibung
         TextArea beschreibung = new TextArea("Beschreibung");
@@ -49,12 +39,9 @@ public class CreateAutoWindow extends Window {
         saveButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                auto.setName(name.getValue());
-                auto.setArt(art.getValue());
-                auto.setBranche(branche.getValue());
-                auto.setStudiengang(studiengang.getValue());
-                auto.setOrt(ort.getValue());
-                auto.setZeitraum(zeitraum.getValue());
+                auto.setMarke(marke.getValue());
+                auto.setBaujahr(baujahr.getValue());
+                auto.setVertriebler_id(Integer.parseInt(vertriebler_id.getValue()));
                 auto.setBeschreibung(beschreibung.getValue());
 
                 try {
@@ -91,12 +78,9 @@ public class CreateAutoWindow extends Window {
 
         //Vertikal
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.addComponent(name);
-        verticalLayout.addComponent(art);
-        verticalLayout.addComponent(branche);
-        verticalLayout.addComponent(studiengang);
-        verticalLayout.addComponent(ort);
-        verticalLayout.addComponent(zeitraum);
+        verticalLayout.addComponent(marke);
+        verticalLayout.addComponent(baujahr);
+        verticalLayout.addComponent(vertriebler_id);
         verticalLayout.addComponent(beschreibung);
         verticalLayout.addComponent(horizontalLayout);
         verticalLayout.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);
