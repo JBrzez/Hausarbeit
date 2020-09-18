@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class FreitextWindow extends Window {
 
     public FreitextWindow(AutoDTO stellenanzeige, UserDTO userDTO) {
-        super(stellenanzeige.getName());
+        super(stellenanzeige.getMarke());
         center();
 
         //Reservierungstext

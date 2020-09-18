@@ -10,7 +10,7 @@ import org.Hausarbeit.process.proxy.ReservierungControlProxy;
 import org.Hausarbeit.services.util.Views;
 
 public class DeleteReservierungWindow extends DeleteWindow {
-    //Window zum Löschen von Reservierungen auf Stellenanzeigen
+    //Window zum Löschen von Reservierungen auf Auto
 
     public DeleteReservierungWindow(ReservierungDTO ReservierungDTO) {
         this.setText("Sind Sie sicher, dass Sie Ihre Reservierung auf diese Stellenanzeige löschen wollen? <br>" +

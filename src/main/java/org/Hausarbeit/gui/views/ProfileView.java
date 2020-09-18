@@ -47,21 +47,8 @@ public class ProfileView extends VerticalLayout implements View {
         TextField name = new TextField("Name");
         name.setPlaceholder("Mustermann");
 
-        TextField hochschule = new TextField("Hochschule");
-        hochschule.setPlaceholder("HBRS");
-
-        TextField semester = new TextField("Semester");
-        semester.setPlaceholder("1");
-
         DateField gebDatum = new DateField("Geburtsdatum");
         gebDatum.setValue(LocalDate.now());
-
-        TextField kenntnisse = new TextField("Kenntnisse");
-        kenntnisse.setPlaceholder("Java, SQL");
-
-        TextField studiengang = new TextField("Studiengang");
-        studiengang.setPlaceholder("Informatik");
-        //Upload profilbild = new Upload("Profilbild", reciever);
 
         Label meinProfil = new Label("Mein Profil");
         //Felder Unternehmen erzeugen
@@ -199,16 +186,11 @@ public class ProfileView extends VerticalLayout implements View {
 
         //horizontal Uni
         HorizontalLayout horizontalLayoutUni = new HorizontalLayout();
-        horizontalLayoutUni.addComponent(hochschule);
-        horizontalLayoutUni.addComponent(studiengang);
-        horizontalLayoutUni.addComponent(semester);
-
         if (userDTO.hasRole(Roles.ENDKUNDE)) {
             this.addComponent(meinProfil);
             this.addComponent(anrede);
             this.addComponent(horizontalLayoutName);
             this.addComponent(horizontalLayoutUni);
-            this.addComponent(kenntnisse);
             this.addComponent(gebDatum);
             this.addComponent(overwriteBtn);
             this.addComponent(deleteButton);

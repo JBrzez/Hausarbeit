@@ -37,7 +37,7 @@ public class RegistrationView extends VerticalLayout implements View {
         final Binder<UserDTO> emailBinder = new Binder<>();
         final TextField fieldEmail = new TextField("Email:");
         fieldEmail.focus();
-        fieldEmail.setPlaceholder("Email");
+        fieldEmail.setPlaceholder("name@carlook.de");
         fieldEmail.setRequiredIndicatorVisible(true);
         emailBinder.forField(fieldEmail)
                 .withValidator(new EmailValidator("Biite geben Sie eine korrekte Emailadresse ein!"))
@@ -91,7 +91,7 @@ public class RegistrationView extends VerticalLayout implements View {
         //Checkbox
         final Binder<UserDTO> checkboxBinder = new Binder<>();
         RadioButtonGroup<String> radioButtonGroup = new RadioButtonGroup<>("Registrieren als:");
-        radioButtonGroup.setItems("Endkunde", "Unternehmen");
+        radioButtonGroup.setItems("Endkunde", "Vertriebler");
         radioButtonGroup.setRequiredIndicatorVisible(true);
         radioButtonGroup.isSelected("Endkunde");
         checkboxBinder.forField(radioButtonGroup)

@@ -17,24 +17,12 @@ public class CreateAutoWindow extends Window {
         center();
 
         //Name
-        TextField name = new TextField("Titel");
-        name.setValue(Auto.getName());
+        TextField marke = new TextField("Marke");
+        marke.setValue(Auto.getMarke());
 
         //Art
-        TextField art = new TextField("Art der Anstellung");
-        art.setValue(Auto.getArt());
-
-        //Branche
-        TextField branche = new TextField("Branche");
-        branche.setValue(Auto.getBranche());
-
-        //Studiengang
-        TextField studiengang = new TextField("Studiengang");
-        studiengang.setValue(Auto.getStudiengang());
-
-        //Ort
-        TextField ort = new TextField("Ort");
-        ort.setValue(Auto.getOrt());
+        TextField baujahr = new TextField("Baujahr");
+        baujahr.setValue(Auto.getBaujahr());
 
         //Zeitraum
         DateField zeitraum = new DateField("Ende der Ausschreibung");
@@ -50,11 +38,8 @@ public class CreateAutoWindow extends Window {
         saveButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                Auto.setName(name.getValue());
-                Auto.setArt(art.getValue());
-                Auto.setBranche(branche.getValue());
-                Auto.setStudiengang(studiengang.getValue());
-                Auto.setOrt(ort.getValue());
+                Auto.setMarke(marke.getValue());
+                Auto.setBaujahr(baujahr.getValue());
                 Auto.setZeitraum(zeitraum.getValue());
                 Auto.setBeschreibung(beschreibung.getValue());
 
@@ -92,11 +77,8 @@ public class CreateAutoWindow extends Window {
 
         //Vertikal
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.addComponent(name);
-        verticalLayout.addComponent(art);
-        verticalLayout.addComponent(branche);
-        verticalLayout.addComponent(studiengang);
-        verticalLayout.addComponent(ort);
+        verticalLayout.addComponent(marke);
+        verticalLayout.addComponent(baujahr);
         verticalLayout.addComponent(zeitraum);
         verticalLayout.addComponent(beschreibung);
         verticalLayout.addComponent(horizontalLayout);

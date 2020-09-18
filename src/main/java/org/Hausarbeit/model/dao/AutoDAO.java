@@ -60,12 +60,9 @@ public class AutoDAO extends AbstractDAO {
         try {
             statement.setInt(1, userDTO.getId());
             statement.setString(2, Auto.getBeschreibung());
-            statement.setString(3, Auto.getArt());
-            statement.setString(4, Auto.getName());
+            statement.setString(3, Auto.getBaujahr());
+            statement.setString(4, Auto.getMarke());
             statement.setObject(5, Auto.getZeitraum());
-            statement.setString(6, Auto.getBranche());
-            statement.setString(7, Auto.getStudiengang());
-            statement.setString(8, Auto.getOrt());
             statement.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -82,12 +79,9 @@ public class AutoDAO extends AbstractDAO {
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
             statement.setString(1, Auto.getBeschreibung());
-            statement.setString(2, Auto.getArt());
-            statement.setString(3, Auto.getName());
+            statement.setString(2, Auto.getBaujahr());
+            statement.setString(3, Auto.getMarke());
             statement.setObject(4, Auto.getZeitraum());
-            statement.setString(5, Auto.getBranche());
-            statement.setString(6, Auto.getStudiengang());
-            statement.setString(7, Auto.getOrt());
             statement.setInt(8, Auto.getId_anzeige());
             statement.executeUpdate();
             return true;
@@ -182,12 +176,9 @@ public class AutoDAO extends AbstractDAO {
                 autoDTO = new AutoDTO();
                 autoDTO.setId_anzeige(rs.getInt(1));
                 autoDTO.setBeschreibung(rs.getString(2));
-                autoDTO.setArt(rs.getString(3));
-                autoDTO.setName(rs.getString(4));
+                autoDTO.setBaujahr(rs.getString(3));
+                autoDTO.setMarke(rs.getString(4));
                 autoDTO.setZeitraum(rs.getDate(5).toLocalDate());
-                autoDTO.setBranche(rs.getString(6));
-                autoDTO.setStudiengang(rs.getString(7));
-                autoDTO.setOrt(rs.getString(8));
                 try {
 
                     autoDTO.setAnzahl_Reservierung(AutoControlProxy.getInstance().getAnzahlReservierung(autoDTO));

@@ -20,33 +20,18 @@ public class AutoWindow extends Window {
     private TextArea beschreibung;
 
     public AutoWindow(AutoDTO autoDTO, UserDTO userDTO) {
-        super(autoDTO.getName());
+        super(autoDTO.getMarke());
         center();
 
         //Name
         name = new TextField("Titel");
-        name.setValue(autoDTO.getName());
+        name.setValue(autoDTO.getMarke());
         name.setReadOnly(true);
 
         //Art
         art = new TextField("Art");
-        art.setValue(autoDTO.getArt());
+        art.setValue(autoDTO.getBaujahr());
         art.setReadOnly(true);
-
-        //Branche
-        branche = new TextField("Branche");
-        branche.setValue(autoDTO.getBranche());
-        branche.setReadOnly(true);
-
-        //Studiengang
-        studiengang = new TextField("Studiengang");
-        studiengang.setValue(autoDTO.getStudiengang());
-        studiengang.setReadOnly(true);
-
-        //Ort
-        ort = new TextField("Ort");
-        ort.setValue(autoDTO.getOrt());
-        ort.setReadOnly(true);
 
         //Zeitraum
         DateField zeitraum = new DateField("Ende der Ausschreibung");
@@ -90,28 +75,16 @@ public class AutoWindow extends Window {
     }
 
     public AutoWindow(AutoDTO Auto, Grid<AutoDTO> grid, VertrieblerDTO vertrieblerDTO) {
-        super(Auto.getName());
+        super(Auto.getMarke());
         center();
 
         //Name
-        name = new TextField("Titel");
-        name.setValue(Auto.getName());
+        name = new TextField("Marke");
+        name.setValue(Auto.getMarke());
 
         //Art
-        art = new TextField("Art");
-        art.setValue(Auto.getArt());
-
-        //Branche
-        branche = new TextField("Branche");
-        branche.setValue(Auto.getBranche());
-
-        //Studiengang
-        studiengang = new TextField("Studiengang");
-        studiengang.setValue(Auto.getStudiengang());
-
-        //Ort
-        ort = new TextField("Ort");
-        ort.setValue(Auto.getOrt());
+        art = new TextField("Baujahr");
+        art.setValue(Auto.getBaujahr());
 
         //Zeitraum
         DateField zeitraum = new DateField("Ende der Ausschreibung");
@@ -126,11 +99,8 @@ public class AutoWindow extends Window {
         saveButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                Auto.setName(name.getValue());
-                Auto.setArt(art.getValue());
-                Auto.setBranche(branche.getValue());
-                Auto.setStudiengang(studiengang.getValue());
-                Auto.setOrt(ort.getValue());
+                Auto.setMarke(name.getValue());
+                Auto.setBaujahr(art.getValue());
                 Auto.setZeitraum(zeitraum.getValue());
                 Auto.setBeschreibung(beschreibung.getValue());
 
