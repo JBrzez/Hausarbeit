@@ -72,7 +72,7 @@ public class AutoControl implements AutoControlInterface {
         int anzahlReservierungen = 0;
         String sql = "SELECT count(user_id) " +
                 "FROM carlook.user_to_auto " +
-                "WHERE auto_id = ? ;";
+                "WHERE auto_id = ?";
 
         ResultSet rs;
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);

@@ -151,8 +151,11 @@ public class MainView extends VerticalLayout implements View {
     private void search(TextField search, ComboBox<String> comboBox, Grid<AutoDTO> grid, Button detailButton) {
         if (search.getValue().length() > 1) {
             suchtext = search.getValue();
-            String filter = comboBox.getValue();
-            filter.replace("Vertriebler-ID", "vertriebler_id");
+            System.out.println(suchtext);
+            String filter = comboBox.getValue().toLowerCase();
+
+            filter = filter == null ? "marke" : filter == "Vertriebler-ID" ? "vertriebler_id" : filter;
+            System.out.println(comboBox.getValue());
             try {
                 list = SearchControlProxy.getInstance().getAnzeigenForSearch(suchtext, filter);
             } catch (SQLException e) {
