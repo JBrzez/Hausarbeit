@@ -1,5 +1,6 @@
 package org.Hausarbeit.gui.windows;
 
+import com.vaadin.data.Binder;
 import com.vaadin.ui.*;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
@@ -18,10 +19,15 @@ public class CreateAutoWindow extends Window {
         //Marke
         TextField marke = new TextField("Marke");
         marke.setValue(auto.getMarke());
+        marke.setRequiredIndicatorVisible(true);
+        new Binder<AutoDTO>().forField(marke).withValidator(txt -> txt.length() > 1, "Mindestens 2 Zeichen").bind(AutoDTO::getMarke, AutoDTO::setMarke);
+
 
         //Baujahr
         TextField baujahr = new TextField("Baujahr");
         baujahr.setValue(auto.getBaujahr());
+        baujahr.setRequiredIndicatorVisible(true);
+        new Binder<AutoDTO>().forField(baujahr).withValidator(txt -> txt.length() == 4, "Genau 4 Zeichen").bind(AutoDTO::getBaujahr, AutoDTO::setBaujahr);
 
         //Beschreibung
         TextArea beschreibung = new TextArea("Beschreibung");
@@ -37,6 +43,17 @@ public class CreateAutoWindow extends Window {
                 auto.setBaujahr(baujahr.getValue());
                 auto.setVertriebler_id(userDTO.isVertriebler() ? userDTO.getId() : -1);
                 auto.setBeschreibung(beschreibung.getValue());
+
+                if(marke.getValue().length() < 2)
+                {
+                    Notification.show("Es muss eine Marke angegeben mit mindestens zwei Zeichen.", Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
+                if(baujahr.getValue().length() != 4)
+                {
+                    Notification.show("Es muss eine Baujahr angegeben, genau vier Zeichen.", Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
 
                 try {
                     AutoControlProxy.getInstance().createAuto(auto);

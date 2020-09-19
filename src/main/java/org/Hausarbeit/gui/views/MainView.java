@@ -75,7 +75,7 @@ public class MainView extends VerticalLayout implements View {
         //Combobox
         final ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPlaceholder("Filtern nach");
-        comboBox.setItems("Marke", "Baujahr", "Beschreibung", "Vertriebler-ID");
+        comboBox.setItems("Marke", "Baujahr", "Beschreibung");
 
         //SelectionListener Tabelle
         grid.addSelectionListener(new SelectionListener<AutoDTO>() {
@@ -152,9 +152,9 @@ public class MainView extends VerticalLayout implements View {
         if (search.getValue().length() > 1) {
             suchtext = search.getValue();
             System.out.println(suchtext);
-            String filter = comboBox.getValue().toLowerCase();
+            String filter = comboBox == null ? null : comboBox.getValue();
 
-            filter = filter == null ? "marke" : filter == "Vertriebler-ID" ? "vertriebler_id" : filter;
+            filter = filter == null ? "marke" : filter.toLowerCase() == "vertriebler-id" ? "vertriebler_id" : filter;
             System.out.println(comboBox.getValue());
             try {
                 list = SearchControlProxy.getInstance().getAnzeigenForSearch(suchtext, filter);

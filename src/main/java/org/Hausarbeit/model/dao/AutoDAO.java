@@ -126,7 +126,7 @@ public class AutoDAO extends AbstractDAO {
         } else {
             String sql = "SELECT id, beschreibung, marke, baujahr, vertriebler_id " +
                     "FROM carlook.auto " +
-                    "WHERE " + filter.toLowerCase() + " like ? ;";
+                    "WHERE LOWER(" + filter.toLowerCase() + ") like LOWER(?) ;";
             statement = this.getPreparedStatement(sql);
 
 
@@ -169,7 +169,7 @@ public class AutoDAO extends AbstractDAO {
     }
 
     private void buildList(ResultSet rs, List<AutoDTO> listAuto) throws SQLException {
-
+        if (rs == null) return;
         AutoDTO autoDTO;
         try {
             while (rs.next()) {
@@ -190,9 +190,6 @@ public class AutoDAO extends AbstractDAO {
             }
         } catch (SQLException e) {
             Notification.show("Es ist ein schwerer SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
-        } finally{
-            assert rs != null;
-            rs.close();
         }
     }
 
