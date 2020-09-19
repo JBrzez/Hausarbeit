@@ -90,7 +90,7 @@ public class AutoView extends VerticalLayout implements View {
         editButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                AutoWindow window = new AutoWindow(selektiert, grid, userDTO);
+                AutoWindow window = new AutoWindow(selektiert, grid, userDTO, true);
                 UI.getCurrent().addWindow(window);
             }
         });

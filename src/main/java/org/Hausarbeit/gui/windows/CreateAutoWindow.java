@@ -12,7 +12,7 @@ import java.util.List;
 public class CreateAutoWindow extends Window {
 
     public CreateAutoWindow(AutoDTO auto, Grid<AutoDTO> grid, UserDTO userDTO) { // Vorher Vertriebler
-        super("Ihre Autos");
+        super("Auto erstellen:");
         center();
 
         //Marke
@@ -22,12 +22,6 @@ public class CreateAutoWindow extends Window {
         //Baujahr
         TextField baujahr = new TextField("Baujahr");
         baujahr.setValue(auto.getBaujahr());
-
-        //Vertriebler_ID
-        TextField vertriebler_id = new TextField("Vertriebler_ID");
-        vertriebler_id.setValue(" " + auto.getVertriebler_id());
-
-
 
         //Beschreibung
         TextArea beschreibung = new TextArea("Beschreibung");
@@ -41,7 +35,7 @@ public class CreateAutoWindow extends Window {
             public void buttonClick(Button.ClickEvent clickEvent) {
                 auto.setMarke(marke.getValue());
                 auto.setBaujahr(baujahr.getValue());
-                auto.setVertriebler_id(Integer.parseInt(vertriebler_id.getValue()));
+                auto.setVertriebler_id(userDTO.isVertriebler() ? userDTO.getId() : -1);
                 auto.setBeschreibung(beschreibung.getValue());
 
                 try {
@@ -80,7 +74,6 @@ public class CreateAutoWindow extends Window {
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.addComponent(marke);
         verticalLayout.addComponent(baujahr);
-        verticalLayout.addComponent(vertriebler_id);
         verticalLayout.addComponent(beschreibung);
         verticalLayout.addComponent(horizontalLayout);
         verticalLayout.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);

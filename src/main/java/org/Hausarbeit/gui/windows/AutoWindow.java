@@ -21,7 +21,7 @@ public class AutoWindow extends Window {
     private TextArea beschreibung;
 
     public AutoWindow(AutoDTO autoDTO, UserDTO userDTO) { // Endkunde
-        super(autoDTO.getMarke() + " - " + autoDTO.getBaujahr());
+        super("Auto Übersicht");
         center();
 
         //Marke
@@ -84,24 +84,24 @@ public class AutoWindow extends Window {
         setContent(verticalLayout);
     }
 
-    public AutoWindow(AutoDTO autoDTO, Grid<AutoDTO> grid, UserDTO userDTO) {
-        super(autoDTO.getMarke() + " - " + autoDTO.getBaujahr());
+    public AutoWindow(AutoDTO autoDTO, Grid<AutoDTO> grid, UserDTO userDTO, boolean edit) {
+        super("Auto Übersicht");
         center();
 
         //Marke
         marke = new TextField("Marke");
         marke.setValue(autoDTO.getMarke());
-        marke.setReadOnly(true);
+        if(!edit) marke.setReadOnly(true);
 
         //Baujahr
         baujahr = new TextField("Baujahr");
         baujahr.setValue(autoDTO.getBaujahr());
-        baujahr.setReadOnly(true);
+        if(!edit) baujahr.setReadOnly(true);
 
         //Beschreibung
         beschreibung = new TextArea("Beschreibung");
         beschreibung.setValue(autoDTO.getBeschreibung());
-        beschreibung.setReadOnly(true);
+        if(!edit) beschreibung.setReadOnly(true);
 
         //SaveButton
         Button saveButton = new Button("Speichern");
