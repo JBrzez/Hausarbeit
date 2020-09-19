@@ -43,7 +43,7 @@ public class ReservierungView extends VerticalLayout implements View {
         //Tabelle
         final Grid<AutoDTO> grid = new Grid<>("Ihre Reservierungen");
         grid.setSizeFull();
-        grid.setHeightMode(HeightMode.UNDEFINED);
+        grid.setHeightMode(HeightMode.ROW);
         SingleSelect<AutoDTO> selection = grid.asSingleSelect();
         grid.setStyleName("schrift-tabelle");
         //Tabelle füllen
