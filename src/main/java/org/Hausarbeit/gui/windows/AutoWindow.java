@@ -1,5 +1,6 @@
 package org.Hausarbeit.gui.windows;
 
+import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.*;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
@@ -97,11 +98,6 @@ public class AutoWindow extends Window {
         baujahr.setValue(autoDTO.getBaujahr());
         baujahr.setReadOnly(true);
 
-        //Ansprechpartner_ID
-        ansprechpartner_id = new TextField("Ansprechpartner-ID");
-        ansprechpartner_id.setValue("" + autoDTO.getVertriebler_id());
-        ansprechpartner_id.setReadOnly(true);
-
         //Beschreibung
         beschreibung = new TextArea("Beschreibung");
         beschreibung.setValue(autoDTO.getBeschreibung());
@@ -114,10 +110,14 @@ public class AutoWindow extends Window {
             public void buttonClick(Button.ClickEvent clickEvent) {
                 autoDTO.setMarke(marke.getValue());
                 autoDTO.setBaujahr(baujahr.getValue());
-                autoDTO.setVertriebler_id(Integer.parseInt(ansprechpartner_id.getValue()));
+                autoDTO.setVertriebler_id(userDTO.isVertriebler() ? userDTO.getId() : -1);
                 autoDTO.setBeschreibung(beschreibung.getValue());
 
                 try {
+                    System.out.println(autoDTO);
+                    System.out.println(autoDTO);
+                    System.out.println(autoDTO);
+                    System.out.println(autoDTO);
                     AutoControlProxy.getInstance().updateAuto(autoDTO);
                 } catch (AutoException e) {
                     Notification.show("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
@@ -129,6 +129,7 @@ public class AutoWindow extends Window {
                 } catch (SQLException e) {
                     Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!", Notification.Type.ERROR_MESSAGE);
                 }
+//                grid.setHeightMode(HeightMode.ROW);
                 grid.setItems();
                 grid.setItems(list);
                 close();
@@ -151,14 +152,14 @@ public class AutoWindow extends Window {
 
         //Vertikal
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout = this.buildVerticalLayout(verticalLayout, marke, baujahr, ansprechpartner_id,  beschreibung, horizontalLayout);
+        verticalLayout = this.buildVerticalLayout(verticalLayout, marke, baujahr, null,  beschreibung, horizontalLayout);
         setContent(verticalLayout);
     }
 
     public VerticalLayout buildVerticalLayout(VerticalLayout verticalLayout, TextField marke, TextField baujahr, TextField ansprechpartner_id, TextArea beschreibung, HorizontalLayout horizontalLayout ){
         verticalLayout.addComponent(marke);
         verticalLayout.addComponent(baujahr);
-        verticalLayout.addComponent(ansprechpartner_id);
+        if(ansprechpartner_id != null) verticalLayout.addComponent(ansprechpartner_id);
         verticalLayout.addComponent(beschreibung);
         verticalLayout.addComponent(horizontalLayout);
         verticalLayout.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);

@@ -66,6 +66,14 @@ public class AutoDAO extends AbstractDAO {
         }
 
     }
+    public boolean createOrUpdateAuto(AutoDTO autoDTO, UserDTO userDTO) {
+        if(autoDTO.getId() == 0)
+        {
+            return createAuto(autoDTO, userDTO);
+        } else {
+            return updateAuto(autoDTO);
+        }
+    }
 
     //Verändert eine bestehende Auto in der Datenbank
     public boolean updateAuto(AutoDTO auto) {
@@ -142,10 +150,17 @@ public class AutoDAO extends AbstractDAO {
         String sql = "SELECT id, beschreibung, marke, baujahr, vertriebler_id " +
                 "FROM carlook.auto " +
                 "WHERE id IN ( SELECT auto_id from carlook.user_to_auto where user_id = ?)";
+        System.out.println(user);
         PreparedStatement statement = this.getPreparedStatement(sql);
+        System.out.println(statement);
         List<AutoDTO> listAuto = new ArrayList<>();
         ResultSet rs = null;
-
+        try {
+            statement.setInt(1, user.getId());
+            rs = statement.executeQuery();
+        } catch (SQLException e) {
+            Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
+        }
         List<AutoDTO> list = new ArrayList<>();
 
         assert rs != null;

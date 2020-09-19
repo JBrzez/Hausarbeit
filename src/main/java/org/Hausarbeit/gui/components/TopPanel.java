@@ -5,6 +5,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import org.Hausarbeit.gui.ui.MyUI;
+import org.Hausarbeit.gui.views.MainView;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.proxy.LoginControlProxy;
 import org.Hausarbeit.services.util.Roles;
@@ -52,6 +53,12 @@ public class TopPanel extends HorizontalLayout {
         MenuBar bar = new MenuBar();
         MenuBar.MenuItem item1 = bar.addItem("Menu", VaadinIcons.MENU,null);
 
+        item1.addItem("Startseite", VaadinIcons.ANCHOR, new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem menuItem) {
+                UI.getCurrent().getNavigator().navigateTo(Views.MAIN);
+            }
+        });
 
         //Gast Menü
         if (userDTO == null) {
@@ -80,7 +87,7 @@ public class TopPanel extends HorizontalLayout {
 
             //Unternehmer Menü
             if ( userDTO.isVertriebler() ) {
-                item1.addItem("Meine erstellten Autos", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
+                item1.addItem("Autos verwalten und erstellen", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
                         UI.getCurrent().getNavigator().navigateTo(Views.AUTO);
