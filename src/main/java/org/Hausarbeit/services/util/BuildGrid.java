@@ -6,11 +6,9 @@ import org.Hausarbeit.model.objects.dto.AutoDTO;
 public class BuildGrid {
     public static void buildGrid(Grid<AutoDTO> grid) {
         grid.removeAllColumns();
-        grid.addColumn(AutoDTO::getName).setCaption("Name");
-        grid.addColumn(AutoDTO::getArt).setCaption("Art");
-        grid.addColumn(AutoDTO::getBranche).setCaption("Branche");
-        grid.addColumn(AutoDTO::getStudiengang).setCaption("Studiengang");
-        grid.addColumn(AutoDTO::getOrt).setCaption("Ort");
-        grid.addColumn(AutoDTO::getZeitraum).setCaption("Ende der Ausschreibung");
+        grid.addColumn(AutoDTO::getMarke).setCaption("Marke");
+        grid.addColumn(AutoDTO::getBaujahr).setCaption("Baujahr");
+        grid.addColumn(AutoDTO::getBeschreibung).setCaption("Beschreibung");
+        grid.addColumn(AutoDTO::getVertriebler_id).setCaption("Vertriebler-ID");
     }
 }

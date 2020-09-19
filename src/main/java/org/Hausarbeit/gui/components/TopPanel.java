@@ -71,16 +71,16 @@ public class TopPanel extends HorizontalLayout {
 
         //Profil
         if (userDTO != null) {
-            item1.addItem("Profil", VaadinIcons.USER, new MenuBar.Command() {
-                @Override
-                public void menuSelected(MenuBar.MenuItem menuItem) {
-                    UI.getCurrent().getNavigator().navigateTo(Views.PROFILE);
-                }
-            });
+//            item1.addItem("Profil", VaadinIcons.USER, new MenuBar.Command() {
+////                @Override
+////                public void menuSelected(MenuBar.MenuItem menuItem) {
+////                    UI.getCurrent().getNavigator().navigateTo(Views.PROFILE);
+////                }
+////            });
 
             //Unternehmer Menü
             if ( userDTO.isVertriebler() ) {
-                item1.addItem("Meine Stellenanzeigen", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
+                item1.addItem("Meine erstellten Autos", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
                         UI.getCurrent().getNavigator().navigateTo(Views.AUTO);
@@ -90,7 +90,7 @@ public class TopPanel extends HorizontalLayout {
 
             //Student Menü
             if ( userDTO.isEndkunde() ) {
-                item1.addItem("Meine Bewerbungen", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
+                item1.addItem("Meine reservierten Autos", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
                         UI.getCurrent().getNavigator().navigateTo(Views.RESERVIERUNG);

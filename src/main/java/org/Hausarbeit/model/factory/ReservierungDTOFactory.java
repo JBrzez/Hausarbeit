@@ -4,10 +4,11 @@ import org.Hausarbeit.model.objects.dto.ReservierungDTO;
 
 public class ReservierungDTOFactory {
 
-    public static ReservierungDTO createReservierungDTO(int id, String text) {
+    public static ReservierungDTO createReservierungDTO(int user_id, int auto_id) {
         ReservierungDTO reservierungDTO = new ReservierungDTO();
-        reservierungDTO.setId(id);
-        reservierungDTO.setFreitext(text);
+        reservierungDTO.setUser_id(user_id);
+        reservierungDTO.setAuto_id(auto_id);
+
         return reservierungDTO;
     }
 

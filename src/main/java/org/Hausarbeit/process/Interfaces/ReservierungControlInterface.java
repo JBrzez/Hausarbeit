@@ -12,21 +12,15 @@ import java.util.List;
 
 public interface ReservierungControlInterface {
 
-    int getLatestApply(UserDTO userDTO) throws DatabaseException, SQLException;
+    boolean reserveAuto(AutoDTO autoDTO, UserDTO userDTO) throws DatabaseException;
 
-    void applyForAuto(AutoDTO auto, int id_Reservierung) throws DatabaseException;
-
-    void applyingIsAllowed() throws DatabaseException, ReservierungException, SQLException;
-
-    void checkAlreadyApplied(AutoDTO auto, UserDTO userDTO) throws ReservierungException, DatabaseException, SQLException;
+    boolean userCanReserve(UserDTO userDTO, AutoDTO autoDTO) throws DatabaseException, SQLException;
 
     void checkAllowed(AutoDTO auto, UserDTO userDTO, Button bewerbenButton);
-
-    void createReservierung(String Reservierungstext, UserDTO userDTO) throws ReservierungException;
-
-    ReservierungDTO getReservierungForAuto(AutoDTO selektiert, UserDTO userDTO) throws SQLException, DatabaseException;
 
     List<ReservierungDTO> getReservierungForEndkunde(UserDTO userDTO) throws SQLException;
 
     void deleteReservierung(ReservierungDTO ReservierungDTO) throws ReservierungException;
+
+    ReservierungDTO getReservierungForAuto(AutoDTO selektiert, UserDTO userDTO);
 }

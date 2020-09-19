@@ -5,6 +5,7 @@ import org.Hausarbeit.model.objects.dto.ReservierungDTO;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.Interfaces.ReservierungControlInterface;
+import org.Hausarbeit.process.control.ReservierungControl;
 import org.Hausarbeit.process.exceptions.ReservierungException;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 
@@ -25,39 +26,33 @@ public class ReservierungControlProxy implements ReservierungControlInterface {
         return reservierungControl;
     }
 
-    public int getLatestApply(UserDTO userDTO) throws DatabaseException, SQLException {
-        return reservierungControl.getInstance().getLatestApply(userDTO);
+    public boolean reserveAuto(AutoDTO autoDTO, UserDTO userDTO) throws DatabaseException {
+        return ReservierungControl.getInstance().reserveAuto(autoDTO, userDTO);
     }
 
-    public void applyForAuto(AutoDTO Auto, int id_Reservierung) throws DatabaseException {
-        reservierungControl.getInstance().applyForAuto(Auto, id_Reservierung);
-    }
 
-    public void applyingIsAllowed() throws DatabaseException, ReservierungException, SQLException {
-        reservierungControl.getInstance().applyingIsAllowed();
-    }
-
-    public void checkAlreadyApplied(AutoDTO AutoDTO, UserDTO userDTO) throws ReservierungException, DatabaseException, SQLException {
-        reservierungControl.getInstance().checkAlreadyApplied(AutoDTO, userDTO);
+    public boolean userCanReserve(UserDTO userDTO, AutoDTO AutoDTO) throws DatabaseException, SQLException {
+        return ReservierungControl.getInstance().userCanReserve(userDTO, AutoDTO);
 
     }
     public void checkAllowed(AutoDTO Auto, UserDTO userDTO, Button bewerbenButton) {
-        reservierungControl.getInstance().checkAllowed(Auto, userDTO, bewerbenButton);
+        ReservierungControl.getInstance().checkAllowed(Auto, userDTO, bewerbenButton);
     }
 
-    public void createReservierung(String Reservierungstext, UserDTO userDTO) throws ReservierungException {
-        reservierungControl.getInstance().createReservierung(Reservierungstext, userDTO);
-    }
-
-    public ReservierungDTO getReservierungForAuto(AutoDTO selektiert, UserDTO userDTO) throws SQLException, DatabaseException {
-        return reservierungControl.getInstance().getReservierungForAuto(selektiert, userDTO);
+    public void createReservierung(AutoDTO autoDTO, UserDTO userDTO) throws DatabaseException {
+        ReservierungControl.getInstance().reserveAuto(autoDTO, userDTO);
     }
 
     public List<ReservierungDTO> getReservierungForEndkunde(UserDTO userDTO) throws SQLException {
-        return reservierungControl.getInstance().getReservierungForEndkunde(userDTO);
+        return ReservierungControl.getInstance().getReservierungForEndkunde(userDTO);
     }
 
     public void deleteReservierung(ReservierungDTO ReservierungDTO) throws ReservierungException {
-        reservierungControl.getInstance().deleteReservierung(ReservierungDTO);
+        ReservierungControl.getInstance().deleteReservierung(ReservierungDTO);
+    }
+
+    @Override
+    public ReservierungDTO getReservierungForAuto(AutoDTO selektiert, UserDTO userDTO) {
+        return ReservierungControl.getInstance().getReservierungForAuto(selektiert, userDTO);
     }
 }

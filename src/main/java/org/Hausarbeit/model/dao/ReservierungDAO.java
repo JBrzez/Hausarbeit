@@ -9,6 +9,7 @@ import org.Hausarbeit.model.objects.dto.ReservierungDTO;
 
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.exceptions.DatabaseException;
+import org.Hausarbeit.process.proxy.AutoControlProxy;
 import org.Hausarbeit.services.db.JDBCConnection;
 
 import java.sql.PreparedStatement;
@@ -33,33 +34,8 @@ public class ReservierungDAO extends AbstractDAO {
         return reservierungDAO;
     }
 
-    public ReservierungDTO getReservierung(int id_reservierung) throws DatabaseException, SQLException {
-        String sql = "SELECT id_bewerbung, freitext " +
-                "FROM collhbrs.bewerbung " +
-                "WHERE id_bewerbung = ?";
-        PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
-        ResultSet rs = null;
-        ReservierungDTO reservierungDTO = null;
-        try {
-            statement.setInt(1, id_reservierung);
-            rs = statement.executeQuery();
-            if (rs.next()) {
-                int id = rs.getInt(1);
-                String text = rs.getString(2);
-                reservierungDTO = ReservierungDTOFactory.createReservierungDTO(id, text);
-            }
-        } catch (SQLException e) {
-            Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
-        } finally {
-            assert rs != null;
-            rs.close();
-        }
-        return reservierungDTO;
-    }
-
-
     public boolean createReservierung(UserDTO userDTO, AutoDTO autoDTO) {
-        String sql = "INSERT INTO carlook.auto (user_id, auto_id) " +
+        String sql = "INSERT INTO carlook.user_to_auto (user_id, auto_id) " +
                 "VALUES (?, ?); ";
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
@@ -75,7 +51,7 @@ public class ReservierungDAO extends AbstractDAO {
 
     public boolean deleteReservierung(ReservierungDTO reservierungDTO) {
         String sql = "DELETE " +
-                "FROM carlook.auto " +
+                "FROM carlook.user_to_auto " +
                 "WHERE auto_id = ? AND user_id = ?";
         PreparedStatement statement = this.getPreparedStatement(sql);
         try {
@@ -88,5 +64,42 @@ public class ReservierungDAO extends AbstractDAO {
             Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
             return false;
         }
+    }
+    public List<ReservierungDTO> getReservierungForEndkunde(UserDTO userDTO) {
+        String sql = "SELECT auto_id " +
+                "FROM carlook.user_to_auto " +
+                "WHERE user_id = ?";
+        PreparedStatement statement = this.getPreparedStatement(sql);
+        ResultSet rs = null;
+        try {
+            statement.setInt(1, userDTO.getId());
+            rs = statement.executeQuery();
+        } catch (SQLException e) {
+            Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
+        }
+        List<ReservierungDTO> list = new ArrayList<>();
+        assert rs != null;
+
+
+        try {
+            while (rs.next()) {
+                ReservierungDTO reservierungDTO;
+                reservierungDTO = new ReservierungDTO();
+                reservierungDTO.setAuto_id(rs.getInt(1));
+                reservierungDTO.setUser_id(userDTO.getId());
+
+                list.add(reservierungDTO);
+            }
+        } catch (SQLException e) {
+            Notification.show("Es ist ein schwerer SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
+        } finally{
+            try {
+                rs.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+        return list;
     }
 }

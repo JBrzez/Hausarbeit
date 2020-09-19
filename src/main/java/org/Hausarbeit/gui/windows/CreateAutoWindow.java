@@ -12,7 +12,7 @@ import java.util.List;
 public class CreateAutoWindow extends Window {
 
     public CreateAutoWindow(AutoDTO auto, Grid<AutoDTO> grid, UserDTO userDTO) { // Vorher Vertriebler
-        super("Ihre Auto");
+        super("Ihre Autos");
         center();
 
         //Marke

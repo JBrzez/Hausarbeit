@@ -24,9 +24,12 @@ public class SearchControl implements SearchControlInterface {
     }
 
     public List<AutoDTO> getAnzeigenForUser() throws SQLException {
-        UserDTO userDTO = ( (MyUI) UI.getCurrent() ).getUserDTO();
+        return getAnzeigenForUser(( (MyUI) UI.getCurrent() ).getUserDTO());
+    }
+
+    public List<AutoDTO> getAnzeigenForUser(UserDTO userDTO) throws SQLException {
         if (userDTO.isEndkunde()) {
-          //  EndkundeDTO EndkundeDTO = new EndkundeDTO(userDTO);
+            //  EndkundeDTO EndkundeDTO = new EndkundeDTO(userDTO);
             return AutoControl.getInstance().getAnzeigenForEndkunde(userDTO);
         }
         //VertrieblerDTO VertrieblerDTO = new VertrieblerDTO(userDTO);
@@ -35,7 +38,7 @@ public class SearchControl implements SearchControlInterface {
 
     public List<AutoDTO> getAnzeigenForSearch(String suchtext, String filter) throws SQLException {
         if (filter == null) {
-            filter = "name";
+            filter = "marke";
         }
         return AutoControl.getInstance().getAnzeigenForSearch(suchtext, filter);
     }

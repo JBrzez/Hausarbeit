@@ -3,7 +3,10 @@ package org.Hausarbeit.gui.windows;
 import com.vaadin.ui.*;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
+import org.Hausarbeit.process.control.ReservierungControl;
 import org.Hausarbeit.process.exceptions.AutoException;
+import org.Hausarbeit.process.exceptions.DatabaseException;
+import org.Hausarbeit.process.exceptions.ReservierungException;
 import org.Hausarbeit.process.proxy.ReservierungControlProxy;
 import org.Hausarbeit.process.proxy.AutoControlProxy;
 
@@ -16,7 +19,7 @@ public class AutoWindow extends Window {
     private TextField ansprechpartner_id;
     private TextArea beschreibung;
 
-    public AutoWindow(AutoDTO autoDTO, UserDTO userDTO) {
+    public AutoWindow(AutoDTO autoDTO, UserDTO userDTO) { // Endkunde
         super(autoDTO.getMarke() + " - " + autoDTO.getBaujahr());
         center();
 
@@ -55,8 +58,17 @@ public class AutoWindow extends Window {
         reservierenButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                UI.getCurrent().addWindow(new FreitextWindow(autoDTO, userDTO));
-                close();
+                boolean canReserve = false;
+                try {
+                    canReserve = ReservierungControlProxy.getInstance().userCanReserve(userDTO, autoDTO);
+                    if(canReserve) ReservierungControlProxy.getInstance().reserveAuto(autoDTO, userDTO);
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                if(canReserve) Notification.show("Sie haben das Auto erfolgreich reserviert.", Notification.Type.HUMANIZED_MESSAGE);
+                if(!canReserve) Notification.show("Sie haben das Auto bereits reserviert.", Notification.Type.ERROR_MESSAGE);
             }
         });
 

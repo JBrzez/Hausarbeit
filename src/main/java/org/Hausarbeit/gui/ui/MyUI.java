@@ -49,7 +49,6 @@ public class MyUI extends UI {
         Navigator navi = new Navigator(this,this);
 
         navi.addView(Views.MAIN, MainView.class);
-        navi.addView(Views.PROFILE, ProfileView.class);
         navi.addView(Views.REGISTRATION, RegistrationView.class);
         navi.addView(Views.LOGIN, LoginView.class);
         navi.addView(Views.AUTO, AutoView.class);
