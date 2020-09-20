@@ -3,7 +3,7 @@ package org.Hausarbeit.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.Hausarbeit.model.dao.ReservierungDAO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.objects.dto.AutoDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.junit.Test;
 import static org.junit.Assert.assertFalse;
@@ -18,10 +18,10 @@ public class ReservierungDAOTest {
         assertNotNull(rservierungDAO);
     }
     @Test
-    public void createBewerbung() {
+    public void createReservierung() {
         UserDTO userDTO = new UserDTO();
-        EndkundeDTO endkundeDTO = new EndkundeDTO(userDTO);
-        assertFalse(ReservierungDAO.getInstance().createReservierung("Lachs",endkundeDTO));
+        AutoDTO auto = new AutoDTO();
+        assertFalse(ReservierungDAO.getInstance().createReservierung(userDTO,auto));
     }
 
 

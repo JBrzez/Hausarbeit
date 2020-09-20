@@ -9,7 +9,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 
-public class RoleDTOTest {#
+public class RoleDTOTest {
 
     private RoleDAO roleDAO;
 
@@ -19,13 +19,13 @@ public class RoleDTOTest {#
         assertNotNull(roleDAO);
     }
     @Test
-    public void setStudent() {
+    public void setEndkunde() {
         UserDTO userDTO = new UserDTO();
         assertFalse(RoleDAO.getInstance().setRolesForEndkunde(userDTO));
 
     }
     @Test
-    public void setUnternehmen() {
+    public void setVertrieber() {
         UserDTO userDTO = new UserDTO();
         assertFalse(RoleDAO.getInstance().setRolesForVertriebler(userDTO));
     }

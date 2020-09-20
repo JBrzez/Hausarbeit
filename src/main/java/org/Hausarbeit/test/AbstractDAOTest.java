@@ -12,9 +12,10 @@ public class AbstractDAOTest {
     @Test
        public void testCreate() {
             statement = getStatement();
-            assertNotNull(statement);
+            assertNull(statement);
         }
 
-    private Statement getStatement() {
+    public Statement getStatement() {
+        return statement;
     }
 }

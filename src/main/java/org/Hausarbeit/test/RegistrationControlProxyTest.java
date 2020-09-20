@@ -1,6 +1,6 @@
 package org.Hausarbeit.test;
 
-import static org.junit.jupiter.api.Assertions.*;#
+import static org.junit.jupiter.api.Assertions.*;
 import org.Hausarbeit.process.proxy.RegistrationControlProxy;
 import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
