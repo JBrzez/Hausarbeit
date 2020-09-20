@@ -1,9 +1,9 @@
 package org.Hausarbeit.gui.windows;
 
+import com.vaadin.data.Binder;
 import com.vaadin.ui.*;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
+import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.exceptions.AutoException;
 import org.Hausarbeit.process.proxy.AutoControlProxy;
 
@@ -12,25 +12,26 @@ import java.util.List;
 
 public class CreateAutoWindow extends Window {
 
-    public CreateAutoWindow(AutoDTO Auto, Grid<AutoDTO> grid, VertrieblerDTO vertrieblerDTO) {
-        super("Ihre Auto");
+    public CreateAutoWindow(AutoDTO auto, Grid<AutoDTO> grid, UserDTO userDTO) { // Vorher Vertriebler
+        super("Auto erstellen:");
         center();
 
-        //Name
+        //Marke
         TextField marke = new TextField("Marke");
-        marke.setValue(Auto.getMarke());
+        marke.setValue(auto.getMarke());
+        marke.setRequiredIndicatorVisible(true);
+        new Binder<AutoDTO>().forField(marke).withValidator(txt -> txt.length() > 1, "Mindestens 2 Zeichen").bind(AutoDTO::getMarke, AutoDTO::setMarke);
 
-        //Art
+
+        //Baujahr
         TextField baujahr = new TextField("Baujahr");
-        baujahr.setValue(Auto.getBaujahr());
-
-        //Zeitraum
-        DateField zeitraum = new DateField("Ende der Ausschreibung");
-        zeitraum.setValue(Auto.getZeitraum());
+        baujahr.setValue(auto.getBaujahr());
+        baujahr.setRequiredIndicatorVisible(true);
+        new Binder<AutoDTO>().forField(baujahr).withValidator(txt -> txt.length() == 4, "Genau 4 Zeichen").bind(AutoDTO::getBaujahr, AutoDTO::setBaujahr);
 
         //Beschreibung
         TextArea beschreibung = new TextArea("Beschreibung");
-        beschreibung.setValue(Auto.getBeschreibung());
+        beschreibung.setValue(auto.getBeschreibung());
 
 
         //saveButton Config
@@ -38,20 +39,31 @@ public class CreateAutoWindow extends Window {
         saveButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                Auto.setMarke(marke.getValue());
-                Auto.setBaujahr(baujahr.getValue());
-                Auto.setZeitraum(zeitraum.getValue());
-                Auto.setBeschreibung(beschreibung.getValue());
+                auto.setMarke(marke.getValue());
+                auto.setBaujahr(baujahr.getValue());
+                auto.setVertriebler_id(userDTO.isVertriebler() ? userDTO.getId() : -1);
+                auto.setBeschreibung(beschreibung.getValue());
+
+                if(marke.getValue().length() < 2)
+                {
+                    Notification.show("Es muss eine Marke angegeben mit mindestens zwei Zeichen.", Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
+                if(baujahr.getValue().length() != 4)
+                {
+                    Notification.show("Es muss eine Baujahr angegeben, genau vier Zeichen.", Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
 
                 try {
-                    AutoControlProxy.getInstance().createAuto(Auto);
+                    AutoControlProxy.getInstance().createAuto(auto);
                 } catch (AutoException e) {
                     Notification.show("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
                 }
                 UI.getCurrent().addWindow(new ConfirmationWindow("Auto erfolgreich gespeichert"));
                 List<AutoDTO> list = null;
                 try {
-                    list = AutoControlProxy.getInstance().getAnzeigenForVertriebler(vertrieblerDTO);
+                    list = AutoControlProxy.getInstance().getAnzeigenForVertriebler(userDTO);
                 } catch (SQLException e) {
                     Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!", Notification.Type.ERROR_MESSAGE);
                 }
@@ -79,7 +91,6 @@ public class CreateAutoWindow extends Window {
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.addComponent(marke);
         verticalLayout.addComponent(baujahr);
-        verticalLayout.addComponent(zeitraum);
         verticalLayout.addComponent(beschreibung);
         verticalLayout.addComponent(horizontalLayout);
         verticalLayout.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);

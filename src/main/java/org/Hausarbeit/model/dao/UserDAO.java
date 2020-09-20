@@ -18,6 +18,21 @@ public class UserDAO extends AbstractDAO {
         return dao;
     }
 
+    public String getRoleFromUserID(int id) {
+        String sql = "SELECT rolle FROM carlook.rolle WHERE id = (SELECT MAX(rolle_id) FROM carlook.user WHERE id = ?);";
+        PreparedStatement statement = this.getPreparedStatement(sql);
+
+        try {
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            return rs.getString(1);
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+        return null;
+    }
+
     public int getMaxID() throws SQLException {
         String sql = "SELECT max(id) " +
                 "FROM carlook.user ;";

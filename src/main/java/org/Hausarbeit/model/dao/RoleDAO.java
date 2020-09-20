@@ -3,6 +3,8 @@ package org.Hausarbeit.model.dao;
 import com.vaadin.ui.Notification;
 import org.Hausarbeit.model.objects.dto.RoleDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
+import org.Hausarbeit.process.exceptions.DatabaseException;
+import org.Hausarbeit.services.db.JDBCConnection;
 import org.Hausarbeit.services.util.Roles;
 
 import java.sql.PreparedStatement;
@@ -85,5 +87,34 @@ public class RoleDAO extends AbstractDAO {
         } catch (SQLException ex) {
             return false;
         }
+    }
+
+    public String getRoleFromID(int id) {
+        String sql = "SELECT rolle FROM carlook.rolle WHERE id = ?;";
+        PreparedStatement statement = this.getPreparedStatement(sql);
+
+        try {
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            return rs.getString(1);
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+        return null;
+    }
+
+        public int getIDFromRole(String rolle) {
+        String sql = "SELECT id FROM carlook.rolle WHERE rolle = ?;";
+        PreparedStatement statement = this.getPreparedStatement(sql);
+        try {
+            statement.setString(1, rolle);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+        return -1;
     }
 }

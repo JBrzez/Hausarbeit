@@ -14,7 +14,7 @@ import org.Hausarbeit.gui.windows.DeleteAutoWindow;
 import org.Hausarbeit.gui.windows.DeleteWindow;
 import org.Hausarbeit.gui.windows.AutoWindow;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
+import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.proxy.SearchControlProxy;
 import org.Hausarbeit.services.util.BuildGrid;
 
@@ -30,11 +30,11 @@ public class AutoView extends VerticalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
         //User user = (User) VaadinSession.getCurrent().getAttribute(Roles.CURRENT_USER);
-        VertrieblerDTO vertrieblerDTO = new VertrieblerDTO(((MyUI) UI.getCurrent()).getUserDTO());
-        this.setUp(vertrieblerDTO);
+        UserDTO userDTO = new UserDTO(((MyUI) UI.getCurrent()).getUserDTO());
+        this.setUp(userDTO);
     }
 
-    private void setUp(VertrieblerDTO vertrieblerDTO) {
+    private void setUp(UserDTO userDTO) {
 
         //Top Layer
         this.addComponent(new TopPanel());
@@ -45,7 +45,7 @@ public class AutoView extends VerticalLayout implements View {
         //Tabelle
         final Grid<AutoDTO> grid = new Grid<>("Ihre Autos");
         grid.setSizeFull();
-        grid.setHeightMode(HeightMode.UNDEFINED);
+        grid.setHeightMode(HeightMode.ROW);
         grid.setStyleName("schrift-tabelle");
         SingleSelect<AutoDTO> selection = grid.asSingleSelect();
 
@@ -60,8 +60,8 @@ public class AutoView extends VerticalLayout implements View {
         grid.setItems(list);
 
         //ShowButton
-        Button showButton = new Button("Bearbeiten");
-        showButton.setEnabled(false);
+        Button editButton = new Button("Bearbeiten");
+        editButton.setEnabled(false);
 
         //CreateButton
         Button createButton = new Button("Erstellen");
@@ -75,22 +75,22 @@ public class AutoView extends VerticalLayout implements View {
             @Override
             public void selectionChange(SelectionEvent<AutoDTO> event) {
                 if (selection.getValue() == null) {
-                    showButton.setEnabled(false);
+                    editButton.setEnabled(false);
                     deleteButton.setEnabled(false);
                 } else {
                     System.out.println("Zeile selektiert: " + selection.getValue());
                     selektiert = selection.getValue();
                     deleteButton.setEnabled(true);
-                    showButton.setEnabled(true);
+                    editButton.setEnabled(true);
                 }
             }
         });
 
         //ShowButton Config Auto Bearbeiten
-        showButton.addClickListener(new Button.ClickListener() {
+        editButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                AutoWindow window = new AutoWindow(selektiert, grid, vertrieblerDTO);
+                AutoWindow window = new AutoWindow(selektiert, grid, userDTO, true);
                 UI.getCurrent().addWindow(window);
             }
         });
@@ -99,7 +99,7 @@ public class AutoView extends VerticalLayout implements View {
         createButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                CreateAutoWindow window = new CreateAutoWindow(new AutoDTO(), grid, vertrieblerDTO);
+                CreateAutoWindow window = new CreateAutoWindow(new AutoDTO(), grid, userDTO);
                 UI.getCurrent().addWindow(window);
             }
         });
@@ -115,7 +115,7 @@ public class AutoView extends VerticalLayout implements View {
 
         //HorizontalLayout
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.addComponent(showButton);
+        horizontalLayout.addComponent(editButton);
         horizontalLayout.addComponent(createButton);
         horizontalLayout.addComponent(deleteButton);
 

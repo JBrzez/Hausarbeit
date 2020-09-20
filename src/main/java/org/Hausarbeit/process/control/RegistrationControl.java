@@ -20,6 +20,7 @@ import org.Hausarbeit.services.util.Views;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 public class RegistrationControl implements RegistrationControlInterface {
 
@@ -74,21 +75,35 @@ public class RegistrationControl implements RegistrationControlInterface {
     }
 
     //User registrieren
-    public void registerUser(String email, String password, String regAs ) throws DatabaseException, SQLException {
+    public void registerUser(String email, String password, String regAs, String vorname, String nachname, String anrede ) throws DatabaseException, SQLException {
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(email);
         userDTO.setPassword(password);
+        userDTO.setVorname(vorname);
+        userDTO.setNachname(nachname);
+        userDTO.setAnrede(anrede);
         boolean registerUser;
         RegisterDAO.getInstance().addUser(userDTO);
         userDTO.setId(UserDAO.getInstance().getMaxID());
 
-        if (regAs.equals(Roles.ENDKUNDE)) {
-            RegisterDAO.getInstance().addEndkunde(userDTO);
-            registerUser = RoleDAO.getInstance().setRolesForEndkunde(userDTO);
-        } else {
-            RegisterDAO.getInstance().addVertriebler(userDTO);
-            registerUser = RoleDAO.getInstance().setRolesForVertriebler(userDTO);
+        userDTO.setRolle(regAs.equals(Roles.ENDKUNDE) ? Roles.ENDKUNDE : Roles.VERTRIEBLER);
+        if(regAs.equals(Roles.VERTRIEBLER)) {
+            if(!Pattern.matches("^[\\w\\d._%+-]+@carlook\\.de$", email))
+            {
+                Notification.show("Fehler",
+                        "Mit dieser E-Mail-Adresse können Sie sich nicht als Vertriebler registrieren.",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
         }
+        if(!Pattern.matches("^[\\w\\d._%+-]+@[\\w\\d.-]+\\.[\\w]{2,}$", email))
+        {
+            Notification.show("Fehler",
+                    "Die von Ihnen angegebene E-Mail-Adresse ist nicht Valide.",
+                    Notification.Type.ERROR_MESSAGE);
+            return;
+        }
+        registerUser = RegisterDAO.getInstance().addUser(userDTO);
 
         if (registerUser) {
             UI.getCurrent().addWindow( new ConfirmationWindow("Registration erfolgreich!") );

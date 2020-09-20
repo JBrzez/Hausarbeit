@@ -23,45 +23,24 @@ public class RegisterDAO extends AbstractDAO {
     }
 
     public boolean addUser(UserDTO userDTO) {
-        String sql = "INSERT INTO carlook.user VALUES (?,?,?)";
+        String sql = "INSERT INTO carlook.user (id, email, password_hash, vorname, nachname, anrede, rolle_id) VALUES (default,?,?,?,?,?,?)";
         PreparedStatement statement = this.getPreparedStatement(sql);
 
         try {
-            statement.setInt(1,UserDAO.getInstance().getMaxID()+1);
-            statement.setString(2, userDTO.getEmail());
-            statement.setString(3, userDTO.getPassword());
+            statement.setString(1, userDTO.getEmail());
+            statement.setString(2, userDTO.getPassword());
+            statement.setString(3, userDTO.getVorname());
+            statement.setString(4, userDTO.getNachname());
+            statement.setString(5, userDTO.getAnrede());
+            statement.setInt(6, RoleDAO.getInstance().getIDFromRole(userDTO.getRolle()));
             statement.executeUpdate();
             return true;
         } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
             return false;
         }
     }
 
-    public boolean addEndkunde(UserDTO userDTO) {
-        String sql = "INSERT INTO carlook.endkunde(id) VALUES (?)";
-        PreparedStatement statement = this.getPreparedStatement(sql);
-
-        try {
-            statement.setInt(1, userDTO.getId());
-            statement.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            return false;
-        }
-    }
-
-    public boolean addVertriebler(UserDTO userDTO) {
-        String sql = "INSERT INTO carlook.vertriebler(id) VALUES (?)";
-        PreparedStatement statement = this.getPreparedStatement(sql);
-
-        try {
-            statement.setInt(1, userDTO.getId());
-            statement.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            return false;
-        }
-    }
     //Lösche User
     public void deleteUser(UserDTO userDTO) {
         String sql = "DELETE " +

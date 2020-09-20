@@ -10,10 +10,10 @@ import org.Hausarbeit.process.proxy.ReservierungControlProxy;
 import org.Hausarbeit.services.util.Views;
 
 public class DeleteReservierungWindow extends DeleteWindow {
-    //Window zum Löschen von Reservierungen auf Auto
+    //Window zum Löschen von Autoreservierung
 
     public DeleteReservierungWindow(ReservierungDTO ReservierungDTO) {
-        this.setText("Sind Sie sicher, dass Sie Ihre Reservierung auf diese Stellenanzeige löschen wollen? <br>" +
+        this.setText("Sind Sie sicher, dass Sie Ihre Autoreservierung löschen wollen? <br>" +
                 "Dieser Vorgang ist unumkehrbar!");
         this.setDto(ReservierungDTO);
         this.setListener(new Button.ClickListener() {

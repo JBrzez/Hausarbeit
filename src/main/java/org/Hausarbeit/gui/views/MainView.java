@@ -32,7 +32,7 @@ public class MainView extends VerticalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
         //User user = (User) VaadinSession.getCurrent().getAttribute(Roles.CURRENT_USER);
-        UserDTO userDTO = ( (MyUI) UI.getCurrent() ).getUserDTO();
+//        UserDTO userDTO = ( (MyUI) UI.getCurrent() ).getUserDTO();
 
         this.setUp();
     }
@@ -47,8 +47,10 @@ public class MainView extends VerticalLayout implements View {
         setStyleName("schrift-profil");
         //Tabelle
         final Grid<AutoDTO> grid = new Grid<>("Ihre Treffer");
+
+        grid.setHeightMode(HeightMode.ROW);
+//        grid.setHeightMode(HeightMode.UNDEFINED);
         grid.setSizeFull();
-        grid.setHeightMode(HeightMode.UNDEFINED);
         BuildGrid.buildGrid(grid);
         SingleSelect<AutoDTO> selection = grid.asSingleSelect();
         grid.setStyleName("schrift-tabelle");
@@ -73,7 +75,7 @@ public class MainView extends VerticalLayout implements View {
         //Combobox
         final ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPlaceholder("Filtern nach");
-        comboBox.setItems("Marke", "Baujahr");
+        comboBox.setItems("Marke", "Baujahr", "Beschreibung");
 
         //SelectionListener Tabelle
         grid.addSelectionListener(new SelectionListener<AutoDTO>() {
@@ -131,18 +133,35 @@ public class MainView extends VerticalLayout implements View {
         //Darstellen
         this.addComponent(horizontalLayout);
         this.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);
+
+        try {
+            grid.setItems(SearchControlProxy.getInstance().getAnzeigenForSearch("", null));
+        } catch (SQLException throwables) {
+            Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
+            throwables.printStackTrace();
+        }
+            addComponent(grid);
+            if(((MyUI) UI.getCurrent()).getUserDTO() != null)
+            {
+                addComponent(detailButton);
+                setComponentAlignment(detailButton, Alignment.MIDDLE_CENTER);
+            }
     }
 
     private void search(TextField search, ComboBox<String> comboBox, Grid<AutoDTO> grid, Button detailButton) {
         if (search.getValue().length() > 1) {
             suchtext = search.getValue();
-            String filter = comboBox.getValue();
+            System.out.println(suchtext);
+            String filter = comboBox == null ? null : comboBox.getValue();
+
+            filter = filter == null ? "marke" : filter.toLowerCase() == "vertriebler-id" ? "vertriebler_id" : filter;
+            System.out.println(comboBox.getValue());
             try {
                 list = SearchControlProxy.getInstance().getAnzeigenForSearch(suchtext, filter);
             } catch (SQLException e) {
                 Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
             }
-            grid.setItems();
+//            grid.setItems();
             grid.setItems(list);
             addComponent(grid);
             addComponent(detailButton);

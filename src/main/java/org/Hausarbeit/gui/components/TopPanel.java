@@ -5,6 +5,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import org.Hausarbeit.gui.ui.MyUI;
+import org.Hausarbeit.gui.views.MainView;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.proxy.LoginControlProxy;
 import org.Hausarbeit.services.util.Roles;
@@ -37,11 +38,11 @@ public class TopPanel extends HorizontalLayout {
         UserDTO userDTO = ( (MyUI) MyUI.getCurrent() ).getUserDTO();
         Label welcome = new Label("Willkommen bei CarLook!");
         if (userDTO != null) {
-            if (userDTO.hasRole(Roles.ENDKUNDE) && userDTO.getVorname() != null) {
+            if (userDTO.isEndkunde() && userDTO.getVorname() != null) {
                 welcome = new Label("Willkommen " + userDTO.getVorname() + "!");
             }
-            if (userDTO.hasRole(Roles.VERTRIEBLER) && userDTO.getName() != null) {
-                welcome = new Label("Willkommen " + userDTO.getName() + "!");
+            if (userDTO.isEndkunde() && userDTO.getNachname() != null) {
+                welcome = new Label("Willkommen " + userDTO.getNachname() + "!");
             }
         }
         hlayout.addComponent(welcome);
@@ -52,6 +53,12 @@ public class TopPanel extends HorizontalLayout {
         MenuBar bar = new MenuBar();
         MenuBar.MenuItem item1 = bar.addItem("Menu", VaadinIcons.MENU,null);
 
+        item1.addItem("Startseite", VaadinIcons.ANCHOR, new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem menuItem) {
+                UI.getCurrent().getNavigator().navigateTo(Views.MAIN);
+            }
+        });
 
         //Gast Menü
         if (userDTO == null) {
@@ -71,16 +78,16 @@ public class TopPanel extends HorizontalLayout {
 
         //Profil
         if (userDTO != null) {
-            item1.addItem("Profil", VaadinIcons.USER, new MenuBar.Command() {
-                @Override
-                public void menuSelected(MenuBar.MenuItem menuItem) {
-                    UI.getCurrent().getNavigator().navigateTo(Views.PROFILE);
-                }
-            });
+//            item1.addItem("Profil", VaadinIcons.USER, new MenuBar.Command() {
+////                @Override
+////                public void menuSelected(MenuBar.MenuItem menuItem) {
+////                    UI.getCurrent().getNavigator().navigateTo(Views.PROFILE);
+////                }
+////            });
 
             //Unternehmer Menü
-            if ( userDTO.hasRole(Roles.VERTRIEBLER) ) {
-                item1.addItem("Meine Autos", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
+            if ( userDTO.isVertriebler() ) {
+                item1.addItem("Autos verwalten und erstellen", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
                         UI.getCurrent().getNavigator().navigateTo(Views.AUTO);
@@ -89,8 +96,8 @@ public class TopPanel extends HorizontalLayout {
             }
 
             //Student Menü
-            if ( userDTO.hasRole(Roles.ENDKUNDE) ) {
-                item1.addItem("Meine Reservierungen", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
+            if ( userDTO.isEndkunde() ) {
+                item1.addItem("Meine reservierten Autos", VaadinIcons.FILE_TEXT_O, new MenuBar.Command() {
                     @Override
                     public void menuSelected(MenuBar.MenuItem menuItem) {
                         UI.getCurrent().getNavigator().navigateTo(Views.RESERVIERUNG);

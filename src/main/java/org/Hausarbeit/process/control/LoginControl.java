@@ -3,15 +3,13 @@ package org.Hausarbeit.process.control;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import org.Hausarbeit.gui.ui.MyUI;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.dao.UserDAO;
 
 import org.Hausarbeit.model.objects.dto.UserDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.process.Interfaces.LoginControlInterface;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.process.exceptions.NoSuchUserOrPassword;
 import org.Hausarbeit.services.db.JDBCConnection;
-import org.Hausarbeit.services.util.Roles;
 import org.Hausarbeit.services.util.Views;
 
 import java.sql.PreparedStatement;
@@ -31,15 +29,13 @@ public class LoginControl implements LoginControlInterface {
     }
 
     public void checkAuthentification(String email, String password) throws NoSuchUserOrPassword, DatabaseException, SQLException {
-        String sql = "SELECT id " +
+        String sql = "SELECT id, password_hash " +
                 "FROM carlook.user " +
-                "WHERE email = ? "+
-                "AND password = ? ;";
+                "WHERE email = ? ;";
         ResultSet rs;
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         try {
             statement.setString(1, email);
-            statement.setString(2, password);
             rs = statement.executeQuery();
         } catch (SQLException throwables) {
             throw new DatabaseException("Fehler im SQL-Befehl: Bitte den Programmierer informieren!");
@@ -51,13 +47,14 @@ public class LoginControl implements LoginControlInterface {
             if( rs.next() ) {
                 userDTO = new UserDTO();
                 userDTO.setId(rs.getInt(1));
+                userDTO.setPassword(rs.getString(2));
+                if(!userDTO.checkpassword(password))
+                {
+                    Notification.show("E-Mail-Adresse oder Passwort falsch.", Notification.Type.ERROR_MESSAGE);
+                    return;
+                }
                 userDTO.setEmail(email);
-                if ( userDTO.hasRole(Roles.ENDKUNDE) ) {
-                    userDTO = ProfileControl.getInstance().getEndkunde(new EndkundeDTO(userDTO));
-                }
-                else {
-                    userDTO = ProfileControl.getInstance().getVertriebler(new VertrieblerDTO(userDTO));
-                }
+                userDTO.setRolle(UserDAO.getInstance().getRoleFromUserID(userDTO.getId()));
             }
             else {
                 throw new NoSuchUserOrPassword();

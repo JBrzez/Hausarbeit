@@ -1,10 +1,13 @@
 package org.Hausarbeit.gui.windows;
 
+import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.*;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.VertrieblerDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
+import org.Hausarbeit.process.control.ReservierungControl;
 import org.Hausarbeit.process.exceptions.AutoException;
+import org.Hausarbeit.process.exceptions.DatabaseException;
+import org.Hausarbeit.process.exceptions.ReservierungException;
 import org.Hausarbeit.process.proxy.ReservierungControlProxy;
 import org.Hausarbeit.process.proxy.AutoControlProxy;
 
@@ -12,31 +15,29 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class AutoWindow extends Window {
-    private TextField name;
-    private TextField art;
-    private TextField branche;
-    private TextField studiengang;
-    private TextField ort;
+    private TextField marke;
+    private TextField baujahr;
+    private TextField ansprechpartner_id;
     private TextArea beschreibung;
 
-    public AutoWindow(AutoDTO autoDTO, UserDTO userDTO) {
-        super(autoDTO.getMarke());
+    public AutoWindow(AutoDTO autoDTO, UserDTO userDTO) { // Endkunde
+        super("Auto Übersicht");
         center();
 
-        //Name
-        name = new TextField("Titel");
-        name.setValue(autoDTO.getMarke());
-        name.setReadOnly(true);
+        //Marke
+        marke = new TextField("Marke");
+        marke.setValue(autoDTO.getMarke());
+        marke.setReadOnly(true);
 
-        //Art
-        art = new TextField("Art");
-        art.setValue(autoDTO.getBaujahr());
-        art.setReadOnly(true);
+        //Baujahr
+        baujahr = new TextField("Baujahr");
+        baujahr.setValue(autoDTO.getBaujahr());
+        baujahr.setReadOnly(true);
 
-        //Zeitraum
-        DateField zeitraum = new DateField("Ende der Ausschreibung");
-        zeitraum.setValue(autoDTO.getZeitraum());
-        zeitraum.setReadOnly(true);
+        //Ansprechpartner_ID
+        ansprechpartner_id = new TextField("Ansprechpartner-ID");
+        ansprechpartner_id.setValue("" + autoDTO.getVertriebler_id());
+        ansprechpartner_id.setReadOnly(true);
 
         //Beschreibung
         beschreibung = new TextArea("Beschreibung");
@@ -52,70 +53,83 @@ public class AutoWindow extends Window {
             }
         });
 
-        //BewerbenButton
-        Button bewerbenButton = new Button("Bewerben");
-        ReservierungControlProxy.getInstance().checkAllowed(autoDTO, userDTO, bewerbenButton);
-        bewerbenButton.addClickListener(new Button.ClickListener() {
+        //Reservierenutton
+        Button reservierenButton = new Button("Reservieren");
+        ReservierungControlProxy.getInstance().checkAllowed(autoDTO, userDTO, reservierenButton);
+        reservierenButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                UI.getCurrent().addWindow(new FreitextWindow(autoDTO, userDTO));
-                close();
+                boolean canReserve = false;
+                try {
+                    canReserve = ReservierungControlProxy.getInstance().userCanReserve(userDTO, autoDTO);
+                    if(canReserve) ReservierungControlProxy.getInstance().reserveAuto(autoDTO, userDTO);
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                if(canReserve) Notification.show("Sie haben das Auto erfolgreich reserviert.", Notification.Type.HUMANIZED_MESSAGE);
+                if(!canReserve) Notification.show("Sie haben das Auto bereits reserviert.", Notification.Type.ERROR_MESSAGE);
             }
         });
 
         //Horizontal
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponent(okButton);
-        horizontalLayout.addComponent(bewerbenButton);
+        horizontalLayout.addComponent(reservierenButton);
 
         //Vertikal
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout = this.buildVerticalLayout(verticalLayout, name, art, branche, studiengang, ort, zeitraum, beschreibung, horizontalLayout);
+        verticalLayout = this.buildVerticalLayout(verticalLayout, marke, baujahr, ansprechpartner_id, beschreibung, horizontalLayout);
         setContent(verticalLayout);
     }
 
-    public AutoWindow(AutoDTO Auto, Grid<AutoDTO> grid, VertrieblerDTO vertrieblerDTO) {
-        super(Auto.getMarke());
+    public AutoWindow(AutoDTO autoDTO, Grid<AutoDTO> grid, UserDTO userDTO, boolean edit) {
+        super("Auto Übersicht");
         center();
 
-        //Name
-        name = new TextField("Marke");
-        name.setValue(Auto.getMarke());
+        //Marke
+        marke = new TextField("Marke");
+        marke.setValue(autoDTO.getMarke());
+        if(!edit) marke.setReadOnly(true);
 
-        //Art
-        art = new TextField("Baujahr");
-        art.setValue(Auto.getBaujahr());
-
-        //Zeitraum
-        DateField zeitraum = new DateField("Ende der Ausschreibung");
-        zeitraum.setValue(Auto.getZeitraum());
+        //Baujahr
+        baujahr = new TextField("Baujahr");
+        baujahr.setValue(autoDTO.getBaujahr());
+        if(!edit) baujahr.setReadOnly(true);
 
         //Beschreibung
         beschreibung = new TextArea("Beschreibung");
-        beschreibung.setValue(Auto.getBeschreibung());
+        beschreibung.setValue(autoDTO.getBeschreibung());
+        if(!edit) beschreibung.setReadOnly(true);
 
         //SaveButton
         Button saveButton = new Button("Speichern");
         saveButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                Auto.setMarke(name.getValue());
-                Auto.setBaujahr(art.getValue());
-                Auto.setZeitraum(zeitraum.getValue());
-                Auto.setBeschreibung(beschreibung.getValue());
+                autoDTO.setMarke(marke.getValue());
+                autoDTO.setBaujahr(baujahr.getValue());
+                autoDTO.setVertriebler_id(userDTO.isVertriebler() ? userDTO.getId() : -1);
+                autoDTO.setBeschreibung(beschreibung.getValue());
 
                 try {
-                    AutoControlProxy.getInstance().updateAuto(Auto);
+                    System.out.println(autoDTO);
+                    System.out.println(autoDTO);
+                    System.out.println(autoDTO);
+                    System.out.println(autoDTO);
+                    AutoControlProxy.getInstance().updateAuto(autoDTO);
                 } catch (AutoException e) {
                     Notification.show("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
                 }
                 UI.getCurrent().addWindow(new ConfirmationWindow("Auto erfolgreich gespeichert"));
                 List<AutoDTO> list = null;
                 try {
-                    list = AutoControlProxy.getInstance().getAnzeigenForVertriebler(vertrieblerDTO);
+                    list = AutoControlProxy.getInstance().getAnzeigenForVertriebler(userDTO);
                 } catch (SQLException e) {
                     Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!", Notification.Type.ERROR_MESSAGE);
                 }
+//                grid.setHeightMode(HeightMode.ROW);
                 grid.setItems();
                 grid.setItems(list);
                 close();
@@ -138,17 +152,14 @@ public class AutoWindow extends Window {
 
         //Vertikal
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout = this.buildVerticalLayout(verticalLayout, name, art, branche, studiengang, ort, zeitraum, beschreibung, horizontalLayout);
+        verticalLayout = this.buildVerticalLayout(verticalLayout, marke, baujahr, null,  beschreibung, horizontalLayout);
         setContent(verticalLayout);
     }
-    public VerticalLayout buildVerticalLayout(VerticalLayout verticalLayout, TextField name, TextField art, TextField branche, TextField studiengang,
-                                              TextField ort, DateField zeitraum, TextArea beschreibung, HorizontalLayout horizontalLayout ){
-        verticalLayout.addComponent(name);
-        verticalLayout.addComponent(art);
-        verticalLayout.addComponent(branche);
-        verticalLayout.addComponent(studiengang);
-        verticalLayout.addComponent(ort);
-        verticalLayout.addComponent(zeitraum);
+
+    public VerticalLayout buildVerticalLayout(VerticalLayout verticalLayout, TextField marke, TextField baujahr, TextField ansprechpartner_id, TextArea beschreibung, HorizontalLayout horizontalLayout ){
+        verticalLayout.addComponent(marke);
+        verticalLayout.addComponent(baujahr);
+        if(ansprechpartner_id != null) verticalLayout.addComponent(ansprechpartner_id);
         verticalLayout.addComponent(beschreibung);
         verticalLayout.addComponent(horizontalLayout);
         verticalLayout.setComponentAlignment(horizontalLayout, Alignment.MIDDLE_CENTER);

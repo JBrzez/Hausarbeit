@@ -13,7 +13,7 @@ import org.Hausarbeit.gui.windows.DeleteReservierungWindow;
 import org.Hausarbeit.gui.windows.DeleteWindow;
 import org.Hausarbeit.model.objects.dto.ReservierungDTO;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
+import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.process.proxy.ReservierungControlProxy;
 import org.Hausarbeit.process.proxy.AutoControlProxy;
@@ -29,13 +29,10 @@ public class ReservierungView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
-        EndkundeDTO EndkundeDTO = new EndkundeDTO( ( (MyUI) UI.getCurrent() ).getUserDTO() );
-
-        this.setUp(EndkundeDTO);
+        this.setUp(((MyUI) UI.getCurrent()).getUserDTO());
     }
 
-    private void setUp(EndkundeDTO endkundeDTO) {
+    private void setUp(UserDTO userDTO) {
 
         //Top Layer
         this.addComponent( new TopPanel() );
@@ -46,12 +43,12 @@ public class ReservierungView extends VerticalLayout implements View {
         //Tabelle
         final Grid<AutoDTO> grid = new Grid<>("Ihre Reservierungen");
         grid.setSizeFull();
-        grid.setHeightMode(HeightMode.UNDEFINED);
+        grid.setHeightMode(HeightMode.ROW);
         SingleSelect<AutoDTO> selection = grid.asSingleSelect();
         grid.setStyleName("schrift-tabelle");
         //Tabelle füllen
         try {
-            list = AutoControlProxy.getInstance().getAnzeigenForEndkunde(endkundeDTO);
+            list = AutoControlProxy.getInstance().getAnzeigenForEndkunde(userDTO);
         } catch (SQLException e) {
             Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte informieren Sie einen Administrator!");
         }
@@ -80,15 +77,8 @@ public class ReservierungView extends VerticalLayout implements View {
         deleteButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                ReservierungDTO ReservierungDTO = null;
-                try {
-                    ReservierungDTO = ReservierungControlProxy.getInstance().getReservierungForAuto(selektiert, endkundeDTO);
-                } catch (SQLException e) {
-                    Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte kontaktieren Sie den Administrator!", Notification.Type.ERROR_MESSAGE);
-                } catch (DatabaseException e) {
-                    Notification.show("Es ist ein Datenbankfehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
-                }
-                DeleteReservierungWindow deleteReservierungWindow = new DeleteReservierungWindow(ReservierungDTO);
+                ReservierungDTO reservierungDTO = ReservierungControlProxy.getInstance().getReservierungForAuto(selektiert, userDTO);
+                DeleteReservierungWindow deleteReservierungWindow = new DeleteReservierungWindow(reservierungDTO);
                 UI.getCurrent().addWindow( new DeleteWindow(deleteReservierungWindow) );
             }
         });

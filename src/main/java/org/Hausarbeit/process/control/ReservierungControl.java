@@ -5,14 +5,12 @@ import com.vaadin.ui.Notification;
 
 import org.Hausarbeit.model.dao.ReservierungDAO;
 import org.Hausarbeit.model.objects.dto.AutoDTO;
-import org.Hausarbeit.model.objects.dto.EndkundeDTO;
 import org.Hausarbeit.model.objects.dto.ReservierungDTO;
 import org.Hausarbeit.model.objects.dto.UserDTO;
 import org.Hausarbeit.process.Interfaces.ReservierungControlInterface;
 import org.Hausarbeit.process.exceptions.DatabaseException;
 import org.Hausarbeit.process.exceptions.ReservierungException;
 import org.Hausarbeit.services.db.JDBCConnection;
-import org.Hausarbeit.services.util.Roles;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,144 +33,63 @@ public class ReservierungControl implements ReservierungControlInterface {
         return ReservierungControl;
     }
 
-    public int getLatestApply(UserDTO userDTO) throws DatabaseException, SQLException {
-        int id_Reservierung = 0;
-        String sql = "SELECT max(id_Reservierung) " +
-                "FROM collhbrs.Reservierung " +
-                "WHERE id = ?";
+    // Auto reservieren
+    public boolean reserveAuto(AutoDTO autoDTO, UserDTO userDTO) throws DatabaseException {
+        String sql = "INSERT INTO carlook.user_to_auto (auto_id, user_id) " +
+                "VALUES (?, ?);";
+        PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
+        try {
+            statement.setInt(1, autoDTO.getId());
+            statement.setInt(2, userDTO.getId());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean userCanReserve(UserDTO userDTO, AutoDTO autoDTO) throws DatabaseException, SQLException {
+        String sql = "SELECT CASE WHEN user_id IS NULL THEN 'allowed' ELSE 'nope' END " +
+                "FROM carlook.user_to_auto WHERE user_id = ? AND auto_id = ?";
         PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
         ResultSet rs = null;
         try {
             statement.setInt(1, userDTO.getId());
-            rs = statement.executeQuery();
-            if (rs.next()) {
-                id_Reservierung = rs.getInt(1);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
-        } finally {
-            assert rs != null;
-            rs.close();
-        }
-        return id_Reservierung;
-    }
-
-    public void applyForAuto(AutoDTO Auto, int id_Reservierung) throws DatabaseException {
-        String sql = "INSERT INTO collhbrs.Reservierung_to_Auto (id_Reservierung, id_anzeige) " +
-                "VALUES (?, ?);";
-        PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
-        try {
-            statement.setInt(1, id_Reservierung);
-            statement.setInt(2, Auto.getId_anzeige());
-            statement.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void applyingIsAllowed() throws DatabaseException, SQLException, ReservierungException {
-        String sql = "SELECT sichtbar " +
-                "FROM collhbrs.Auto_on_off";
-        PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
-        ResultSet rs = null;
-        try {
+            statement.setInt(2, autoDTO.getId());
             rs = statement.executeQuery();
             if ( rs.next() ) {
-                if (rs.getBoolean(1)) {
-                    return;
-                }
-                throw new ReservierungException();
+                return rs.getString(1).equals("allowed");
             }
         } catch (SQLException ex) {
             Logger.getLogger((ReservierungDAO.class.getName())).log(Level.SEVERE, null, ex);
+            return false;
         } finally {
             assert rs != null;
             rs.close();
         }
+        return true;
     }
 
-    public void checkAlreadyApplied(AutoDTO autoDTO, UserDTO userDTO) throws DatabaseException, SQLException, ReservierungException {
-        EndkundeDTO endkundeDTO = new EndkundeDTO(userDTO);
-        List<ReservierungDTO> list = ReservierungDAO.getInstance().getReservierungForEndkunde(endkundeDTO);
-        String sql = "SELECT id_anzeige " +
-                "FROM collhbrs.Reservierung_to_Auto " +
-                "WHERE id_Reservierung = ? " +
-                "AND id_anzeige = ?";
-        PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
-        ResultSet rs = null;
-        for (ReservierungDTO reservierungDTO : list) {
-            int id_Reservierung = reservierungDTO.getId();
-            try {
-                statement.setInt(1, id_Reservierung);
-                statement.setInt(2, autoDTO.getId_anzeige());
-                rs = statement.executeQuery();
-                if (rs.next()) {
-                    throw new ReservierungException();
-                }
-            } catch (SQLException e) {
-                Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte kontaktieren Sie den Administrator!", Notification.Type.ERROR_MESSAGE);
-            } finally {
-                assert rs != null;
-                rs.close();
-            }
-        }
 
-    }
     public void checkAllowed(AutoDTO auto, UserDTO userDTO, Button bewerbenButton) {
-        if (userDTO == null || !userDTO.hasRole(Roles.ENDKUNDE)) {
+        if (userDTO == null || !userDTO.isEndkunde()) {
             bewerbenButton.setVisible(false);
             return;
         }
+        System.out.println("reached");
         try {
-            applyingIsAllowed();
-            checkAlreadyApplied(auto, userDTO);
+            boolean canReserve = userCanReserve(userDTO, auto);
+            if(!canReserve) bewerbenButton.setVisible(false);
         } catch (DatabaseException e) {
             Notification.show("Es ist ein Datenbankfehler aufgetreten. Bitte versuchen Sie es erneut!", Notification.Type.ERROR_MESSAGE);
-        } catch (ReservierungException e) {
-            bewerbenButton.setVisible(false);
         } catch (SQLException e) {
             Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte kontaktieren Sie den Administrator!", Notification.Type.ERROR_MESSAGE);
         }
     }
 
-    public void createReservierung(String Reservierungstext, UserDTO userDTO) throws ReservierungException {
-        EndkundeDTO endkundeDTO = new EndkundeDTO(userDTO);
-        boolean result = ReservierungDAO.getInstance().createReservierung(Reservierungstext, endkundeDTO);
-        if (!result) {
-            throw new ReservierungException();
-        }
-    }
-
-    public ReservierungDTO getReservierungForAuto(AutoDTO selektiert, EndkundeDTO endkundeDTO) throws SQLException, DatabaseException {
-        List<ReservierungDTO> list = getReservierungForEndkunde(endkundeDTO);
-        ReservierungDTO reservierungDTO = new ReservierungDTO();
-        String sql = "SELECT id_Reservierung " +
-                "FROM collhbrs.Reservierung_to_Auto " +
-                "WHERE id_anzeige = ? " +
-                "AND id_Reservierung = ? ";
-        PreparedStatement statement = JDBCConnection.getInstance().getPreparedStatement(sql);
-        ResultSet rs = null;
-        for (ReservierungDTO reservierung :list ) {
-            try {
-                statement.setInt(1, selektiert.getId_anzeige());
-                statement.setInt(2, reservierung.getId());
-                rs = statement.executeQuery();
-                if ( rs.next() ) {
-                    reservierungDTO = reservierung;
-                    break;
-                }
-            } catch (SQLException e) {
-                Notification.show("Es ist ein SQL-Fehler aufgetreten. Bitte kontaktieren Sie den Administrator!", Notification.Type.ERROR_MESSAGE);
-            } finally{
-                assert rs != null;
-                rs.close();
-            }
-        }
-        return reservierungDTO;
-    }
-
-    public List<ReservierungDTO> getReservierungForEndkunde(EndkundeDTO endkundeDTO) throws SQLException {
-        return ReservierungDAO.getInstance().getReservierungForEndkunde(endkundeDTO);
+    public List<ReservierungDTO> getReservierungForEndkunde(UserDTO userDTO) throws SQLException {
+        return ReservierungDAO.getInstance().getReservierungForEndkunde(userDTO);
     }
 
     public void deleteReservierung(ReservierungDTO reservierungDTO) throws ReservierungException {
@@ -181,5 +98,12 @@ public class ReservierungControl implements ReservierungControlInterface {
             return;
         }
         throw new ReservierungException();
+    }
+
+    public ReservierungDTO getReservierungForAuto(AutoDTO autoDTO, UserDTO userDTO) {
+        ReservierungDTO result = new ReservierungDTO();
+        result.setUser_id(userDTO.getId());
+        result.setAuto_id(autoDTO.getId());
+        return result;
     }
 }
