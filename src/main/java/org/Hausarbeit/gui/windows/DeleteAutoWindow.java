@@ -13,7 +13,7 @@ public class DeleteAutoWindow extends DeleteWindow {
     //Window zum Löschen von Auton
 
     public DeleteAutoWindow(AutoDTO AutoDTO) {
-        this.setText("Sind Sie sicher, dass Sie das Auto löschen wollen? <br>" +
+        this.setText("Sind Sie sicher, dass Sie die Auto löschen wollen? <br>" +
                 "Dieser Vorgang ist unumkehrbar!");
         this.setDto(AutoDTO);
         this.setListener(new Button.ClickListener() {
