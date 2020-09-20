@@ -9,6 +9,6 @@ public class BuildGrid {
         grid.addColumn(AutoDTO::getMarke).setCaption("Marke");
         grid.addColumn(AutoDTO::getBaujahr).setCaption("Baujahr");
         grid.addColumn(AutoDTO::getBeschreibung).setCaption("Beschreibung");
-        grid.addColumn(AutoDTO::getVertriebler_id).setCaption("Vertriebler-ID");
+        grid.addColumn(AutoDTO::getVertriebler_id).setCaption("Ansprechpartner-ID");
     }
 }
