@@ -1,4 +1,4 @@
-/*package org.Hausarbeit.test;
+package org.Hausarbeit.test;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,6 +11,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -39,31 +40,30 @@ public class seleniumRegisterViewTest {
         driver.manage().window().maximize();
 
         //Click on Button "Menü"
-        driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div[1]/div/div/div[3]/div/div[3]/div/span")).click();
+        driver.findElement(By.xpath("//*[@id="Hausarbeitwar-727407250"]/div/div[2]/div[1]/div/div/div[3]/div/div[3]/div/span")).click();
 
-        //Click on Button "Registrieren"
-        driver.findElement(By.xpath("/html/body/div[2]/div[2]/div/div/span[2]/span")).click();
+        //Click on Button "Login"
+        driver.findElement(By.xpath("//*[@id="Hausarbeitwar-727407250-overlays"]/div[2]/div/div/span[2]/span")).click();
 
         //Daten eingeben
-        driver.findElement(By.xpath("//*[@id=\"email\"]")).sendKeys("asd@asd.de");
-        driver.findElement(By.xpath("//*[@id=\"passwort1\"]")).sendKeys("asdasd");
-        driver.findElement(By.xpath("//*[@id=\"passwort2\"]")).sendKeys("asdasd");
-
-        //Click on Button "Vertriebler"
-        driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div[5]/div/div[2]/div/div[11]/div/div[2]/span[1]/label")).click();
+        driver.findElement(By.xpath("//*[@id="gwt-uid-3"]")).sendKeys("asdasd@asd.de");
+        driver.findElement(By.xpath("//*[@id="gwt-uid-7"]")).sendKeys("asdasd");
 
         //Login button drücken
         driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div[5]/div/div[2]/div/div[13]/div/div[1]/div")).click();
 
-        //Ok Button clicken
-        driver.findElement(By.xpath("/html/body/div[2]/div[2]/div/div/div[3]/div/div/div[3]/div")).click();
+        //Login Button clicken
+        driver.findElement(By.xpath("//*[@id="Hausarbeitwar-727407250"]/div/div[2]/div[5]/div/div[2]/div/div[5]/div/div[1]/div")).click();
+
+        //Pause um zu checken
+        TimeUnit.SECONDS.sleep(3);
 
         //Check ob gleich
-        assertEquals("http://localhost:8080/Hausarbeit_war/#!main",driver.getCurrentUrl());
+        assertEquals("http://localhost:8080/Hausarbeit_war/main#!main",driver.getCurrentUrl());
     }
     @After
     public void tearDownClass() {
         driver.quit();
     }
 
-}*/
+}
