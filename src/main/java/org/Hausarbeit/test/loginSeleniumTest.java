@@ -1,3 +1,8 @@
+/*
+
+ !!! Wurde auskommentiert, weil Fehler aufkommen, da Pfade vom Geckodriver ect. individuell nochmal geändert werden müssen.
+     Bei uns läuft dieser jedoch angepasst !!!
+
 package org.Hausarbeit.test;
 
 import org.junit.After;
@@ -15,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
-public class seleniumRegisterViewTest {
+public class loginSeleniumTest {
 
     private WebDriver driver = null;
 
@@ -66,4 +71,4 @@ public class seleniumRegisterViewTest {
         driver.quit();
     }
 
-}
+}*/
